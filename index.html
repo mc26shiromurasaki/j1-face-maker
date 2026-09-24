@@ -1,935 +1,1328 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <title>Jリーグ好き顔9選メーカー</title>
+<title>Jリーグ好き顔9選メーカー</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "Hiragino Kaku Gothic ProN",
-        "Hiragino Sans",
-        Meiryo,
-        sans-serif;
-      background: #f3f5f8;
-      color: #222;
-    }
+body {
+  margin: 0;
+  background: #f2f4f7;
+  color: #222;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans",
+    Meiryo,
+    sans-serif;
+}
 
-    .container {
-      width: min(900px, 94%);
-      margin: 0 auto;
-      padding: 30px 0 60px;
-    }
+.container {
+  width: min(900px, 94%);
+  margin: auto;
+  padding: 24px 0 60px;
+}
 
-    header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
+header {
+  text-align: center;
+  margin-bottom: 22px;
+}
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(24px, 5vw, 38px);
-      font-weight: 800;
-    }
+h1 {
+  margin: 0 0 7px;
+  font-size: clamp(26px, 6vw, 42px);
+  font-weight: 900;
+}
 
-    .subtitle {
-      color: #666;
-      font-size: 14px;
-      margin: 0;
-    }
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
 
-    /* --------------------
-       選択画面
-    -------------------- */
+/* =========================
+   ゲーム
+========================= */
 
-    .game-area {
-      background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    }
+.game-area,
+.result-area {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
 
-    .progress {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+.round-info {
+  text-align: center;
+  margin-bottom: 18px;
+}
 
-    .progress-number {
-      font-size: 30px;
-      font-weight: 800;
-    }
+.round-number {
+  font-size: 32px;
+  font-weight: 900;
+}
 
-    .progress-text {
-      color: #666;
-      font-size: 14px;
-    }
+.round-label {
+  color: #777;
+  font-size: 12px;
+}
 
-    .player-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
+.instruction {
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
 
-    .player-card {
-      position: relative;
-      border: 3px solid transparent;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #f7f7f7;
-      cursor: pointer;
-      transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease,
-        border-color 0.15s ease;
-      padding: 0;
-      font: inherit;
-    }
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
 
-    .player-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    }
+.player-card {
+  position: relative;
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: 17px;
+  overflow: hidden;
+  background: #eee;
+  cursor: pointer;
+  font: inherit;
+  transition: .15s;
+}
 
-    .player-card:active {
-      transform: scale(0.98);
-    }
+.player-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
 
-    .player-card img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      background: #ddd;
-    }
+.player-card:active {
+  transform: scale(.98);
+}
 
-    .player-name {
-      display: block;
-      padding: 12px 8px;
-      background: #fff;
-      font-size: 17px;
-      font-weight: 700;
-    }
+.player-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: #ddd;
+}
 
-    .player-club {
-      display: block;
-      padding: 0 8px 12px;
-      background: #fff;
-      color: #777;
-      font-size: 12px;
-    }
+.player-info {
+  background: white;
+  text-align: center;
+  padding: 10px 5px;
+}
 
-    .selected-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 36px;
-      height: 36px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: #e60012;
-      color: #fff;
-      font-size: 20px;
-      font-weight: bold;
-    }
+.player-name {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+}
 
-    .player-card.selected {
-      border-color: #e60012;
-    }
+.player-club {
+  display: block;
+  margin-top: 3px;
+  color: #777;
+  font-size: 11px;
+}
 
-    .player-card.selected .selected-badge {
-      display: flex;
-    }
+.choice-mark {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 
-    /* --------------------
-       選択済み一覧
-    -------------------- */
+  width: 42px;
+  height: 42px;
 
-    .selected-section {
-      margin-top: 28px;
-    }
+  display: none;
+  align-items: center;
+  justify-content: center;
 
-    .selected-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+  border-radius: 50%;
+  background: #e60012;
+  color: white;
 
-    .selected-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+  font-size: 23px;
+  font-weight: 900;
+}
 
-    .selected-item {
-      width: 55px;
-      height: 55px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid #ddd;
-    }
+.player-card.selected {
+  border-color: #e60012;
+  transform: scale(.97);
+}
 
-    .selected-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+.player-card.selected .choice-mark {
+  display: flex;
+}
 
-    /* --------------------
-       結果画面
-    -------------------- */
+.progress {
+  height: 8px;
+  margin-top: 18px;
 
-    #resultArea {
-      display: none;
-      background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-      text-align: center;
-    }
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+}
 
-    .result-title {
-      margin: 0 0 6px;
-      font-size: 28px;
-      font-weight: 800;
-    }
+.progress-inner {
+  width: 0;
+  height: 100%;
+  background: #e60012;
+  transition: width .25s;
+}
 
-    .result-description {
-      margin: 0 0 22px;
-      color: #666;
-      font-size: 14px;
-    }
+/* =========================
+   結果
+========================= */
 
-    .result-grid {
-      width: min(650px, 100%);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-      background: #111;
-      border: 3px solid #111;
-    }
+.result-area {
+  display: none;
+  text-align: center;
+}
 
-    .result-cell {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      background: #ddd;
-    }
+.result-title {
+  margin: 0 0 5px;
+  font-size: 30px;
+  font-weight: 900;
+}
 
-    .result-cell img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+.result-description {
+  color: #666;
+  font-size: 13px;
+  margin: 0 0 20px;
+}
 
-    .result-cell-name {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 8px 4px;
-      background: linear-gradient(
-        transparent,
-        rgba(0, 0, 0, 0.8)
-      );
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      text-shadow: 0 1px 3px #000;
-    }
+/* 3×3 */
 
-    .result-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 24px;
-      flex-wrap: wrap;
-    }
+.result-grid {
+  width: min(700px,100%);
+  margin: auto;
 
-    button.action-button {
-      border: 0;
-      border-radius: 999px;
-      padding: 14px 24px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease;
-    }
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
 
-    button.action-button:hover {
-      transform: translateY(-2px);
-    }
+  gap: 3px;
 
-    .download-button {
-      background: #111;
-      color: #fff;
-    }
+  background: #111;
+  border: 3px solid #111;
+}
 
-    .restart-button {
-      background: #eee;
-      color: #222;
-    }
+.result-cell {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background: #ddd;
+}
 
-    /* --------------------
-       スマホ対応
-    -------------------- */
+.result-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-    @media (max-width: 600px) {
-      .container {
-        padding-top: 20px;
-      }
+.result-cell-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-      .game-area,
-      #resultArea {
-        padding: 16px;
-        border-radius: 16px;
-      }
+  padding: 25px 5px 8px;
 
-      .player-grid {
-        gap: 10px;
-      }
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
 
-      .player-name {
-        font-size: 14px;
-        padding: 9px 5px;
-      }
+  text-shadow: 0 1px 4px #000;
 
-      .player-club {
-        font-size: 10px;
-        padding: 0 5px 9px;
-      }
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.9)
+    );
+}
 
-      .selected-item {
-        width: 45px;
-        height: 45px;
-      }
+/* =========================
+   ランキング
+========================= */
 
-      .result-cell-name {
-        font-size: 10px;
-        padding: 5px 2px;
-      }
-    }
-  </style>
+.ranking {
+  width: min(600px,100%);
+  margin: 25px auto 0;
+  text-align: left;
+}
+
+.ranking-title {
+  text-align: center;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px;
+
+  border-bottom: 1px solid #eee;
+}
+
+.rank {
+  width: 28px;
+  text-align: center;
+  font-weight: 900;
+}
+
+.rank-photo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.rank-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rank-name {
+  flex: 1;
+  font-weight: 700;
+}
+
+.rank-score {
+  color: #e60012;
+  font-weight: 900;
+}
+
+/* =========================
+   ボタン
+========================= */
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 25px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.download-button {
+  background: #111;
+  color: white;
+}
+
+.restart-button {
+  background: #eee;
+  color: #222;
+}
+
+/* =========================
+   スマホ
+========================= */
+
+@media(max-width:600px) {
+
+  .container {
+    padding-top: 15px;
+  }
+
+  .game-area,
+  .result-area {
+    padding: 15px;
+    border-radius: 17px;
+  }
+
+  .player-grid {
+    gap: 9px;
+  }
+
+  .player-name {
+    font-size: 14px;
+  }
+
+  .player-club {
+    font-size: 9px;
+  }
+
+  .player-info {
+    padding: 8px 3px;
+  }
+
+  .result-cell-name {
+    font-size: 9px;
+    padding-bottom: 5px;
+  }
+
+  .rank-photo {
+    width: 38px;
+    height: 38px;
+  }
+}
+</style>
 </head>
+
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <header>
-      <h1>⚽ Jリーグ好き顔9選</h1>
-      <p class="subtitle">
-        4人の中から「好き！」と思う選手を選んでください
-      </p>
-    </header>
+<header>
+  <h1>⚽ Jリーグ好き顔9選</h1>
 
-    <!-- ==========================
-         選択画面
-    =========================== -->
-    <section id="gameArea" class="game-area">
-
-      <div class="progress">
-        <div class="progress-number">
-          <span id="selectedCount">0</span> / 9
-        </div>
-
-        <div class="progress-text">
-          好きな顔を選択中
-        </div>
-      </div>
-
-      <div id="playerGrid" class="player-grid">
-        <!-- JavaScriptで選手を表示 -->
-      </div>
-
-      <div class="selected-section">
-        <div class="selected-title">
-          現在の9選
-        </div>
-
-        <div id="selectedList" class="selected-list">
-          <!-- JavaScriptで表示 -->
-        </div>
-      </div>
-
-    </section>
+  <p class="subtitle">
+    4人の中から一番好きな顔を選ぼう
+  </p>
+</header>
 
 
-    <!-- ==========================
-         結果画面
-    =========================== -->
-    <section id="resultArea">
+<!-- =========================
+     GAME
+========================= -->
 
-      <h2 class="result-title">
-        あなたの好き顔9選
-      </h2>
+<section id="gameArea" class="game-area">
 
-      <p class="result-description">
-        これがあなたのJリーグ好き顔9選！
-      </p>
+  <div class="round-info">
 
-      <div id="resultGrid" class="result-grid">
-        <!-- JavaScriptで生成 -->
-      </div>
+    <div class="round-number">
+      <span id="currentRound">1</span>
+      /
+      <span id="totalRounds">100</span>
+    </div>
 
-      <div class="result-buttons">
-
-        <button
-          id="downloadButton"
-          class="action-button download-button">
-          🖼️ 画像を保存
-        </button>
-
-        <button
-          id="restartButton"
-          class="action-button restart-button">
-          🔄 もう一度遊ぶ
-        </button>
-
-      </div>
-
-    </section>
+    <div class="round-label">
+      ラウンド
+    </div>
 
   </div>
 
 
-  <!-- html2canvas
-       結果の3×3グリッドを画像化するために使用 -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-  </script>
+  <div class="instruction">
+    この4人なら、誰の顔が一番好き？
+  </div>
 
 
-  <script>
+  <div id="playerGrid" class="player-grid"></div>
 
-    /* ==================================================
-       選手データ
-       ==================================================
 
-       ここに選手を追加していくだけでOKです。
+  <div class="progress">
+    <div id="progressInner" class="progress-inner"></div>
+  </div>
 
-       image は写真URLです。
+</section>
 
-       現在は「UI Avatars」というプレースホルダーを
-       使用しています。
 
-       実際の選手写真を使う場合は、GitHubリポジトリに
-       画像を入れて、
+<!-- =========================
+     RESULT
+========================= -->
 
-       image: "images/endo.jpg"
+<section id="resultArea" class="result-area">
 
-       のように変更することをおすすめします。
-    ================================================== */
+  <h2 class="result-title">
+    あなたの好き顔9選
+  </h2>
 
-    const players = [
+  <p class="result-description">
+    100回の4択から選ばれたTOP9
+  </p>
 
-      {
-        id: 1,
-        name: "遠藤 航",
-        club: "浦和レッズなど",
-        image:
-          "https://ui-avatars.com/api/?name=%E9%81%A0%E8%97%A4%E8%88%AA&size=800&background=cc0000&color=ffffff&bold=true"
-      },
 
-      {
-        id: 2,
-        name: "谷口 彰悟",
-        club: "川崎フロンターレなど",
-        image:
-          "https://ui-avatars.com/api/?name=%E8%B0%B7%E5%8F%A3%E5%BD%B0%E6%82%9F&size=800&background=0066cc&color=ffffff&bold=true"
-      },
+  <div id="resultGrid" class="result-grid"></div>
 
-      {
-        id: 3,
-        name: "家長 昭博",
-        club: "川崎フロンターレ",
-        image:
-          "https://ui-avatars.com/api/?name=%E5%AE%B6%E9%95%B7%E6%98%AD%E5%8D%9A&size=800&background=009944&color=ffffff&bold=true"
-      },
 
-      {
-        id: 4,
-        name: "大迫 勇也",
-        club: "ヴィッセル神戸など",
-        image:
-          "https://ui-avatars.com/api/?name=%E5%A4%A7%E8%BF%AB%E5%8B%87%E4%B9%9F&size=800&background=990000&color=ffffff&bold=true"
-      },
+  <div class="ranking">
 
-      {
-        id: 5,
-        name: "中村 憲剛",
-        club: "川崎フロンターレ",
-        image:
-          "https://ui-avatars.com/api/?name=%E4%B8%AD%E6%9D%91%E6%86%B2%E5%89%9B&size=800&background=003399&color=ffffff&bold=true"
-      }
+    <div class="ranking-title">
+      選択回数ランキング
+    </div>
 
-    ];
+    <div id="rankingList"></div>
 
+  </div>
 
-    /* ==================================================
-       設定
-    ================================================== */
 
-    const MAX_SELECTION = 9;
-    const DISPLAY_COUNT = 4;
+  <div class="buttons">
 
+    <button
+      id="downloadButton"
+      class="button download-button">
+      🖼️ 画像を保存
+    </button>
 
-    /* ==================================================
-       状態
-    ================================================== */
+    <button
+      id="restartButton"
+      class="button restart-button">
+      🔄 もう一度遊ぶ
+    </button>
 
-    let selectedPlayers = [];
-    let currentCandidates = [];
+  </div>
 
+</section>
 
-    /* ==================================================
-       DOM
-    ================================================== */
+</div>
 
-    const gameArea = document.getElementById("gameArea");
-    const resultArea = document.getElementById("resultArea");
 
-    const playerGrid = document.getElementById("playerGrid");
+<!-- =========================
+     html2canvas
+========================= -->
 
-    const selectedCount =
-      document.getElementById("selectedCount");
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-    const selectedList =
-      document.getElementById("selectedList");
 
-    const resultGrid =
-      document.getElementById("resultGrid");
+<script>
 
-    const downloadButton =
-      document.getElementById("downloadButton");
+/* =====================================================
+   ゲーム設定
+===================================================== */
 
-    const restartButton =
-      document.getElementById("restartButton");
+/*
+ * 100回の4択
+ *
+ * ここを200にすれば200回になります。
+ */
 
+const TOTAL_ROUNDS = 100;
 
-    /* ==================================================
-       初期化
-    ================================================== */
 
-    function init() {
+/*
+ * 1回につき表示する人数
+ */
 
-      selectedPlayers = [];
+const CANDIDATE_COUNT = 4;
 
-      gameArea.style.display = "block";
-      resultArea.style.display = "none";
 
-      updateSelectedList();
+/*
+ * 最終的に表示する人数
+ */
 
-      showNextCandidates();
-    }
+const RESULT_COUNT = 9;
 
 
-    /* ==================================================
-       ランダムな4人を表示
-    ================================================== */
+/*
+ * 同じ選手が連続して出るのを少し抑える
+ *
+ * 0.0 = 制限なし
+ * 1.0 = 直前に出た選手を完全に除外
+ */
+
+const REPEAT_AVOIDANCE = 0.7;
+
+
+/* =====================================================
+   選手データ
+===================================================== */
+
+/*
+ * ★★★ 写真の変更方法 ★★★
+ *
+ * 例えば1人目の写真なら、
+ *
+ * images/players/001.jpg
+ *
+ * を自分の写真に差し替えるだけです。
+ *
+ * GitHub上では、
+ *
+ * index.html
+ * images/
+ *   players/
+ *     001.jpg
+ *     002.jpg
+ *     003.jpg
+ *     ...
+ *
+ * という構成にしてください。
+ *
+ *
+ * 写真がまだない場合でもゲーム自体は動きます。
+ * 下の画像URLが存在しない場合は、
+ * 自動的にプレースホルダーを表示します。
+ */
+
+
+/*
+ * 2026年J1の20クラブをベースにした
+ * 120人の初期登録データです。
+ *
+ * 選手の所属はシーズン中にも移籍・登録変更が
+ * あり得るため、公開直前には公式選手名鑑で
+ * 最終確認してください。
+ */
+
+const players = [
+
+/* ===== 鹿島アントラーズ ===== */
 
-    function showNextCandidates() {
+{id:1,name:"鈴木 優磨",club:"鹿島アントラーズ",image:"images/players/001.jpg"},
+{id:2,name:"知念 慶",club:"鹿島アントラーズ",image:"images/players/002.jpg"},
+{id:3,name:"師岡 柊生",club:"鹿島アントラーズ",image:"images/players/003.jpg"},
+{id:4,name:"濃野 公人",club:"鹿島アントラーズ",image:"images/players/004.jpg"},
+{id:5,name:"早川 友基",club:"鹿島アントラーズ",image:"images/players/005.jpg"},
+{id:6,name:"安西 幸輝",club:"鹿島アントラーズ",image:"images/players/006.jpg"},
+
 
-      playerGrid.innerHTML = "";
+/* ===== 浦和レッズ ===== */
 
-      /*
-       * まだ選んでいない選手を優先する
-       */
-      let availablePlayers =
-        players.filter(player =>
-          !selectedPlayers.some(
-            selected => selected.id === player.id
-          )
-        );
+{id:7,name:"マテウス サヴィオ",club:"浦和レッズ",image:"images/players/007.jpg"},
+{id:8,name:"金子 拓郎",club:"浦和レッズ",image:"images/players/008.jpg"},
+{id:9,name:"渡邊 凌磨",club:"浦和レッズ",image:"images/players/009.jpg"},
+{id:10,name:"宮本 優太",club:"浦和レッズ",image:"images/players/010.jpg"},
+{id:11,name:"西川 周作",club:"浦和レッズ",image:"images/players/011.jpg"},
+{id:12,name:"南野 遥海",club:"浦和レッズ",image:"images/players/012.jpg"},
 
 
-      /*
-       * サンプル人数が9人未満でも動作するよう、
-       * 選手が足りなくなった場合は全選手から補充します。
-       *
-       * 本番ではJ1選手を9人以上登録するのがおすすめです。
-       */
+/* ===== 柏レイソル ===== */
 
-      if (availablePlayers.length < DISPLAY_COUNT) {
+{id:13,name:"細谷 真大",club:"柏レイソル",image:"images/players/013.jpg"},
+{id:14,name:"マテウス サヴィオ",club:"柏レイソル",image:"images/players/014.jpg"},
+{id:15,name:"古賀 太陽",club:"柏レイソル",image:"images/players/015.jpg"},
+{id:16,name:"関根 大輝",club:"柏レイソル",image:"images/players/016.jpg"},
+{id:17,name:"白井 永地",club:"柏レイソル",image:"images/players/017.jpg"},
+{id:18,name:"小屋松 知哉",club:"柏レイソル",image:"images/players/018.jpg"},
 
-        availablePlayers = [
-          ...availablePlayers,
-          ...players.filter(player =>
-            !availablePlayers.some(
-              p => p.id === player.id
-            )
-          )
-        ];
 
-      }
+/* ===== FC東京 ===== */
 
+{id:19,name:"長倉 幹樹",club:"FC東京",image:"images/players/019.jpg"},
+{id:20,name:"マルセロ ヒアン",club:"FC東京",image:"images/players/020.jpg"},
+{id:21,name:"高 宇洋",club:"FC東京",image:"images/players/021.jpg"},
+{id:22,name:"室屋 成",club:"FC東京",image:"images/players/022.jpg"},
+{id:23,name:"佐藤 恵允",club:"FC東京",image:"images/players/023.jpg"},
+{id:24,name:"俵積田 晃太",club:"FC東京",image:"images/players/024.jpg"},
 
-      currentCandidates =
-        shuffleArray(availablePlayers)
-          .slice(0, Math.min(
-            DISPLAY_COUNT,
-            availablePlayers.length
-          ));
 
+/* ===== 東京ヴェルディ ===== */
 
-      currentCandidates.forEach(player => {
+{id:25,name:"染野 唯月",club:"東京ヴェルディ",image:"images/players/025.jpg"},
+{id:26,name:"福田 湧矢",club:"東京ヴェルディ",image:"images/players/026.jpg"},
+{id:27,name:"森田 晃樹",club:"東京ヴェルディ",image:"images/players/027.jpg"},
+{id:28,name:"平川 怜",club:"東京ヴェルディ",image:"images/players/028.jpg"},
+{id:29,name:"鈴木 海音",club:"東京ヴェルディ",image:"images/players/029.jpg"},
+{id:30,name:"山見 大登",club:"東京ヴェルディ",image:"images/players/030.jpg"},
 
-        const card =
-          document.createElement("button");
 
-        card.className = "player-card";
+/* ===== FC町田ゼルビア ===== */
 
-        card.type = "button";
+{id:31,name:"谷 晃生",club:"FC町田ゼルビア",image:"images/players/031.jpg"},
+{id:32,name:"昌子 源",club:"FC町田ゼルビア",image:"images/players/032.jpg"},
+{id:33,name:"相馬 勇紀",club:"FC町田ゼルビア",image:"images/players/033.jpg"},
+{id:34,name:"藤尾 翔太",club:"FC町田ゼルビア",image:"images/players/034.jpg"},
+{id:35,name:"仙頭 啓矢",club:"FC町田ゼルビア",image:"images/players/035.jpg"},
+{id:36,name:"柴戸 海",club:"FC町田ゼルビア",image:"images/players/036.jpg"},
 
-        card.innerHTML = `
 
-          <img
-            src="${player.image}"
-            alt="${escapeHtml(player.name)}"
-            crossorigin="anonymous"
-          >
+/* ===== 川崎フロンターレ ===== */
 
-          <span class="selected-badge">
-            ✓
-          </span>
+{id:37,name:"家長 昭博",club:"川崎フロンターレ",image:"images/players/037.jpg"},
+{id:38,name:"脇坂 泰斗",club:"川崎フロンターレ",image:"images/players/038.jpg"},
+{id:39,name:"山田 新",club:"川崎フロンターレ",image:"images/players/039.jpg"},
+{id:40,name:"橘田 健人",club:"川崎フロンターレ",image:"images/players/040.jpg"},
+{id:41,name:"大南 拓磨",club:"川崎フロンターレ",image:"images/players/041.jpg"},
+{id:42,name:"高井 幸大",club:"川崎フロンターレ",image:"images/players/042.jpg"},
 
-          <span class="player-name">
-            ${escapeHtml(player.name)}
-          </span>
 
-          <span class="player-club">
-            ${escapeHtml(player.club)}
-          </span>
+/* ===== 横浜F・マリノス ===== */
 
-        `;
+{id:43,name:"宮市 亮",club:"横浜F・マリノス",image:"images/players/043.jpg"},
+{id:44,name:"植中 朝日",club:"横浜F・マリノス",image:"images/players/044.jpg"},
+{id:45,name:"井上 健太",club:"横浜F・マリノス",image:"images/players/045.jpg"},
+{id:46,name:"永戸 勝也",club:"横浜F・マリノス",image:"images/players/046.jpg"},
+{id:47,name:"松原 健",club:"横浜F・マリノス",image:"images/players/047.jpg"},
+{id:48,name:"喜田 拓也",club:"横浜F・マリノス",image:"images/players/048.jpg"},
 
-        card.addEventListener(
-          "click",
-          () => selectPlayer(player, card)
-        );
 
-        playerGrid.appendChild(card);
+/* ===== 清水エスパルス ===== */
 
-      });
+{id:49,name:"北川 航也",club:"清水エスパルス",image:"images/players/049.jpg"},
+{id:50,name:"乾 貴士",club:"清水エスパルス",image:"images/players/050.jpg"},
+{id:51,name:"松崎 快",club:"清水エスパルス",image:"images/players/051.jpg"},
+{id:52,name:"原 輝綺",club:"清水エスパルス",image:"images/players/052.jpg"},
+{id:53,name:"高橋 祐治",club:"清水エスパルス",image:"images/players/053.jpg"},
+{id:54,name:"山原 怜音",club:"清水エスパルス",image:"images/players/054.jpg"},
 
-    }
 
+/* ===== 名古屋グランパス ===== */
 
-    /* ==================================================
-       選手を選択
-    ================================================== */
+{id:55,name:"シュミット ダニエル",club:"名古屋グランパス",image:"images/players/055.jpg"},
+{id:56,name:"永井 謙佑",club:"名古屋グランパス",image:"images/players/056.jpg"},
+{id:57,name:"稲垣 祥",club:"名古屋グランパス",image:"images/players/057.jpg"},
+{id:58,name:"森島 司",club:"名古屋グランパス",image:"images/players/058.jpg"},
+{id:59,name:"椎橋 慧也",club:"名古屋グランパス",image:"images/players/059.jpg"},
+{id:60,name:"和泉 竜司",club:"名古屋グランパス",image:"images/players/060.jpg"},
 
-    function selectPlayer(player, card) {
 
-      /*
-       * 9人に達したら何もしない
-       */
-      if (selectedPlayers.length >= MAX_SELECTION) {
-        return;
-      }
+/* ===== 京都サンガ ===== */
 
+{id:61,name:"原 大智",club:"京都サンガF.C.",image:"images/players/061.jpg"},
+{id:62,name:"川﨑 颯太",club:"京都サンガF.C.",image:"images/players/062.jpg"},
+{id:63,name:"豊川 雄太",club:"京都サンガF.C.",image:"images/players/063.jpg"},
+{id:64,name:"福田 心之助",club:"京都サンガF.C.",image:"images/players/064.jpg"},
+{id:65,name:"鈴木 冬一",club:"京都サンガF.C.",image:"images/players/065.jpg"},
+{id:66,name:"佐藤 響",club:"京都サンガF.C.",image:"images/players/066.jpg"},
 
-      /*
-       * すでに選択済みなら何もしない
-       */
-      if (
-        selectedPlayers.some(
-          selected => selected.id === player.id
-        )
-      ) {
 
-        return;
+/* ===== ガンバ大阪 ===== */
 
-      }
+{id:67,name:"東口 順昭",club:"ガンバ大阪",image:"images/players/067.jpg"},
+{id:68,name:"宇佐美 貴史",club:"ガンバ大阪",image:"images/players/068.jpg"},
+{id:69,name:"福岡 将太",club:"ガンバ大阪",image:"images/players/069.jpg"},
+{id:70,name:"半田 陸",club:"ガンバ大阪",image:"images/players/070.jpg"},
+{id:71,name:"一森 純",club:"ガンバ大阪",image:"images/players/071.jpg"},
+{id:72,name:"山田 康太",club:"ガンバ大阪",image:"images/players/072.jpg"},
 
 
-      /*
-       * 選択状態
-       */
-      card.classList.add("selected");
+/* ===== セレッソ大阪 ===== */
 
+{id:73,name:"香川 真司",club:"セレッソ大阪",image:"images/players/073.jpg"},
+{id:74,name:"北野 颯太",club:"セレッソ大阪",image:"images/players/074.jpg"},
+{id:75,name:"上門 知樹",club:"セレッソ大阪",image:"images/players/075.jpg"},
+{id:76,name:"毎熊 晟矢",club:"セレッソ大阪",image:"images/players/076.jpg"},
+{id:77,name:"西尾 隆矢",club:"セレッソ大阪",image:"images/players/077.jpg"},
+{id:78,name:"田中 駿汰",club:"セレッソ大阪",image:"images/players/078.jpg"},
 
-      /*
-       * 選手を追加
-       */
-      selectedPlayers.push(player);
 
+/* ===== ヴィッセル神戸 ===== */
 
-      updateSelectedList();
+{id:79,name:"大迫 勇也",club:"ヴィッセル神戸",image:"images/players/079.jpg"},
+{id:80,name:"武藤 嘉紀",club:"ヴィッセル神戸",image:"images/players/080.jpg"},
+{id:81,name:"山口 蛍",club:"ヴィッセル神戸",image:"images/players/081.jpg"},
+{id:82,name:"酒井 高徳",club:"ヴィッセル神戸",image:"images/players/082.jpg"},
+{id:83,name:"宮代 大聖",club:"ヴィッセル神戸",image:"images/players/083.jpg"},
+{id:84,name:"佐々木 大樹",club:"ヴィッセル神戸",image:"images/players/084.jpg"},
 
 
-      /*
-       * 9人選び終わった
-       */
-      if (
-        selectedPlayers.length >= MAX_SELECTION
-      ) {
+/* ===== ファジアーノ岡山 ===== */
 
-        setTimeout(() => {
-          showResult();
-        }, 300);
+{id:85,name:"河野 孝汰",club:"ファジアーノ岡山",image:"images/players/085.jpg"},
+{id:86,name:"大森 博",club:"ファジアーノ岡山",image:"images/players/086.jpg"},
+{id:87,name:"鈴木 喜丈",club:"ファジアーノ岡山",image:"images/players/087.jpg"},
+{id:88,name:"白井 康介",club:"ファジアーノ岡山",image:"images/players/088.jpg"},
+{id:89,name:"本山 遥",club:"ファジアーノ岡山",image:"images/players/089.jpg"},
+{id:90,name:"ルカオ",club:"ファジアーノ岡山",image:"images/players/090.jpg"},
 
-        return;
-      }
 
+/* ===== サンフレッチェ広島 ===== */
 
-      /*
-       * 少し待って次の4人を表示
-       */
-      setTimeout(() => {
+{id:91,name:"大迫 敬介",club:"サンフレッチェ広島",image:"images/players/091.jpg"},
+{id:92,name:"佐々木 翔",club:"サンフレッチェ広島",image:"images/players/092.jpg"},
+{id:93,name:"荒木 隼人",club:"サンフレッチェ広島",image:"images/players/093.jpg"},
+{id:94,name:"川辺 駿",club:"サンフレッチェ広島",image:"images/players/094.jpg"},
+{id:95,name:"東 俊希",club:"サンフレッチェ広島",image:"images/players/095.jpg"},
+{id:96,name:"中野 就斗",club:"サンフレッチェ広島",image:"images/players/096.jpg"},
 
-        showNextCandidates();
 
-      }, 250);
+/* ===== アビスパ福岡 ===== */
 
-    }
+{id:97,name:"永石 拓海",club:"アビスパ福岡",image:"images/players/097.jpg"},
+{id:98,name:"前嶋 洋太",club:"アビスパ福岡",image:"images/players/098.jpg"},
+{id:99,name:"見木 友哉",club:"アビスパ福岡",image:"images/players/099.jpg"},
+{id:100,name:"師岡 柊生",club:"アビスパ福岡",image:"images/players/100.jpg"},
+{id:101,name:"橋本 悠",club:"アビスパ福岡",image:"images/players/101.jpg"},
+{id:102,name:"ウェリック ポポ",club:"アビスパ福岡",image:"images/players/102.jpg"},
 
 
-    /* ==================================================
-       選択済み一覧
-    ================================================== */
+/* ===== V・ファーレン長崎 ===== */
 
-    function updateSelectedList() {
+{id:103,name:"山口 蛍",club:"V・ファーレン長崎",image:"images/players/103.jpg"},
+{id:104,name:"マテウス ジェズス",club:"V・ファーレン長崎",image:"images/players/104.jpg"},
+{id:105,name:"岩崎 悠人",club:"V・ファーレン長崎",image:"images/players/105.jpg"},
+{id:106,name:"翁長 聖",club:"V・ファーレン長崎",image:"images/players/106.jpg"},
+{id:107,name:"長谷川 元希",club:"V・ファーレン長崎",image:"images/players/107.jpg"},
+{id:108,name:"江川 湧清",club:"V・ファーレン長崎",image:"images/players/108.jpg"},
 
-      selectedCount.textContent =
-        selectedPlayers.length;
 
+/* ===== 水戸ホーリーホック ===== */
 
-      selectedList.innerHTML = "";
+{id:109,name:"山田 奈央",club:"水戸ホーリーホック",image:"images/players/109.jpg"},
+{id:110,name:"飯泉 涼矢",club:"水戸ホーリーホック",image:"images/players/110.jpg"},
+{id:111,name:"久保 征一郎",club:"水戸ホーリーホック",image:"images/players/111.jpg"},
+{id:112,name:"甲田 英將",club:"水戸ホーリーホック",image:"images/players/112.jpg"},
+{id:113,name:"新井 晴樹",club:"水戸ホーリーホック",image:"images/players/113.jpg"},
+{id:114,name:"黒川 淳史",club:"水戸ホーリーホック",image:"images/players/114.jpg"},
 
 
-      selectedPlayers.forEach(player => {
+/* ===== ジェフユナイテッド千葉 ===== */
 
-        const item =
-          document.createElement("div");
+{id:115,name:"田中 和樹",club:"ジェフユナイテッド千葉",image:"images/players/115.jpg"},
+{id:116,name:"津久井 匠海",club:"ジェフユナイテッド千葉",image:"images/players/116.jpg"},
+{id:117,name:"イサカ ゼイン",club:"ジェフユナイテッド千葉",image:"images/players/117.jpg"},
+{id:118,name:"杉山 直宏",club:"ジェフユナイテッド千葉",image:"images/players/118.jpg"},
+{id:119,name:"呉屋 大翔",club:"ジェフユナイテッド千葉",image:"images/players/119.jpg"},
+{id:120,name:"髙橋 壱晟",club:"ジェフユナイテッド千葉",image:"images/players/120.jpg"}
 
-        item.className = "selected-item";
+];
 
-        item.title = player.name;
 
-        item.innerHTML = `
+/* =====================================================
+   ゲーム状態
+===================================================== */
 
-          <img
-            src="${player.image}"
-            alt="${escapeHtml(player.name)}"
-            crossorigin="anonymous"
-          >
+let currentRound = 1;
+let scores = {};
+let currentCandidates = [];
+let previousCandidates = [];
+let choosing = false;
 
-        `;
 
-        selectedList.appendChild(item);
+/* =====================================================
+   DOM
+===================================================== */
 
-      });
+const gameArea =
+  document.getElementById("gameArea");
 
-    }
+const resultArea =
+  document.getElementById("resultArea");
 
+const playerGrid =
+  document.getElementById("playerGrid");
 
-    /* ==================================================
-       結果を表示
-    ================================================== */
+const currentRoundElement =
+  document.getElementById("currentRound");
 
-    function showResult() {
+const totalRoundsElement =
+  document.getElementById("totalRounds");
 
-      gameArea.style.display = "none";
+const progressInner =
+  document.getElementById("progressInner");
 
-      resultArea.style.display = "block";
+const resultGrid =
+  document.getElementById("resultGrid");
 
-      resultGrid.innerHTML = "";
+const rankingList =
+  document.getElementById("rankingList");
 
+const downloadButton =
+  document.getElementById("downloadButton");
 
-      selectedPlayers.forEach(
-        (player, index) => {
+const restartButton =
+  document.getElementById("restartButton");
 
-          const cell =
-            document.createElement("div");
 
-          cell.className = "result-cell";
+/* =====================================================
+   ゲーム開始
+===================================================== */
 
-          cell.innerHTML = `
+function initGame() {
 
-            <img
-              src="${player.image}"
-              alt="${escapeHtml(player.name)}"
-              crossorigin="anonymous"
-            >
+  currentRound = 1;
 
-            <div class="result-cell-name">
-              ${index + 1}. ${escapeHtml(player.name)}
-            </div>
+  previousCandidates = [];
 
-          `;
+  choosing = false;
 
-          resultGrid.appendChild(cell);
+  scores = {};
 
-        }
+  players.forEach(player => {
+    scores[player.id] = 0;
+  });
+
+  totalRoundsElement.textContent =
+    TOTAL_ROUNDS;
+
+  gameArea.style.display = "block";
+
+  resultArea.style.display = "none";
+
+  showCandidates();
+}
+
+
+/* =====================================================
+   4人を選ぶ
+===================================================== */
+
+function getCandidates() {
+
+  let pool =
+    shuffleArray(players);
+
+
+  /*
+   * 前回出た選手を少し避ける
+   */
+
+  if (previousCandidates.length > 0) {
+
+    const preferred =
+      pool.filter(player =>
+        !previousCandidates.includes(player.id)
+      );
+
+    const avoided =
+      pool.filter(player =>
+        previousCandidates.includes(player.id)
       );
 
 
-      /*
-       * ページ上部へスクロール
-       */
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+    /*
+     * まず前回出ていない選手から選ぶ
+     */
+
+    const candidatePool =
+      Math.random() < REPEAT_AVOIDANCE
+        ? preferred
+        : pool;
+
+
+    /*
+     * 4人に足りない場合は
+     * 前回出た選手から補充
+     */
+
+    let selected =
+      candidatePool.slice(
+        0,
+        CANDIDATE_COUNT
+      );
+
+
+    if (selected.length < CANDIDATE_COUNT) {
+
+      selected = [
+        ...selected,
+        ...avoided.slice(
+          0,
+          CANDIDATE_COUNT - selected.length
+        )
+      ];
 
     }
 
-
-    /* ==================================================
-       画像として保存
-    ================================================== */
-
-    downloadButton.addEventListener(
-      "click",
-      async function() {
-
-        downloadButton.disabled = true;
-
-        downloadButton.textContent =
-          "画像を作成中...";
+    return selected;
+  }
 
 
-        try {
-
-          /*
-           * 結果グリッドをCanvas化
-           */
-          const canvas =
-            await html2canvas(
-              resultGrid,
-              {
-                backgroundColor: "#111",
-                scale: 2,
-                useCORS: true
-              }
-            );
+  return pool.slice(
+    0,
+    CANDIDATE_COUNT
+  );
+}
 
 
-          /*
-           * PNGとして保存
-           */
-          const link =
-            document.createElement("a");
+/* =====================================================
+   選択肢表示
+===================================================== */
 
-          link.download =
-            "jleague-sukigao9.png";
+function showCandidates() {
 
-          link.href =
-            canvas.toDataURL("image/png");
+  choosing = false;
 
+  playerGrid.innerHTML = "";
 
-          link.click();
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "画像の保存に失敗しました。"
-            + "\n写真URLのCORS設定などを確認してください。"
-          );
-
-        }
+  currentCandidates =
+    getCandidates();
 
 
-        downloadButton.disabled = false;
-
-        downloadButton.textContent =
-          "🖼️ 画像を保存";
-
-      }
+  previousCandidates =
+    currentCandidates.map(
+      player => player.id
     );
 
 
-    /* ==================================================
-       もう一度遊ぶ
-    ================================================== */
+  currentCandidates.forEach(player => {
 
-    restartButton.addEventListener(
+    const card =
+      document.createElement("button");
+
+    card.type = "button";
+
+    card.className =
+      "player-card";
+
+
+    card.innerHTML = `
+
+      <img
+        src="${player.image}"
+        alt="${escapeHtml(player.name)}"
+        onerror="this.src='https://placehold.co/800x800?text=${encodeURIComponent(player.name)}'"
+      >
+
+      <div class="choice-mark">
+        ✓
+      </div>
+
+      <div class="player-info">
+
+        <span class="player-name">
+          ${escapeHtml(player.name)}
+        </span>
+
+        <span class="player-club">
+          ${escapeHtml(player.club)}
+        </span>
+
+      </div>
+    `;
+
+
+    card.addEventListener(
       "click",
-      function() {
-
-        init();
-
-      }
+      () => choosePlayer(player, card)
     );
 
 
-    /* ==================================================
-       配列をシャッフル
-    ================================================== */
+    playerGrid.appendChild(card);
 
-    function shuffleArray(array) {
-
-      const result =
-        [...array];
+  });
 
 
-      for (
-        let i = result.length - 1;
-        i > 0;
-        i--
-      ) {
-
-        const j =
-          Math.floor(
-            Math.random() * (i + 1)
-          );
+  currentRoundElement.textContent =
+    currentRound;
 
 
-        [
-          result[i],
-          result[j]
-        ] = [
-          result[j],
-          result[i]
-        ];
+  const percentage =
+    ((currentRound - 1) / TOTAL_ROUNDS) * 100;
 
+
+  progressInner.style.width =
+    percentage + "%";
+}
+
+
+/* =====================================================
+   選手を選択
+===================================================== */
+
+function choosePlayer(player, card) {
+
+  if (choosing) {
+    return;
+  }
+
+  choosing = true;
+
+
+  /*
+   * 得票 +1
+   */
+
+  scores[player.id]++;
+
+
+  card.classList.add("selected");
+
+
+  setTimeout(() => {
+
+    if (currentRound >= TOTAL_ROUNDS) {
+
+      showResult();
+
+      return;
+    }
+
+
+    currentRound++;
+
+    showCandidates();
+
+  }, 280);
+}
+
+
+/* =====================================================
+   結果
+===================================================== */
+
+function showResult() {
+
+  gameArea.style.display = "none";
+
+  resultArea.style.display = "block";
+
+
+  /*
+   * 得票数の高い順
+   *
+   * 同点の場合はランダム
+   */
+
+  const ranking =
+    [...players].sort((a,b) => {
+
+      const difference =
+        scores[b.id] - scores[a.id];
+
+      if (difference !== 0) {
+        return difference;
       }
 
+      return Math.random() - .5;
+    });
 
-      return result;
+
+  /*
+   * TOP9
+   */
+
+  const top9 =
+    ranking.slice(
+      0,
+      RESULT_COUNT
+    );
+
+
+  /*
+   * 3×3生成
+   */
+
+  resultGrid.innerHTML = "";
+
+
+  top9.forEach((player,index) => {
+
+    const cell =
+      document.createElement("div");
+
+    cell.className =
+      "result-cell";
+
+
+    cell.innerHTML = `
+
+      <img
+        src="${player.image}"
+        alt="${escapeHtml(player.name)}"
+        onerror="this.src='https://placehold.co/800x800?text=${encodeURIComponent(player.name)}'"
+      >
+
+      <div class="result-cell-name">
+
+        ${index + 1}位
+        ${escapeHtml(player.name)}
+        ・${scores[player.id]}票
+
+      </div>
+
+    `;
+
+
+    resultGrid.appendChild(cell);
+
+  });
+
+
+  /*
+   * 全ランキング
+   */
+
+  rankingList.innerHTML = "";
+
+
+  ranking.forEach((player,index) => {
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "ranking-row";
+
+
+    row.innerHTML = `
+
+      <div class="rank">
+        ${index + 1}
+      </div>
+
+      <div class="rank-photo">
+
+        <img
+          src="${player.image}"
+          alt="${escapeHtml(player.name)}"
+          onerror="this.src='https://placehold.co/100x100?text=${encodeURIComponent(player.name)}'"
+        >
+
+      </div>
+
+      <div class="rank-name">
+        ${escapeHtml(player.name)}
+      </div>
+
+      <div class="rank-score">
+        ${scores[player.id]}票
+      </div>
+
+    `;
+
+
+    rankingList.appendChild(row);
+
+  });
+
+
+  progressInner.style.width = "100%";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+/* =====================================================
+   PNG保存
+===================================================== */
+
+downloadButton.addEventListener(
+  "click",
+  async () => {
+
+    downloadButton.disabled = true;
+
+    downloadButton.textContent =
+      "画像を作成中...";
+
+
+    try {
+
+      const canvas =
+        await html2canvas(
+          resultGrid,
+          {
+            backgroundColor: "#111",
+            scale: 2,
+            useCORS: true
+          }
+        );
+
+
+      const link =
+        document.createElement("a");
+
+
+      link.download =
+        "jleague-sukigao9.png";
+
+
+      link.href =
+        canvas.toDataURL("image/png");
+
+
+      link.click();
+
+
+    } catch(error) {
+
+      console.error(error);
+
+      alert(
+        "画像の保存に失敗しました。"
+      );
 
     }
 
 
-    /* ==================================================
-       HTMLエスケープ
-    ================================================== */
+    downloadButton.disabled = false;
 
-    function escapeHtml(text) {
-
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    }
+    downloadButton.textContent =
+      "🖼️ 画像を保存";
+  }
+);
 
 
-    /* ==================================================
-       START
-    ================================================== */
+/* =====================================================
+   リスタート
+===================================================== */
 
-    init();
+restartButton.addEventListener(
+  "click",
+  () => {
 
-  </script>
+    initGame();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+);
+
+
+/* =====================================================
+   シャッフル
+===================================================== */
+
+function shuffleArray(array) {
+
+  const result =
+    [...array];
+
+
+  for (
+    let i = result.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+
+    [
+      result[i],
+      result[j]
+    ] = [
+      result[j],
+      result[i]
+    ];
+  }
+
+
+  return result;
+}
+
+
+/* =====================================================
+   HTMLエスケープ
+===================================================== */
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+initGame();
+
+</script>
 
 </body>
 </html>
+```
