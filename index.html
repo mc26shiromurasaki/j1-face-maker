@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J1好き顔9選メーカー</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        h1 { color: #111; font-size: 24px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; }
+        #game-container, #result-container { max-width: 500px; margin: 20px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .player-card { background: #f8f9fa; border: 2px solid #ddd; border-radius: 8px; padding: 20px 10px; cursor: pointer; transition: all 0.2s; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .player-card:hover { border-color: #007bff; background: #e9ecef; transform: translateY(-2px); }
+        .player-img-placeholder { width: 60px; height: 60px; background: #343a40; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 10px; font-weight: bold; }
+        .player-name { font-weight: bold; font-size: 16px; }
+        .player-club { font-size: 12px; color: #777; margin-top: 4px; }
+        .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; background: #111; padding: 5px; border-radius: 8px; width: 300px; height: 300px; margin: 20px auto; }
+        .result-item { background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; text-align: center; padding: 2px; overflow: hidden; border-radius: 4px; }
+        .result-club { font-size: 9px; color: #666; font-weight: normal; }
+        button { background: #28a745; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        button:hover { background: #218838; }
+        .hidden { display: none; }
+        #progress { font-size: 14px; color: #999; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>⚽ J1好き顔9選メーカー ⚽</h1>
+    <p>どちらが好みの顔？ 直感で選んでいこう！</p>
+
+    <!-- 選択画面 -->
+    <div id="game-container">
+        <div id="progress">残り人数: <span id="remaining-count">0</span>人</div>
+        <div class="grid-4" id="match-grid">
+            <!-- ここに選手カードが動的に入ります -->
+        </div>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="result-container" class="hidden">
+        <h2>✨ あなたのJ1好き顔9選 ✨</h2>
+        <div class="grid-3x3" id="final-grid">
+            <!-- ここに選ばれた9人が並びます -->
+        </div>
+        <p>※スクリーンショットを撮ってXに投稿しよう！</p>
+        <button onclick="location.reload()">もう一度遊ぶ</button>
+    </div>
+
+    <script>
+        // サッカー選手データ（20名）
+        const allPlayers = [
+            { name: "遠藤 航", club: "J1レジェンド" },
+            { name: "谷口 彰悟", club: "J1レジェンド" },
+            { name: "大迫 勇也", club: "神戸" },
+            { name: "武藤 嘉紀", club: "神戸" },
+            { name: "酒井 高徳", club: "神戸" },
+            { name: "香川 真司", club: "C大阪" },
+            { name: "清武 弘嗣", club: "C大阪" },
+            { name: "西川 周作", club: "浦和" },
+            { name: "酒井 宏樹", club: "浦和" },
+            { name: "鈴木 優磨", club: "鹿島" },
+            { name: "柴崎 岳", club: "鹿島" },
+            { name: "家長 昭博", club: "川崎" },
+            { name: "脇坂 泰斗", club: "川崎" },
+            { name: "宮代 大聖", club: "神戸" },
+            { name: "仲川 輝人", club: "FC東京" },
+            { name: "長友 佑都", club: "FC東京" },
+            { name: "宇佐美 貴史", club: "G大阪" },
+            { name: "細谷 真大", club: "柏" },
+            { name: "満田 誠", club: "広島" },
+            { name: "浅野 雄也", club: "札幌" }
+        ];
+
+        let pool = [...allPlayers];
+        let selectedWinners = [];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startRound() {
+            shuffle(pool);
+            document.getElementById('remaining-count').innerText = pool.length;
+
+            if (selectedWinners.length >= 9 || pool.length < 2) {
+                // 上位が溜まった、またはプールがなくなったら終了処理へ
+                showResults();
+                return;
+            }
+
+            const grid = document.getElementById('match-grid');
+            grid.innerHTML = '';
+
+            // 2人ずつ対戦させる
+            const matchCount = Math.min(2, pool.length);
+            const currentMatch = pool.splice(0, matchCount);
+
+            currentMatch.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.onclick = () => selectPlayer(player, currentMatch);
+
+                card.innerHTML = `
+                    <div class="player-img-placeholder">⚽</div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-club">${player.club}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectPlayer(winner, currentMatch) {
+            // 選んだ選手を確定枠（または次のプール）へ
+            if (!selectedWinners.includes(winner)) {
+                selectedWinners.push(winner);
+            }
+            
+            // 残った選手をプールから除外（今回の対戦相手を落とす）
+            startRound();
+        }
+
+        function showResults() {
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('result-container').classList.remove('hidden');
+
+            const finalGrid = document.getElementById('final-grid');
+            finalGrid.innerHTML = '';
+
+            // 上位9人をグリッドに配置（足りない場合は元のリストから補填）
+            const final9 = [...selectedWinners];
+            while (final9.length < 9 && allPlayers.length > final9.length) {
+                const next = allPlayers.find(p => !final9.includes(p));
+                if (next) final9.push(next);
+            }
+
+            final9.slice(0, 9).forEach(player => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>${player.name}</div>
+                    <div class="result-club">${player.club}</div>
+                `;
+                finalGrid.appendChild(item);
+            });
+        }
+
+        // 初期スタート
+        startRound();
+    </script>
+</body>
+</html>
