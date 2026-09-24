@@ -1,363 +1,935 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J1好き顔9選メーカー</title>
-    <!-- 画像ダウンロードを正常に動作させるためのライブラリ -->
-    <script src="https://cloudflare.com"></script>
-    <style>
-        body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-        h1 { color: #111; font-size: 24px; margin-bottom: 5px; }
-        .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
-        #game-container, #result-container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        /* 4人表示用の2×2グリッド */
-        .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .player-card { background: #f8f9fa; border: 2px solid #eee; border-radius: 8px; padding: 20px 10px; cursor: pointer; transition: all 0.2s; min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .player-card:hover { border-color: #007bff; background: #e9ecef; transform: translateY(-2px); }
-        .player-icon { width: 45px; height: 45px; background: #28a745; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 8px; }
-        .player-name { font-weight: bold; font-size: 15px; color: #111; word-break: break-all; }
-        .player-club { font-size: 12px; color: #666; margin-top: 4px; }
-        
-        /* ダウンロードされる3×3の画像エリア */
-        #download-area { width: 320px; background: #111; padding: 20px 15px 15px 15px; margin: 20px auto; text-align: center; box-sizing: border-box; }
-        .grid-title { color: #fff; font-size: 16px; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif; }
-        .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #111; height: 290px; }
-        .result-item { background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; text-align: center; padding: 4px; overflow: hidden; border-radius: 4px; color: #111; }
-        .result-club { font-size: 9px; color: #666; font-weight: normal; margin-top: 3px; }
-        
-        /* ボタン装飾 */
-        .btn { border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin: 10px 5px; transition: opacity 0.2s; }
-        .btn:hover { opacity: 0.9; }
-        .btn-primary { background: #007bff; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .hidden { display: none; }
-        #progress { font-size: 15px; color: #444; font-weight: bold; background: #e9ecef; padding: 8px; border-radius: 6px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Jリーグ好き顔9選メーカー</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        Meiryo,
+        sans-serif;
+      background: #f3f5f8;
+      color: #222;
+    }
+
+    .container {
+      width: min(900px, 94%);
+      margin: 0 auto;
+      padding: 30px 0 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 5vw, 38px);
+      font-weight: 800;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* --------------------
+       選択画面
+    -------------------- */
+
+    .game-area {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .progress {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .progress-number {
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .progress-text {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .player-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .player-card {
+      position: relative;
+      border: 3px solid transparent;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f7f7f7;
+      cursor: pointer;
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+      padding: 0;
+      font: inherit;
+    }
+
+    .player-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .player-card:active {
+      transform: scale(0.98);
+    }
+
+    .player-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .player-name {
+      display: block;
+      padding: 12px 8px;
+      background: #fff;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .player-club {
+      display: block;
+      padding: 0 8px 12px;
+      background: #fff;
+      color: #777;
+      font-size: 12px;
+    }
+
+    .selected-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #e60012;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .player-card.selected {
+      border-color: #e60012;
+    }
+
+    .player-card.selected .selected-badge {
+      display: flex;
+    }
+
+    /* --------------------
+       選択済み一覧
+    -------------------- */
+
+    .selected-section {
+      margin-top: 28px;
+    }
+
+    .selected-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .selected-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .selected-item {
+      width: 55px;
+      height: 55px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid #ddd;
+    }
+
+    .selected-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --------------------
+       結果画面
+    -------------------- */
+
+    #resultArea {
+      display: none;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .result-title {
+      margin: 0 0 6px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .result-description {
+      margin: 0 0 22px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .result-grid {
+      width: min(650px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      background: #111;
+      border: 3px solid #111;
+    }
+
+    .result-cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #ddd;
+    }
+
+    .result-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .result-cell-name {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 4px;
+      background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.8)
+      );
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      text-shadow: 0 1px 3px #000;
+    }
+
+    .result-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    button.action-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    button.action-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .download-button {
+      background: #111;
+      color: #fff;
+    }
+
+    .restart-button {
+      background: #eee;
+      color: #222;
+    }
+
+    /* --------------------
+       スマホ対応
+    -------------------- */
+
+    @media (max-width: 600px) {
+      .container {
+        padding-top: 20px;
+      }
+
+      .game-area,
+      #resultArea {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .player-grid {
+        gap: 10px;
+      }
+
+      .player-name {
+        font-size: 14px;
+        padding: 9px 5px;
+      }
+
+      .player-club {
+        font-size: 10px;
+        padding: 0 5px 9px;
+      }
+
+      .selected-item {
+        width: 45px;
+        height: 45px;
+      }
+
+      .result-cell-name {
+        font-size: 10px;
+        padding: 5px 2px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    <h1>⚽ J1好き顔9選メーカー ⚽</h1>
-    <div class="subtitle">表示された4人の中から「一番好みの顔」をタップして9人選ぼう！</div>
+  <div class="container">
 
-    <!-- 選択ゲーム画面 -->
-    <div id="game-container">
-        <div id="progress">お気に入り獲得数: <span id="saved-count">0</span> / 9人</div>
-        <div class="grid-4" id="match-grid">
-            <!-- JavaScriptで4人のカードがここに入ります -->
+    <header>
+      <h1>⚽ Jリーグ好き顔9選</h1>
+      <p class="subtitle">
+        4人の中から「好き！」と思う選手を選んでください
+      </p>
+    </header>
+
+    <!-- ==========================
+         選択画面
+    =========================== -->
+    <section id="gameArea" class="game-area">
+
+      <div class="progress">
+        <div class="progress-number">
+          <span id="selectedCount">0</span> / 9
         </div>
-    </div>
 
-    <!-- 結果画面 -->
-    <div id="result-container" class="hidden">
-        <h2>✨ あなたのJ1好き顔9選 ✨</h2>
-        
-        <!-- ここが画像として切り出されます -->
-        <div id="download-area">
-            <div class="grid-title">MY J1 FAVORITE 9</div>
-            <div class="grid-3x3" id="final-grid">
-                <!-- 選ばれた9人がここに並びます -->
-            </div>
+        <div class="progress-text">
+          好きな顔を選択中
         </div>
-        
-        <button class="btn btn-success" onclick="downloadImage()">画像を保存する</button>
-        <button class="btn btn-primary" onclick="location.reload()">もう一度遊ぶ</button>
-    </div>
+      </div>
 
-    <script>
-        // サンプル選手データ（J1の主要クラブから25名）
-        const allPlayers = [
-            { name: "早川 友基", club: "鹿島" },
-            { name: "山田 大樹", club: "鹿島" },
-            { name: "梶川 裕嗣", club: "鹿島" },
-            { name: "藤井 陽登", club: "鹿島" },
-            { name: "安西 幸輝", club: "鹿島" },
-            { name: "千田 海人", club: "鹿島" },
-            { name: "関川 郁万", club: "鹿島" },
-            { name: "小川 諒也", club: "鹿島" },
-            { name: "津久井 佳祐", club: "鹿島" },
-            { name: "小池 龍太", club: "鹿島" },
-            { name: "大川 佑梧", club: "鹿島" },
-            { name: "元砂 晏翔仁 ウデンバ", club: "鹿島" },
-            { name: "広瀬 陸斗", club: "鹿島" },
-            { name: "植田 直通", club: "鹿島" },
-            { name: "三竿 健斗", club: "鹿島" },
-            { name: "柴崎 岳", club: "鹿島" },
-            { name: "樋口 雄太", club: "鹿島" },
-            { name: "林 晴己", club: "鹿島" },
-            { name: "松村 優太", club: "鹿島" },
-            { name: "田川 亨介", club: "鹿島" },
-            { name: "吉田 湊海", club: "鹿島" },
-            { name: "徳田 誉", club: "鹿島" },
-            { name: "鈴木 優磨", club: "鹿島" },
-            { name: "松原 修平", club: "水戸" },
-            { name: "西川 幸之介", club: "水戸" },
-            { name: "上山 海翔", club: "水戸" },
-            { name: "早川 ウワブライト", club: "水戸" },
-            { name: "フォファナ マリック", club: "水戸" },
-            { name: "河面 旺成", club: "水戸" },
-            { name: "岩﨑 博", club: "水戸" },
-            { name: "大森 渚生", club: "水戸" },
-            { name: "木本 恭生", club: "水戸" },
-            { name: "田村 遊吏", club: "水戸" },
-            { name: "板倉 健太", club: "水戸" },
-            { name: "真瀬 拓海", club: "水戸" },
-            { name: "家泉 怜依", club: "水戸" },
-            { name: "大崎 航詩", club: "水戸" },
-            { name: "加藤 千尋", club: "水戸" },
-            { name: "鳥海 芳樹", club: "水戸" },
-            { name: "新井 瑞希", club: "水戸" },
-            { name: "仙波 大志", club: "水戸" },
-            { name: "舩橋 佑", club: "水戸" },
-            { name: "山﨑 希一", club: "水戸" },
-            { name: "山本 隼大", club: "水戸" },
-            { name: "島谷 義進", club: "水戸" },
-            { name: "西原 源樹", club: "水戸" },
-            { name: "山下 優人", club: "水戸" },
-            { name: "山下 翔大", club: "水戸" },
-            { name: "川上 航立", club: "水戸" },
-            { name: "根本 凌", club: "水戸" },
-            { name: "渡邉 新太", club: "水戸" },
-            { name: "内野 航太郎", club: "水戸" },
-            { name: "谷口 海斗", club: "水戸" },
-            { name: "多田 圭佑", club: "水戸" },
-            { name: "五木田 季晋", club: "水戸" },
-            { name: "西川 周作", club: "浦和" },
-            { name: "福井 光輝", club: "浦和" },
-            { name: "新井 栄聡", club: "浦和" },
-            { name: "宮本 優太", club: "浦和" },
-            { name: "根本 健太", club: "浦和" },
-            { name: "山根 視来", club: "浦和" },
-            { name: "工藤 孝太", club: "浦和" },
-            { name: "林 幸多郎", club: "浦和" },
-            { name: "田中 義峯", club: "浦和" },
-            { name: "稲垣 篤志", club: "浦和" },
-            { name: "片山 瑛一", club: "浦和" },
-            { name: "田中 怜音", club: "浦和" },
-            { name: "金子 拓郎", club: "浦和" },
-            { name: "水沼 宏太", club: "浦和" },
-            { name: "瀬古 樹", club: "浦和" },
-            { name: "渡邊 凌磨", club: "浦和" },
-            { name: "安居 海渡", club: "浦和" },
-            { name: "堀内 陽太", club: "浦和" },
-            { name: "笹 修大", club: "浦和" },
-            { name: "植木 颯", club: "浦和" },
-            { name: "早川 隼平", club: "浦和" },
-            { name: "和田 武士", club: "浦和" },
-            { name: "長沼 洋一", club: "浦和" },
-            { name: "小森 飛絢", club: "浦和" },
-            { name: "肥田野 蓮治", club: "浦和" },
-            { name: "南野 遥海", club: "浦和" },
-            { name: "オナイウ 阿道", club: "浦和" },
-            { name: "薄井 覇斗", club: "千葉" },
-            { name: "鈴木 椋大", club: "千葉" },
-            { name: "岡本 享也", club: "千葉" },
-            { name: "久保庭 良太", club: "千葉" },
-            { name: "鈴木 大輔", club: "千葉" },
-            { name: "前 貴之", club: "千葉" },
-            { name: "飯田 貴敬", club: "千葉" },
-            { name: "鳥海 晃司", club: "千葉" },
-            { name: "植田 悠太", club: "千葉" },
-            { name: "河野 貴志", club: "千葉" },
-            { name: "石尾 陸登", club: "千葉" },
-            { name: "田中 泰士", club: "千葉" },
-            { name: "小林 祐介", club: "千葉" },
-            { name: "津久井 匠海", club: "千葉" },
-            { name: "米倉 恒貴", club: "千葉" },
-            { name: "椿 直起", club: "千葉" },
-            { name: "杉山 直宏", club: "千葉" },
-            { name: "姫野 誠", club: "千葉" },
-            { name: "天笠 泰輝", club: "千葉" },
-            { name: "安井 拓也", club: "千葉" },
-            { name: "イサカ ゼイン", club: "千葉" },
-            { name: "品田 愛斗", club: "千葉" },
-            { name: "日高 大", club: "千葉" },
-            { name: "田中 和樹", club: "千葉" },
-            { name: "呉屋 大翔", club: "千葉" },
-            { name: "石川 大地", club: "千葉" },
-            { name: "矢村 健", club: "千葉" },
-            { name: "松村 拓実", club: "千葉" },
-            { name: "猿田 遥己", club: "柏" },
-            { name: "小島 亨介", club: "柏" },
-            { name: "永井 堅梧", club: "柏" },
-            { name: "松本 健太", club: "柏" },
-            { name: "若原 智哉", club: "柏" },
-            { name: "三丸 拡", club: "柏" },
-            { name: "麻田 将吾", club: "柏" },
-            { name: "古賀 太陽", club: "柏" },
-            { name: "犬飼 智也", club: "柏" },
-            { name: "杉岡 大暉", club: "柏" },
-            { name: "山之内 佑成", club: "柏" },
-            { name: "原田 亘", club: "柏" },
-            { name: "常藤 奏", club: "柏" },
-            { name: "馬場 晴也", club: "柏" },
-            { name: "遠藤 渓太", club: "柏" },
-            { name: "山田 雄士", club: "柏" },
-            { name: "小泉 佳穂", club: "柏" },
-            { name: "渡井 理己", club: "柏" },
-            { name: "大久保 智明", club: "柏" },
-            { name: "汰木 康也", club: "柏" },
-            { name: "手塚 康平", club: "柏" },
-            { name: "仲間 隼斗", club: "柏" },
-            { name: "瀬川 祐輔", club: "柏" },
-            { name: "小西 雄大", club: "柏" },
-            { name: "長南 開史", club: "柏" },
-            { name: "久保 藤次郎", club: "柏" },
-            { name: "熊坂 光希", club: "柏" },
-            { name: "戸嶋 祥郎", club: "柏" },
-            { name: "古谷 柊介", club: "柏" },
-            { name: "岩永 創太", club: "柏" },
-            { name: "島野 怜", club: "柏" },
-            { name: "中川 敦瑛", club: "柏" },
-            { name: "原川 力", club: "柏" },
-            { name: "弓場 堅真", club: "柏" },
-            { name: "山内 日向汰", club: "柏" },
-            { name: "細谷 真大", club: "柏" },
-            { name: "藤尾 翔太", club: "柏" },
-            { name: "垣田 裕暉", club: "柏" },
-            { name: "古澤 ナベル慈宇", club: "柏" },
-            { name: "満田 誠", club: "柏" },
-            { name: "田中 颯", club: "FC東京" },
-            { name: "渡邊 麻舟", club: "FC東京" },
-            { name: "後藤 亘", club: "FC東京" },
-            { name: "室屋 成", club: "FC東京" },
-            { name: "森重 真人", club: "FC東京" },
-            { name: "稲村 隼翔", club: "FC東京" },
-            { name: "長友 佑都", club: "FC東京" },
-            { name: "バングーナガンデ 佳史扶", club: "FC東京" },
-            { name: "大森 理生", club: "FC東京" },
-            { name: "永野 修都", club: "FC東京" },
-            { name: "石原 広教", club: "FC東京" },
-            { name: "橋本 健人", club: "FC東京" },
-            { name: "鈴木 楓", club: "FC東京" },
-            { name: "安斎 颯馬", club: "FC東京" },
-            { name: "高 宇洋", club: "FC東京" },
-            { name: "橋本 拳人", club: "FC東京" },
-            { name: "本間 至恩", club: "FC東京" },
-            { name: "菅原 悠太", club: "FC東京" },
-            { name: "常盤 亨太", club: "FC東京" },
-            { name: "俵積田 晃太", club: "FC東京" },
-            { name: "田中 希和", club: "FC東京" },
-            { name: "山田 楓喜", club: "FC東京" },
-            { name: "佐藤 恵允", club: "FC東京" },
-            { name: "小柏 剛", club: "FC東京" },
-            { name: "小湊 絆", club: "FC東京" },
-            { name: "長倉 幹樹", club: "FC東京" },
-            { name: "仲川 輝人", club: "FC東京" },
-            { name: "尾谷 ディヴァインチネドゥ", club: "FC東京" },
-            { name: "て", club: "FC東京" },
-            { name: "す", club: "FC東京" },
-            { name: "と", club: "FC東京" },
-            { name: "脇坂 泰斗", club: "川崎" },
-            { name: "宮代 大聖", club: "神戸" },
-            { name: "仲川 輝人", club: "FC東京" },
-            { name: "長友 佑都", club: "FC東京" },
-            { name: "宇佐美 貴史", club: "G大阪" },
-            { name: "細谷 真大", club: "柏" },
-            { name: "満田 誠", club: "広島" },
-            { name: "浅野 雄也", club: "札幌" }
+      <div id="playerGrid" class="player-grid">
+        <!-- JavaScriptで選手を表示 -->
+      </div>
+
+      <div class="selected-section">
+        <div class="selected-title">
+          現在の9選
+        </div>
+
+        <div id="selectedList" class="selected-list">
+          <!-- JavaScriptで表示 -->
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ==========================
+         結果画面
+    =========================== -->
+    <section id="resultArea">
+
+      <h2 class="result-title">
+        あなたの好き顔9選
+      </h2>
+
+      <p class="result-description">
+        これがあなたのJリーグ好き顔9選！
+      </p>
+
+      <div id="resultGrid" class="result-grid">
+        <!-- JavaScriptで生成 -->
+      </div>
+
+      <div class="result-buttons">
+
+        <button
+          id="downloadButton"
+          class="action-button download-button">
+          🖼️ 画像を保存
+        </button>
+
+        <button
+          id="restartButton"
+          class="action-button restart-button">
+          🔄 もう一度遊ぶ
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- html2canvas
+       結果の3×3グリッドを画像化するために使用 -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+  </script>
+
+
+  <script>
+
+    /* ==================================================
+       選手データ
+       ==================================================
+
+       ここに選手を追加していくだけでOKです。
+
+       image は写真URLです。
+
+       現在は「UI Avatars」というプレースホルダーを
+       使用しています。
+
+       実際の選手写真を使う場合は、GitHubリポジトリに
+       画像を入れて、
+
+       image: "images/endo.jpg"
+
+       のように変更することをおすすめします。
+    ================================================== */
+
+    const players = [
+
+      {
+        id: 1,
+        name: "遠藤 航",
+        club: "浦和レッズなど",
+        image:
+          "https://ui-avatars.com/api/?name=%E9%81%A0%E8%97%A4%E8%88%AA&size=800&background=cc0000&color=ffffff&bold=true"
+      },
+
+      {
+        id: 2,
+        name: "谷口 彰悟",
+        club: "川崎フロンターレなど",
+        image:
+          "https://ui-avatars.com/api/?name=%E8%B0%B7%E5%8F%A3%E5%BD%B0%E6%82%9F&size=800&background=0066cc&color=ffffff&bold=true"
+      },
+
+      {
+        id: 3,
+        name: "家長 昭博",
+        club: "川崎フロンターレ",
+        image:
+          "https://ui-avatars.com/api/?name=%E5%AE%B6%E9%95%B7%E6%98%AD%E5%8D%9A&size=800&background=009944&color=ffffff&bold=true"
+      },
+
+      {
+        id: 4,
+        name: "大迫 勇也",
+        club: "ヴィッセル神戸など",
+        image:
+          "https://ui-avatars.com/api/?name=%E5%A4%A7%E8%BF%AB%E5%8B%87%E4%B9%9F&size=800&background=990000&color=ffffff&bold=true"
+      },
+
+      {
+        id: 5,
+        name: "中村 憲剛",
+        club: "川崎フロンターレ",
+        image:
+          "https://ui-avatars.com/api/?name=%E4%B8%AD%E6%9D%91%E6%86%B2%E5%89%9B&size=800&background=003399&color=ffffff&bold=true"
+      }
+
+    ];
+
+
+    /* ==================================================
+       設定
+    ================================================== */
+
+    const MAX_SELECTION = 9;
+    const DISPLAY_COUNT = 4;
+
+
+    /* ==================================================
+       状態
+    ================================================== */
+
+    let selectedPlayers = [];
+    let currentCandidates = [];
+
+
+    /* ==================================================
+       DOM
+    ================================================== */
+
+    const gameArea = document.getElementById("gameArea");
+    const resultArea = document.getElementById("resultArea");
+
+    const playerGrid = document.getElementById("playerGrid");
+
+    const selectedCount =
+      document.getElementById("selectedCount");
+
+    const selectedList =
+      document.getElementById("selectedList");
+
+    const resultGrid =
+      document.getElementById("resultGrid");
+
+    const downloadButton =
+      document.getElementById("downloadButton");
+
+    const restartButton =
+      document.getElementById("restartButton");
+
+
+    /* ==================================================
+       初期化
+    ================================================== */
+
+    function init() {
+
+      selectedPlayers = [];
+
+      gameArea.style.display = "block";
+      resultArea.style.display = "none";
+
+      updateSelectedList();
+
+      showNextCandidates();
+    }
+
+
+    /* ==================================================
+       ランダムな4人を表示
+    ================================================== */
+
+    function showNextCandidates() {
+
+      playerGrid.innerHTML = "";
+
+      /*
+       * まだ選んでいない選手を優先する
+       */
+      let availablePlayers =
+        players.filter(player =>
+          !selectedPlayers.some(
+            selected => selected.id === player.id
+          )
+        );
+
+
+      /*
+       * サンプル人数が9人未満でも動作するよう、
+       * 選手が足りなくなった場合は全選手から補充します。
+       *
+       * 本番ではJ1選手を9人以上登録するのがおすすめです。
+       */
+
+      if (availablePlayers.length < DISPLAY_COUNT) {
+
+        availablePlayers = [
+          ...availablePlayers,
+          ...players.filter(player =>
+            !availablePlayers.some(
+              p => p.id === player.id
+            )
+          )
         ];
 
-        let selectedWinners = [];
+      }
 
-        // 配列をランダムに並び替える関数
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+
+      currentCandidates =
+        shuffleArray(availablePlayers)
+          .slice(0, Math.min(
+            DISPLAY_COUNT,
+            availablePlayers.length
+          ));
+
+
+      currentCandidates.forEach(player => {
+
+        const card =
+          document.createElement("button");
+
+        card.className = "player-card";
+
+        card.type = "button";
+
+        card.innerHTML = `
+
+          <img
+            src="${player.image}"
+            alt="${escapeHtml(player.name)}"
+            crossorigin="anonymous"
+          >
+
+          <span class="selected-badge">
+            ✓
+          </span>
+
+          <span class="player-name">
+            ${escapeHtml(player.name)}
+          </span>
+
+          <span class="player-club">
+            ${escapeHtml(player.club)}
+          </span>
+
+        `;
+
+        card.addEventListener(
+          "click",
+          () => selectPlayer(player, card)
+        );
+
+        playerGrid.appendChild(card);
+
+      });
+
+    }
+
+
+    /* ==================================================
+       選手を選択
+    ================================================== */
+
+    function selectPlayer(player, card) {
+
+      /*
+       * 9人に達したら何もしない
+       */
+      if (selectedPlayers.length >= MAX_SELECTION) {
+        return;
+      }
+
+
+      /*
+       * すでに選択済みなら何もしない
+       */
+      if (
+        selectedPlayers.some(
+          selected => selected.id === player.id
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * 選択状態
+       */
+      card.classList.add("selected");
+
+
+      /*
+       * 選手を追加
+       */
+      selectedPlayers.push(player);
+
+
+      updateSelectedList();
+
+
+      /*
+       * 9人選び終わった
+       */
+      if (
+        selectedPlayers.length >= MAX_SELECTION
+      ) {
+
+        setTimeout(() => {
+          showResult();
+        }, 300);
+
+        return;
+      }
+
+
+      /*
+       * 少し待って次の4人を表示
+       */
+      setTimeout(() => {
+
+        showNextCandidates();
+
+      }, 250);
+
+    }
+
+
+    /* ==================================================
+       選択済み一覧
+    ================================================== */
+
+    function updateSelectedList() {
+
+      selectedCount.textContent =
+        selectedPlayers.length;
+
+
+      selectedList.innerHTML = "";
+
+
+      selectedPlayers.forEach(player => {
+
+        const item =
+          document.createElement("div");
+
+        item.className = "selected-item";
+
+        item.title = player.name;
+
+        item.innerHTML = `
+
+          <img
+            src="${player.image}"
+            alt="${escapeHtml(player.name)}"
+            crossorigin="anonymous"
+          >
+
+        `;
+
+        selectedList.appendChild(item);
+
+      });
+
+    }
+
+
+    /* ==================================================
+       結果を表示
+    ================================================== */
+
+    function showResult() {
+
+      gameArea.style.display = "none";
+
+      resultArea.style.display = "block";
+
+      resultGrid.innerHTML = "";
+
+
+      selectedPlayers.forEach(
+        (player, index) => {
+
+          const cell =
+            document.createElement("div");
+
+          cell.className = "result-cell";
+
+          cell.innerHTML = `
+
+            <img
+              src="${player.image}"
+              alt="${escapeHtml(player.name)}"
+              crossorigin="anonymous"
+            >
+
+            <div class="result-cell-name">
+              ${index + 1}. ${escapeHtml(player.name)}
+            </div>
+
+          `;
+
+          resultGrid.appendChild(cell);
+
+        }
+      );
+
+
+      /*
+       * ページ上部へスクロール
+       */
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /* ==================================================
+       画像として保存
+    ================================================== */
+
+    downloadButton.addEventListener(
+      "click",
+      async function() {
+
+        downloadButton.disabled = true;
+
+        downloadButton.textContent =
+          "画像を作成中...";
+
+
+        try {
+
+          /*
+           * 結果グリッドをCanvas化
+           */
+          const canvas =
+            await html2canvas(
+              resultGrid,
+              {
+                backgroundColor: "#111",
+                scale: 2,
+                useCORS: true
+              }
+            );
+
+
+          /*
+           * PNGとして保存
+           */
+          const link =
+            document.createElement("a");
+
+          link.download =
+            "jleague-sukigao9.png";
+
+          link.href =
+            canvas.toDataURL("image/png");
+
+
+          link.click();
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "画像の保存に失敗しました。"
+            + "\n写真URLのCORS設定などを確認してください。"
+          );
+
         }
 
-        // 4人の対戦ラウンドを開始する関数
-        function startRound() {
-            document.getElementById('saved-count').innerText = selectedWinners.length;
 
-            // 9人選出できたら結果画面へ
-            if (selectedWinners.length >= 9) {
-                showResults();
-                return;
-            }
+        downloadButton.disabled = false;
 
-            const grid = document.getElementById('match-grid');
-            grid.innerHTML = '';
+        downloadButton.textContent =
+          "🖼️ 画像を保存";
 
-            // まだ選ばれていない選手からランダムに4人選出
-            let shuffled = shuffle([...allPlayers]);
-            let currentMatch = [];
-            
-            for (let p of shuffled) {
-                if (!selectedWinners.includes(p)) {
-                    currentMatch.push(p);
-                }
-                if (currentMatch.length === 4) break;
-            }
+      }
+    );
 
-            // 万が一プールが足りない場合の補填処理
-            while (currentMatch.length < 4) {
-                let randomPlayer = allPlayers[Math.floor(Math.random() * allPlayers.length)];
-                if (!currentMatch.includes(randomPlayer)) {
-                    currentMatch.push(randomPlayer);
-                }
-            }
 
-            // 画面にカードを生成
-            currentMatch.forEach(player => {
-                const card = document.createElement('div');
-                card.className = 'player-card';
-                card.onclick = () => selectPlayer(player);
+    /* ==================================================
+       もう一度遊ぶ
+    ================================================== */
 
-                card.innerHTML = `
-                    <div class="player-icon">⚽</div>
-                    <div class="player-name">${player.name}</div>
-                    <div class="player-club">${player.club}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+    restartButton.addEventListener(
+      "click",
+      function() {
 
-        // 選手がタップされた時の処理
-        function selectPlayer(winner) {
-            if (!selectedWinners.includes(winner)) {
-                selectedWinners.push(winner);
-            }
-            startRound();
-        }
+        init();
 
-        // 結果を3×3で表示する関数
-        function showResults() {
-            document.getElementById('game-container').classList.add('hidden');
-            document.getElementById('result-container').classList.remove('hidden');
+      }
+    );
 
-            const finalGrid = document.getElementById('final-grid');
-            finalGrid.innerHTML = '';
 
-            selectedWinners.slice(0, 9).forEach(player => {
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <div>${player.name}</div>
-                    <div class="result-club">${player.club}</div>
-                `;
-                finalGrid.appendChild(item);
-            });
-        }
+    /* ==================================================
+       配列をシャッフル
+    ================================================== */
 
-        // 表示されている3x3エリアを画像化してダウンロード
-        function downloadImage() {
-            const target = document.getElementById('download-area');
-            // 高画質で出力するためにscaleを2に設定
-            html2canvas(target, { scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'j1_favorite_9.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
+    function shuffleArray(array) {
 
-        // 初回起動
-        startRound();
-    </script>
+      const result =
+        [...array];
+
+
+      for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+      ) {
+
+        const j =
+          Math.floor(
+            Math.random() * (i + 1)
+          );
+
+
+        [
+          result[i],
+          result[j]
+        ] = [
+          result[j],
+          result[i]
+        ];
+
+      }
+
+
+      return result;
+
+    }
+
+
+    /* ==================================================
+       HTMLエスケープ
+    ================================================== */
+
+    function escapeHtml(text) {
+
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ==================================================
+       START
+    ================================================== */
+
+    init();
+
+  </script>
+
 </body>
 </html>
