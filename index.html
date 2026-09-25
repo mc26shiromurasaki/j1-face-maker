@@ -1,1328 +1,5118 @@
-```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Jリーグ好き顔9選メーカー</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Jリーグ 好き顔9選</title>
 <style>
-* {
-  box-sizing: border-box;
+:root{
+  --bg:#f5f6f8;--card:#fff;--text:#111827;--muted:#6b7280;
+  --line:#e5e7eb;--accent:#111827;--accent2:#2563eb;
 }
-
-body {
-  margin: 0;
-  background: #f2f4f7;
-  color: #222;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans",
-    Meiryo,
-    sans-serif;
-}
-
-.container {
-  width: min(900px, 94%);
-  margin: auto;
-  padding: 24px 0 60px;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 22px;
-}
-
-h1 {
-  margin: 0 0 7px;
-  font-size: clamp(26px, 6vw, 42px);
-  font-weight: 900;
-}
-
-.subtitle {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
-}
-
-/* =========================
-   ゲーム
-========================= */
-
-.game-area,
-.result-area {
-  background: white;
-  border-radius: 22px;
-  padding: 24px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.08);
-}
-
-.round-info {
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-.round-number {
-  font-size: 32px;
-  font-weight: 900;
-}
-
-.round-label {
-  color: #777;
-  font-size: 12px;
-}
-
-.instruction {
-  text-align: center;
-  font-weight: 800;
-  margin-bottom: 18px;
-}
-
-.player-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.player-card {
-  position: relative;
-  padding: 0;
-  border: 3px solid transparent;
-  border-radius: 17px;
-  overflow: hidden;
-  background: #eee;
-  cursor: pointer;
-  font: inherit;
-  transition: .15s;
-}
-
-.player-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.15);
-}
-
-.player-card:active {
-  transform: scale(.98);
-}
-
-.player-card img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  background: #ddd;
-}
-
-.player-info {
-  background: white;
-  text-align: center;
-  padding: 10px 5px;
-}
-
-.player-name {
-  display: block;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.player-club {
-  display: block;
-  margin-top: 3px;
-  color: #777;
-  font-size: 11px;
-}
-
-.choice-mark {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-
-  width: 42px;
-  height: 42px;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-  background: #e60012;
-  color: white;
-
-  font-size: 23px;
-  font-weight: 900;
-}
-
-.player-card.selected {
-  border-color: #e60012;
-  transform: scale(.97);
-}
-
-.player-card.selected .choice-mark {
-  display: flex;
-}
-
-.progress {
-  height: 8px;
-  margin-top: 18px;
-
-  background: #eee;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-inner {
-  width: 0;
-  height: 100%;
-  background: #e60012;
-  transition: width .25s;
-}
-
-/* =========================
-   結果
-========================= */
-
-.result-area {
-  display: none;
-  text-align: center;
-}
-
-.result-title {
-  margin: 0 0 5px;
-  font-size: 30px;
-  font-weight: 900;
-}
-
-.result-description {
-  color: #666;
-  font-size: 13px;
-  margin: 0 0 20px;
-}
-
-/* 3×3 */
-
-.result-grid {
-  width: min(700px,100%);
-  margin: auto;
-
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-
-  gap: 3px;
-
-  background: #111;
-  border: 3px solid #111;
-}
-
-.result-cell {
-  position: relative;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  background: #ddd;
-}
-
-.result-cell img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.result-cell-name {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  padding: 25px 5px 8px;
-
-  color: white;
-  font-size: 13px;
-  font-weight: 800;
-
-  text-shadow: 0 1px 4px #000;
-
-  background:
-    linear-gradient(
-      transparent,
-      rgba(0,0,0,.9)
-    );
-}
-
-/* =========================
-   ランキング
-========================= */
-
-.ranking {
-  width: min(600px,100%);
-  margin: 25px auto 0;
-  text-align: left;
-}
-
-.ranking-title {
-  text-align: center;
-  font-weight: 900;
-  margin-bottom: 10px;
-}
-
-.ranking-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 8px;
-
-  border-bottom: 1px solid #eee;
-}
-
-.rank {
-  width: 28px;
-  text-align: center;
-  font-weight: 900;
-}
-
-.rank-photo {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.rank-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.rank-name {
-  flex: 1;
-  font-weight: 700;
-}
-
-.rank-score {
-  color: #e60012;
-  font-weight: 900;
-}
-
-/* =========================
-   ボタン
-========================= */
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 25px;
-}
-
-.button {
-  border: 0;
-  border-radius: 999px;
-  padding: 14px 25px;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.download-button {
-  background: #111;
-  color: white;
-}
-
-.restart-button {
-  background: #eee;
-  color: #222;
-}
-
-/* =========================
-   スマホ
-========================= */
-
-@media(max-width:600px) {
-
-  .container {
-    padding-top: 15px;
-  }
-
-  .game-area,
-  .result-area {
-    padding: 15px;
-    border-radius: 17px;
-  }
-
-  .player-grid {
-    gap: 9px;
-  }
-
-  .player-name {
-    font-size: 14px;
-  }
-
-  .player-club {
-    font-size: 9px;
-  }
-
-  .player-info {
-    padding: 8px 3px;
-  }
-
-  .result-cell-name {
-    font-size: 9px;
-    padding-bottom: 5px;
-  }
-
-  .rank-photo {
-    width: 38px;
-    height: 38px;
-  }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",Meiryo,sans-serif}
+button{font:inherit}
+.app{min-height:100svh}
+.header{padding:20px 16px 12px;text-align:center}
+.logo{font-weight:900;letter-spacing:.02em;font-size:clamp(24px,7vw,38px)}
+.subtitle{margin-top:5px;color:var(--muted);font-size:13px}
+.wrap{width:min(980px,100%);margin:auto;padding:0 14px 30px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 30px rgba(17,24,39,.06);padding:18px}
+.hidden{display:none!important}
+.start-title{font-size:24px;font-weight:900;margin:4px 0 10px}
+.start-text{color:#4b5563;line-height:1.8;font-size:14px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.rule{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:13px;text-align:center}
+.rule b{display:block;font-size:20px}.rule span{font-size:12px;color:var(--muted)}
+.primary,.secondary{border:0;border-radius:999px;padding:13px 20px;font-weight:800;cursor:pointer}
+.primary{background:#111827;color:white;width:100%}
+.secondary{background:#eef2ff;color:#1e3a8a}
+.progress{margin-bottom:14px}
+.progress-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:7px}
+.bar{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:#111827;border-radius:99px;transition:width .25s}
+.stage{font-weight:900;font-size:22px;margin:5px 0 3px}
+.stage-note{font-size:12px;color:var(--muted);margin-bottom:15px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.choice{border:1px solid var(--line);background:white;border-radius:18px;overflow:hidden;cursor:pointer;padding:0;text-align:left;transition:transform .12s,box-shadow .12s}
+.choice:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.choice:active{transform:scale(.985)}
+.photo{aspect-ratio:4/5;background:#e5e7eb;display:grid;place-items:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar{width:100%;height:100%;display:grid;place-items:center;font-weight:900;font-size:clamp(38px,10vw,70px);color:#64748b;background:linear-gradient(135deg,#e2e8f0,#f8fafc)}
+.choice-body{padding:11px 12px 13px}
+.choice-name{font-weight:900;font-size:16px;line-height:1.3}
+.choice-team{font-size:12px;color:var(--muted);margin-top:3px}
+.choice-age{font-size:11px;color:#9ca3af;margin-top:3px}
+.result-head{text-align:center}
+.result-head h1{font-size:30px;margin:4px 0}
+.result-head p{color:var(--muted);font-size:13px}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.podium-group{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:12px}
+.podium-group h2{text-align:center;font-size:16px;margin:3px 0 12px}
+.pod-card{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:8px}
+.pod-card:last-child{margin-bottom:0}
+.pod-photo{aspect-ratio:1/1;background:#e5e7eb}
+.pod-photo img{width:100%;height:100%;object-fit:cover}
+.pod-info{padding:8px}.rank{font-size:11px;color:var(--muted)}.pname{font-weight:900;font-size:13px}.pteam{font-size:10px;color:var(--muted)}
+.final-nine{margin-top:18px}
+.final-nine h2{text-align:center;font-size:20px}
+.nine{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nine-card{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.nine-photo{aspect-ratio:1/1;background:#e5e7eb}
+.nine-photo img{width:100%;height:100%;object-fit:cover}
+.nine-info{padding:8px}.nine-rank{font-weight:900;font-size:12px}.nine-name{font-weight:900;font-size:13px}.nine-team{font-size:10px;color:var(--muted)}
+.actions{display:flex;gap:10px;margin-top:18px}.actions button{flex:1}
+.note{font-size:11px;color:#9ca3af;line-height:1.7;margin-top:14px}
+.admin{margin-top:16px}.admin summary{cursor:pointer;color:#374151;font-weight:800}
+textarea{width:100%;min-height:180px;margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(max-width:620px){
+  .panel{padding:14px;border-radius:18px}
+  .rules{gap:7px}.rule{padding:10px 5px}
+  .choices{gap:9px}.choice-body{padding:9px}
+  .choice-name{font-size:14px}
+  .podium{gap:6px}.podium-group{padding:7px}
+  .nine{gap:7px}
 }
 </style>
 </head>
-
-
 <body>
+<div class="app">
+  <header class="header">
+    <div class="logo">⚽ Jリーグ 好き顔9選</div>
+    <div class="subtitle">4択を繰り返して、あなたの「好きな顔」を発掘しよう</div>
+  </header>
 
-<div class="container">
+  <main class="wrap">
+    <section id="startScreen" class="panel">
+      <div class="start-title">あなたのJリーグ好き顔9選</div>
+      <div class="start-text">
+        10代・20代・30代以上の3年代で予選を行い、それぞれ3人ずつを選出。
+        最後に<strong>合計9人</strong>の「好き顔9選」を完成させます。
+      </div>
+      <div class="rules">
+        <div class="rule"><b>①</b><span>年代別に予選</span></div>
+        <div class="rule"><b>②</b><span>4人から1人を選択</span></div>
+        <div class="rule"><b>③</b><span>各年代TOP3を決定</span></div>
+      </div>
+      <button id="startBtn" class="primary">好き顔9選を作る</button>
+      <div class="note">
+        ※このHTMLは外部ライブラリ不要でGitHub Pagesにそのまま配置できます。<br>
+        ※今回の選手データは、送っていただいたリスト 571人を収録。年代区分はリスト記載の年齢を使用します。<br>
+        ※写真は <code>images/選手ID.jpg</code> の形式で差し替えられる設計です。
+      </div>
+    </section>
 
-<header>
-  <h1>⚽ Jリーグ好き顔9選</h1>
+    <section id="gameScreen" class="panel hidden">
+      <div class="progress">
+        <div class="progress-top"><span id="progressLabel">予選</span><span id="progressCount"></span></div>
+        <div class="bar"><i id="progressBar"></i></div>
+      </div>
+      <div id="stageTitle" class="stage"></div>
+      <div id="stageNote" class="stage-note"></div>
+      <div id="choices" class="choices"></div>
+    </section>
 
-  <p class="subtitle">
-    4人の中から一番好きな顔を選ぼう
-  </p>
-</header>
-
-
-<!-- =========================
-     GAME
-========================= -->
-
-<section id="gameArea" class="game-area">
-
-  <div class="round-info">
-
-    <div class="round-number">
-      <span id="currentRound">1</span>
-      /
-      <span id="totalRounds">100</span>
-    </div>
-
-    <div class="round-label">
-      ラウンド
-    </div>
-
-  </div>
-
-
-  <div class="instruction">
-    この4人なら、誰の顔が一番好き？
-  </div>
-
-
-  <div id="playerGrid" class="player-grid"></div>
-
-
-  <div class="progress">
-    <div id="progressInner" class="progress-inner"></div>
-  </div>
-
-</section>
-
-
-<!-- =========================
-     RESULT
-========================= -->
-
-<section id="resultArea" class="result-area">
-
-  <h2 class="result-title">
-    あなたの好き顔9選
-  </h2>
-
-  <p class="result-description">
-    100回の4択から選ばれたTOP9
-  </p>
-
-
-  <div id="resultGrid" class="result-grid"></div>
-
-
-  <div class="ranking">
-
-    <div class="ranking-title">
-      選択回数ランキング
-    </div>
-
-    <div id="rankingList"></div>
-
-  </div>
-
-
-  <div class="buttons">
-
-    <button
-      id="downloadButton"
-      class="button download-button">
-      🖼️ 画像を保存
-    </button>
-
-    <button
-      id="restartButton"
-      class="button restart-button">
-      🔄 もう一度遊ぶ
-    </button>
-
-  </div>
-
-</section>
-
+    <section id="resultScreen" class="panel hidden">
+      <div class="result-head">
+        <h1>あなたの好き顔9選</h1>
+        <p>各年代の予選を勝ち抜いた3人ずつです。</p>
+      </div>
+      <div id="podium" class="podium"></div>
+      <div class="final-nine">
+        <h2>🏆 COMPLETE</h2>
+        <div id="nine" class="nine"></div>
+      </div>
+      <div class="actions">
+        <button id="retryBtn" class="primary">もう一度遊ぶ</button>
+        <button id="copyBtn" class="secondary">結果をコピー</button>
+      </div>
+      <div class="note">※結果画像をSNSに投稿する場合は、写真の利用条件・権利関係を確認してください。</div>
+    </section>
+  </main>
 </div>
 
-
-<!-- =========================
-     html2canvas
-========================= -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-
 <script>
-
-/* =====================================================
-   ゲーム設定
-===================================================== */
-
 /*
- * 100回の4択
- *
- * ここを200にすれば200回になります。
- */
+============================================================
+ Jリーグ 好き顔9選 — 選手データ
+============================================================
+ここに選手を追加してください。
 
-const TOTAL_ROUNDS = 100;
+id       : 半角英数字で一意
+name     : 表示名
+team     : 2026年J1所属クラブ
+birth    : YYYY-MM-DD
+birthPlace: 出生地（日本生まれのみ登録する想定）
+photo    : 写真ファイル。例 "images/player001.jpg"
 
+写真がまだない選手は photo:"" でも動きます。
+その場合は名前から簡易アバターを自動表示します。
 
-/*
- * 1回につき表示する人数
- */
-
-const CANDIDATE_COUNT = 4;
-
-
-/*
- * 最終的に表示する人数
- */
-
-const RESULT_COUNT = 9;
-
-
-/*
- * 同じ選手が連続して出るのを少し抑える
- *
- * 0.0 = 制限なし
- * 1.0 = 直前に出た選手を完全に除外
- */
-
-const REPEAT_AVOIDANCE = 0.7;
-
-
-/* =====================================================
-   選手データ
-===================================================== */
-
-/*
- * ★★★ 写真の変更方法 ★★★
- *
- * 例えば1人目の写真なら、
- *
- * images/players/001.jpg
- *
- * を自分の写真に差し替えるだけです。
- *
- * GitHub上では、
- *
- * index.html
- * images/
- *   players/
- *     001.jpg
- *     002.jpg
- *     003.jpg
- *     ...
- *
- * という構成にしてください。
- *
- *
- * 写真がまだない場合でもゲーム自体は動きます。
- * 下の画像URLが存在しない場合は、
- * 自動的にプレースホルダーを表示します。
- */
-
-
-/*
- * 2026年J1の20クラブをベースにした
- * 120人の初期登録データです。
- *
- * 選手の所属はシーズン中にも移籍・登録変更が
- * あり得るため、公開直前には公式選手名鑑で
- * 最終確認してください。
- */
+【重要】
+このサンプルにはゲームエンジン確認用の選手データだけを入れています。
+実運用では、2026年J1の「日本生まれ」選手をこの配列へ追加してください。
+Jリーグ公式選手名鑑・Jリーグデータサイト等で出生地、生年月日、所属を確認してください。
+============================================================
+*/
 
 const players = [
-
-/* ===== 鹿島アントラーズ ===== */
-
-{id:1,name:"鈴木 優磨",club:"鹿島アントラーズ",image:"images/players/001.jpg"},
-{id:2,name:"知念 慶",club:"鹿島アントラーズ",image:"images/players/002.jpg"},
-{id:3,name:"師岡 柊生",club:"鹿島アントラーズ",image:"images/players/003.jpg"},
-{id:4,name:"濃野 公人",club:"鹿島アントラーズ",image:"images/players/004.jpg"},
-{id:5,name:"早川 友基",club:"鹿島アントラーズ",image:"images/players/005.jpg"},
-{id:6,name:"安西 幸輝",club:"鹿島アントラーズ",image:"images/players/006.jpg"},
-
-
-/* ===== 浦和レッズ ===== */
-
-{id:7,name:"マテウス サヴィオ",club:"浦和レッズ",image:"images/players/007.jpg"},
-{id:8,name:"金子 拓郎",club:"浦和レッズ",image:"images/players/008.jpg"},
-{id:9,name:"渡邊 凌磨",club:"浦和レッズ",image:"images/players/009.jpg"},
-{id:10,name:"宮本 優太",club:"浦和レッズ",image:"images/players/010.jpg"},
-{id:11,name:"西川 周作",club:"浦和レッズ",image:"images/players/011.jpg"},
-{id:12,name:"南野 遥海",club:"浦和レッズ",image:"images/players/012.jpg"},
-
-
-/* ===== 柏レイソル ===== */
-
-{id:13,name:"細谷 真大",club:"柏レイソル",image:"images/players/013.jpg"},
-{id:14,name:"マテウス サヴィオ",club:"柏レイソル",image:"images/players/014.jpg"},
-{id:15,name:"古賀 太陽",club:"柏レイソル",image:"images/players/015.jpg"},
-{id:16,name:"関根 大輝",club:"柏レイソル",image:"images/players/016.jpg"},
-{id:17,name:"白井 永地",club:"柏レイソル",image:"images/players/017.jpg"},
-{id:18,name:"小屋松 知哉",club:"柏レイソル",image:"images/players/018.jpg"},
-
-
-/* ===== FC東京 ===== */
-
-{id:19,name:"長倉 幹樹",club:"FC東京",image:"images/players/019.jpg"},
-{id:20,name:"マルセロ ヒアン",club:"FC東京",image:"images/players/020.jpg"},
-{id:21,name:"高 宇洋",club:"FC東京",image:"images/players/021.jpg"},
-{id:22,name:"室屋 成",club:"FC東京",image:"images/players/022.jpg"},
-{id:23,name:"佐藤 恵允",club:"FC東京",image:"images/players/023.jpg"},
-{id:24,name:"俵積田 晃太",club:"FC東京",image:"images/players/024.jpg"},
-
-
-/* ===== 東京ヴェルディ ===== */
-
-{id:25,name:"染野 唯月",club:"東京ヴェルディ",image:"images/players/025.jpg"},
-{id:26,name:"福田 湧矢",club:"東京ヴェルディ",image:"images/players/026.jpg"},
-{id:27,name:"森田 晃樹",club:"東京ヴェルディ",image:"images/players/027.jpg"},
-{id:28,name:"平川 怜",club:"東京ヴェルディ",image:"images/players/028.jpg"},
-{id:29,name:"鈴木 海音",club:"東京ヴェルディ",image:"images/players/029.jpg"},
-{id:30,name:"山見 大登",club:"東京ヴェルディ",image:"images/players/030.jpg"},
-
-
-/* ===== FC町田ゼルビア ===== */
-
-{id:31,name:"谷 晃生",club:"FC町田ゼルビア",image:"images/players/031.jpg"},
-{id:32,name:"昌子 源",club:"FC町田ゼルビア",image:"images/players/032.jpg"},
-{id:33,name:"相馬 勇紀",club:"FC町田ゼルビア",image:"images/players/033.jpg"},
-{id:34,name:"藤尾 翔太",club:"FC町田ゼルビア",image:"images/players/034.jpg"},
-{id:35,name:"仙頭 啓矢",club:"FC町田ゼルビア",image:"images/players/035.jpg"},
-{id:36,name:"柴戸 海",club:"FC町田ゼルビア",image:"images/players/036.jpg"},
-
-
-/* ===== 川崎フロンターレ ===== */
-
-{id:37,name:"家長 昭博",club:"川崎フロンターレ",image:"images/players/037.jpg"},
-{id:38,name:"脇坂 泰斗",club:"川崎フロンターレ",image:"images/players/038.jpg"},
-{id:39,name:"山田 新",club:"川崎フロンターレ",image:"images/players/039.jpg"},
-{id:40,name:"橘田 健人",club:"川崎フロンターレ",image:"images/players/040.jpg"},
-{id:41,name:"大南 拓磨",club:"川崎フロンターレ",image:"images/players/041.jpg"},
-{id:42,name:"高井 幸大",club:"川崎フロンターレ",image:"images/players/042.jpg"},
-
-
-/* ===== 横浜F・マリノス ===== */
-
-{id:43,name:"宮市 亮",club:"横浜F・マリノス",image:"images/players/043.jpg"},
-{id:44,name:"植中 朝日",club:"横浜F・マリノス",image:"images/players/044.jpg"},
-{id:45,name:"井上 健太",club:"横浜F・マリノス",image:"images/players/045.jpg"},
-{id:46,name:"永戸 勝也",club:"横浜F・マリノス",image:"images/players/046.jpg"},
-{id:47,name:"松原 健",club:"横浜F・マリノス",image:"images/players/047.jpg"},
-{id:48,name:"喜田 拓也",club:"横浜F・マリノス",image:"images/players/048.jpg"},
-
-
-/* ===== 清水エスパルス ===== */
-
-{id:49,name:"北川 航也",club:"清水エスパルス",image:"images/players/049.jpg"},
-{id:50,name:"乾 貴士",club:"清水エスパルス",image:"images/players/050.jpg"},
-{id:51,name:"松崎 快",club:"清水エスパルス",image:"images/players/051.jpg"},
-{id:52,name:"原 輝綺",club:"清水エスパルス",image:"images/players/052.jpg"},
-{id:53,name:"高橋 祐治",club:"清水エスパルス",image:"images/players/053.jpg"},
-{id:54,name:"山原 怜音",club:"清水エスパルス",image:"images/players/054.jpg"},
-
-
-/* ===== 名古屋グランパス ===== */
-
-{id:55,name:"シュミット ダニエル",club:"名古屋グランパス",image:"images/players/055.jpg"},
-{id:56,name:"永井 謙佑",club:"名古屋グランパス",image:"images/players/056.jpg"},
-{id:57,name:"稲垣 祥",club:"名古屋グランパス",image:"images/players/057.jpg"},
-{id:58,name:"森島 司",club:"名古屋グランパス",image:"images/players/058.jpg"},
-{id:59,name:"椎橋 慧也",club:"名古屋グランパス",image:"images/players/059.jpg"},
-{id:60,name:"和泉 竜司",club:"名古屋グランパス",image:"images/players/060.jpg"},
-
-
-/* ===== 京都サンガ ===== */
-
-{id:61,name:"原 大智",club:"京都サンガF.C.",image:"images/players/061.jpg"},
-{id:62,name:"川﨑 颯太",club:"京都サンガF.C.",image:"images/players/062.jpg"},
-{id:63,name:"豊川 雄太",club:"京都サンガF.C.",image:"images/players/063.jpg"},
-{id:64,name:"福田 心之助",club:"京都サンガF.C.",image:"images/players/064.jpg"},
-{id:65,name:"鈴木 冬一",club:"京都サンガF.C.",image:"images/players/065.jpg"},
-{id:66,name:"佐藤 響",club:"京都サンガF.C.",image:"images/players/066.jpg"},
-
-
-/* ===== ガンバ大阪 ===== */
-
-{id:67,name:"東口 順昭",club:"ガンバ大阪",image:"images/players/067.jpg"},
-{id:68,name:"宇佐美 貴史",club:"ガンバ大阪",image:"images/players/068.jpg"},
-{id:69,name:"福岡 将太",club:"ガンバ大阪",image:"images/players/069.jpg"},
-{id:70,name:"半田 陸",club:"ガンバ大阪",image:"images/players/070.jpg"},
-{id:71,name:"一森 純",club:"ガンバ大阪",image:"images/players/071.jpg"},
-{id:72,name:"山田 康太",club:"ガンバ大阪",image:"images/players/072.jpg"},
-
-
-/* ===== セレッソ大阪 ===== */
-
-{id:73,name:"香川 真司",club:"セレッソ大阪",image:"images/players/073.jpg"},
-{id:74,name:"北野 颯太",club:"セレッソ大阪",image:"images/players/074.jpg"},
-{id:75,name:"上門 知樹",club:"セレッソ大阪",image:"images/players/075.jpg"},
-{id:76,name:"毎熊 晟矢",club:"セレッソ大阪",image:"images/players/076.jpg"},
-{id:77,name:"西尾 隆矢",club:"セレッソ大阪",image:"images/players/077.jpg"},
-{id:78,name:"田中 駿汰",club:"セレッソ大阪",image:"images/players/078.jpg"},
-
-
-/* ===== ヴィッセル神戸 ===== */
-
-{id:79,name:"大迫 勇也",club:"ヴィッセル神戸",image:"images/players/079.jpg"},
-{id:80,name:"武藤 嘉紀",club:"ヴィッセル神戸",image:"images/players/080.jpg"},
-{id:81,name:"山口 蛍",club:"ヴィッセル神戸",image:"images/players/081.jpg"},
-{id:82,name:"酒井 高徳",club:"ヴィッセル神戸",image:"images/players/082.jpg"},
-{id:83,name:"宮代 大聖",club:"ヴィッセル神戸",image:"images/players/083.jpg"},
-{id:84,name:"佐々木 大樹",club:"ヴィッセル神戸",image:"images/players/084.jpg"},
-
-
-/* ===== ファジアーノ岡山 ===== */
-
-{id:85,name:"河野 孝汰",club:"ファジアーノ岡山",image:"images/players/085.jpg"},
-{id:86,name:"大森 博",club:"ファジアーノ岡山",image:"images/players/086.jpg"},
-{id:87,name:"鈴木 喜丈",club:"ファジアーノ岡山",image:"images/players/087.jpg"},
-{id:88,name:"白井 康介",club:"ファジアーノ岡山",image:"images/players/088.jpg"},
-{id:89,name:"本山 遥",club:"ファジアーノ岡山",image:"images/players/089.jpg"},
-{id:90,name:"ルカオ",club:"ファジアーノ岡山",image:"images/players/090.jpg"},
-
-
-/* ===== サンフレッチェ広島 ===== */
-
-{id:91,name:"大迫 敬介",club:"サンフレッチェ広島",image:"images/players/091.jpg"},
-{id:92,name:"佐々木 翔",club:"サンフレッチェ広島",image:"images/players/092.jpg"},
-{id:93,name:"荒木 隼人",club:"サンフレッチェ広島",image:"images/players/093.jpg"},
-{id:94,name:"川辺 駿",club:"サンフレッチェ広島",image:"images/players/094.jpg"},
-{id:95,name:"東 俊希",club:"サンフレッチェ広島",image:"images/players/095.jpg"},
-{id:96,name:"中野 就斗",club:"サンフレッチェ広島",image:"images/players/096.jpg"},
-
-
-/* ===== アビスパ福岡 ===== */
-
-{id:97,name:"永石 拓海",club:"アビスパ福岡",image:"images/players/097.jpg"},
-{id:98,name:"前嶋 洋太",club:"アビスパ福岡",image:"images/players/098.jpg"},
-{id:99,name:"見木 友哉",club:"アビスパ福岡",image:"images/players/099.jpg"},
-{id:100,name:"師岡 柊生",club:"アビスパ福岡",image:"images/players/100.jpg"},
-{id:101,name:"橋本 悠",club:"アビスパ福岡",image:"images/players/101.jpg"},
-{id:102,name:"ウェリック ポポ",club:"アビスパ福岡",image:"images/players/102.jpg"},
-
-
-/* ===== V・ファーレン長崎 ===== */
-
-{id:103,name:"山口 蛍",club:"V・ファーレン長崎",image:"images/players/103.jpg"},
-{id:104,name:"マテウス ジェズス",club:"V・ファーレン長崎",image:"images/players/104.jpg"},
-{id:105,name:"岩崎 悠人",club:"V・ファーレン長崎",image:"images/players/105.jpg"},
-{id:106,name:"翁長 聖",club:"V・ファーレン長崎",image:"images/players/106.jpg"},
-{id:107,name:"長谷川 元希",club:"V・ファーレン長崎",image:"images/players/107.jpg"},
-{id:108,name:"江川 湧清",club:"V・ファーレン長崎",image:"images/players/108.jpg"},
-
-
-/* ===== 水戸ホーリーホック ===== */
-
-{id:109,name:"山田 奈央",club:"水戸ホーリーホック",image:"images/players/109.jpg"},
-{id:110,name:"飯泉 涼矢",club:"水戸ホーリーホック",image:"images/players/110.jpg"},
-{id:111,name:"久保 征一郎",club:"水戸ホーリーホック",image:"images/players/111.jpg"},
-{id:112,name:"甲田 英將",club:"水戸ホーリーホック",image:"images/players/112.jpg"},
-{id:113,name:"新井 晴樹",club:"水戸ホーリーホック",image:"images/players/113.jpg"},
-{id:114,name:"黒川 淳史",club:"水戸ホーリーホック",image:"images/players/114.jpg"},
-
-
-/* ===== ジェフユナイテッド千葉 ===== */
-
-{id:115,name:"田中 和樹",club:"ジェフユナイテッド千葉",image:"images/players/115.jpg"},
-{id:116,name:"津久井 匠海",club:"ジェフユナイテッド千葉",image:"images/players/116.jpg"},
-{id:117,name:"イサカ ゼイン",club:"ジェフユナイテッド千葉",image:"images/players/117.jpg"},
-{id:118,name:"杉山 直宏",club:"ジェフユナイテッド千葉",image:"images/players/118.jpg"},
-{id:119,name:"呉屋 大翔",club:"ジェフユナイテッド千葉",image:"images/players/119.jpg"},
-{id:120,name:"髙橋 壱晟",club:"ジェフユナイテッド千葉",image:"images/players/120.jpg"}
-
+  {
+    "id": "p0001",
+    "name": "早川 友基",
+    "team": "鹿島",
+    "birth": "1999-03-03",
+    "age": 27,
+    "photo": "images/p0001.jpg"
+  },
+  {
+    "id": "p0002",
+    "name": "山田 大樹",
+    "team": "鹿島",
+    "birth": "2002-01-08",
+    "age": 24,
+    "photo": "images/p0002.jpg"
+  },
+  {
+    "id": "p0003",
+    "name": "梶川 裕嗣",
+    "team": "鹿島",
+    "birth": "1991-07-26",
+    "age": 35,
+    "photo": "images/p0003.jpg"
+  },
+  {
+    "id": "p0004",
+    "name": "藤井 陽登",
+    "team": "鹿島",
+    "birth": "2003-06-05",
+    "age": 23,
+    "photo": "images/p0004.jpg"
+  },
+  {
+    "id": "p0005",
+    "name": "安西 幸輝",
+    "team": "鹿島",
+    "birth": "1995-05-31",
+    "age": 31,
+    "photo": "images/p0005.jpg"
+  },
+  {
+    "id": "p0006",
+    "name": "千田 海人",
+    "team": "鹿島",
+    "birth": "1994-10-17",
+    "age": 32,
+    "photo": "images/p0006.jpg"
+  },
+  {
+    "id": "p0007",
+    "name": "関川 郁万",
+    "team": "鹿島",
+    "birth": "2000-09-13",
+    "age": 26,
+    "photo": "images/p0007.jpg"
+  },
+  {
+    "id": "p0008",
+    "name": "小川 諒也",
+    "team": "鹿島",
+    "birth": "1996-11-24",
+    "age": 30,
+    "photo": "images/p0008.jpg"
+  },
+  {
+    "id": "p0009",
+    "name": "大森 渚生",
+    "team": "鹿島",
+    "birth": "1999-08-19",
+    "age": 27,
+    "photo": "images/p0009.jpg"
+  },
+  {
+    "id": "p0010",
+    "name": "津久井 佳祐",
+    "team": "鹿島",
+    "birth": "2004-05-21",
+    "age": 22,
+    "photo": "images/p0010.jpg"
+  },
+  {
+    "id": "p0011",
+    "name": "小池 龍太",
+    "team": "鹿島",
+    "birth": "1995-08-29",
+    "age": 31,
+    "photo": "images/p0011.jpg"
+  },
+  {
+    "id": "p0012",
+    "name": "大川 佑梧",
+    "team": "鹿島",
+    "birth": "2007-07-14",
+    "age": 19,
+    "photo": "images/p0012.jpg"
+  },
+  {
+    "id": "p0013",
+    "name": "元砂 晏翔仁 ウデンバ",
+    "team": "鹿島",
+    "birth": "2009-03-10",
+    "age": 17,
+    "photo": "images/p0013.jpg"
+  },
+  {
+    "id": "p0014",
+    "name": "広瀬 陸斗",
+    "team": "鹿島",
+    "birth": "1995-09-23",
+    "age": 31,
+    "photo": "images/p0014.jpg"
+  },
+  {
+    "id": "p0015",
+    "name": "植田 直通",
+    "team": "鹿島",
+    "birth": "1994-10-24",
+    "age": 32,
+    "photo": "images/p0015.jpg"
+  },
+  {
+    "id": "p0016",
+    "name": "三竿 健斗",
+    "team": "鹿島",
+    "birth": "1996-04-16",
+    "age": 30,
+    "photo": "images/p0016.jpg"
+  },
+  {
+    "id": "p0017",
+    "name": "柴崎 岳",
+    "team": "鹿島",
+    "birth": "1992-05-28",
+    "age": 34,
+    "photo": "images/p0017.jpg"
+  },
+  {
+    "id": "p0018",
+    "name": "樋口 雄太",
+    "team": "鹿島",
+    "birth": "1996-10-30",
+    "age": 30,
+    "photo": "images/p0018.jpg"
+  },
+  {
+    "id": "p0019",
+    "name": "林 晴己",
+    "team": "鹿島",
+    "birth": "2003-12-05",
+    "age": 23,
+    "photo": "images/p0019.jpg"
+  },
+  {
+    "id": "p0020",
+    "name": "松村 優太",
+    "team": "鹿島",
+    "birth": "2001-04-13",
+    "age": 25,
+    "photo": "images/p0020.jpg"
+  },
+  {
+    "id": "p0021",
+    "name": "田川 亨介",
+    "team": "鹿島",
+    "birth": "1999-02-11",
+    "age": 27,
+    "photo": "images/p0021.jpg"
+  },
+  {
+    "id": "p0022",
+    "name": "吉田 湊海",
+    "team": "鹿島",
+    "birth": "2008-07-15",
+    "age": 18,
+    "photo": "images/p0022.jpg"
+  },
+  {
+    "id": "p0023",
+    "name": "徳田 誉",
+    "team": "鹿島",
+    "birth": "2007-02-18",
+    "age": 19,
+    "photo": "images/p0023.jpg"
+  },
+  {
+    "id": "p0024",
+    "name": "鈴木 優磨",
+    "team": "鹿島",
+    "birth": "1996-04-26",
+    "age": 30,
+    "photo": "images/p0024.jpg"
+  },
+  {
+    "id": "p0025",
+    "name": "松原 修平",
+    "team": "水戸",
+    "birth": "1992-08-11",
+    "age": 34,
+    "photo": "images/p0025.jpg"
+  },
+  {
+    "id": "p0026",
+    "name": "西川 幸之介",
+    "team": "水戸",
+    "birth": "2002-09-11",
+    "age": 24,
+    "photo": "images/p0026.jpg"
+  },
+  {
+    "id": "p0027",
+    "name": "上山 海翔",
+    "team": "水戸",
+    "birth": "2007-09-10",
+    "age": 19,
+    "photo": "images/p0027.jpg"
+  },
+  {
+    "id": "p0028",
+    "name": "フォファナ マリック",
+    "team": "水戸",
+    "birth": "2000-05-02",
+    "age": 26,
+    "photo": "images/p0028.jpg"
+  },
+  {
+    "id": "p0029",
+    "name": "河面 旺成",
+    "team": "水戸",
+    "birth": "1994-05-03",
+    "age": 32,
+    "photo": "images/p0029.jpg"
+  },
+  {
+    "id": "p0030",
+    "name": "岩﨑 博",
+    "team": "水戸",
+    "birth": "2002-10-11",
+    "age": 24,
+    "photo": "images/p0030.jpg"
+  },
+  {
+    "id": "p0031",
+    "name": "木本 恭生",
+    "team": "水戸",
+    "birth": "1993-08-06",
+    "age": 33,
+    "photo": "images/p0031.jpg"
+  },
+  {
+    "id": "p0032",
+    "name": "田村 遊吏",
+    "team": "水戸",
+    "birth": "2005-10-20",
+    "age": 21,
+    "photo": "images/p0032.jpg"
+  },
+  {
+    "id": "p0033",
+    "name": "板倉 健太",
+    "team": "水戸",
+    "birth": "2002-06-15",
+    "age": 24,
+    "photo": "images/p0033.jpg"
+  },
+  {
+    "id": "p0034",
+    "name": "真瀬 拓海",
+    "team": "水戸",
+    "birth": "1998-05-03",
+    "age": 28,
+    "photo": "images/p0034.jpg"
+  },
+  {
+    "id": "p0035",
+    "name": "家泉 怜依",
+    "team": "水戸",
+    "birth": "2000-01-20",
+    "age": 26,
+    "photo": "images/p0035.jpg"
+  },
+  {
+    "id": "p0036",
+    "name": "大崎 航詩",
+    "team": "水戸",
+    "birth": "1998-06-30",
+    "age": 28,
+    "photo": "images/p0036.jpg"
+  },
+  {
+    "id": "p0037",
+    "name": "加藤 千尋",
+    "team": "水戸",
+    "birth": "1998-12-12",
+    "age": 28,
+    "photo": "images/p0037.jpg"
+  },
+  {
+    "id": "p0038",
+    "name": "鳥海 芳樹",
+    "team": "水戸",
+    "birth": "1998-08-01",
+    "age": 28,
+    "photo": "images/p0038.jpg"
+  },
+  {
+    "id": "p0039",
+    "name": "新井 瑞希",
+    "team": "水戸",
+    "birth": "1997-04-14",
+    "age": 29,
+    "photo": "images/p0039.jpg"
+  },
+  {
+    "id": "p0040",
+    "name": "仙波 大志",
+    "team": "水戸",
+    "birth": "1999-08-19",
+    "age": 27,
+    "photo": "images/p0040.jpg"
+  },
+  {
+    "id": "p0041",
+    "name": "舩橋 佑",
+    "team": "水戸",
+    "birth": "2002-07-12",
+    "age": 24,
+    "photo": "images/p0041.jpg"
+  },
+  {
+    "id": "p0042",
+    "name": "山﨑 希一",
+    "team": "水戸",
+    "birth": "2001-10-12",
+    "age": 25,
+    "photo": "images/p0042.jpg"
+  },
+  {
+    "id": "p0043",
+    "name": "奥村 仁",
+    "team": "水戸",
+    "birth": "2001-04-03",
+    "age": 25,
+    "photo": "images/p0043.jpg"
+  },
+  {
+    "id": "p0044",
+    "name": "山本 隼大",
+    "team": "水戸",
+    "birth": "2003-02-12",
+    "age": 23,
+    "photo": "images/p0044.jpg"
+  },
+  {
+    "id": "p0045",
+    "name": "島谷 義進",
+    "team": "水戸",
+    "birth": "2008-03-23",
+    "age": 18,
+    "photo": "images/p0045.jpg"
+  },
+  {
+    "id": "p0046",
+    "name": "西原 源樹",
+    "team": "水戸",
+    "birth": "2006-12-16",
+    "age": 20,
+    "photo": "images/p0046.jpg"
+  },
+  {
+    "id": "p0047",
+    "name": "山下 優人",
+    "team": "水戸",
+    "birth": "1996-05-24",
+    "age": 30,
+    "photo": "images/p0047.jpg"
+  },
+  {
+    "id": "p0048",
+    "name": "山下 翔大",
+    "team": "水戸",
+    "birth": "2008-02-29",
+    "age": 18,
+    "photo": "images/p0048.jpg"
+  },
+  {
+    "id": "p0049",
+    "name": "根本 凌",
+    "team": "水戸",
+    "birth": "2000-02-03",
+    "age": 26,
+    "photo": "images/p0049.jpg"
+  },
+  {
+    "id": "p0050",
+    "name": "渡邉 新太",
+    "team": "水戸",
+    "birth": "1995-08-05",
+    "age": 31,
+    "photo": "images/p0050.jpg"
+  },
+  {
+    "id": "p0051",
+    "name": "内野 航太郎",
+    "team": "水戸",
+    "birth": "2004-06-19",
+    "age": 22,
+    "photo": "images/p0051.jpg"
+  },
+  {
+    "id": "p0052",
+    "name": "谷口 海斗",
+    "team": "水戸",
+    "birth": "1995-09-07",
+    "age": 31,
+    "photo": "images/p0052.jpg"
+  },
+  {
+    "id": "p0053",
+    "name": "多田 圭佑",
+    "team": "水戸",
+    "birth": "2002-09-27",
+    "age": 24,
+    "photo": "images/p0053.jpg"
+  },
+  {
+    "id": "p0054",
+    "name": "五木田 季晋",
+    "team": "水戸",
+    "birth": "2004-07-12",
+    "age": 22,
+    "photo": "images/p0054.jpg"
+  },
+  {
+    "id": "p0055",
+    "name": "西川 周作",
+    "team": "浦和",
+    "birth": "1986-06-18",
+    "age": 40,
+    "photo": "images/p0055.jpg"
+  },
+  {
+    "id": "p0056",
+    "name": "福井 光輝",
+    "team": "浦和",
+    "birth": "1995-11-04",
+    "age": 31,
+    "photo": "images/p0056.jpg"
+  },
+  {
+    "id": "p0057",
+    "name": "新井 栄聡",
+    "team": "浦和",
+    "birth": "1995-09-27",
+    "age": 31,
+    "photo": "images/p0057.jpg"
+  },
+  {
+    "id": "p0058",
+    "name": "宮本 優太",
+    "team": "浦和",
+    "birth": "1999-12-15",
+    "age": 27,
+    "photo": "images/p0058.jpg"
+  },
+  {
+    "id": "p0059",
+    "name": "根本 健太",
+    "team": "浦和",
+    "birth": "2002-12-13",
+    "age": 24,
+    "photo": "images/p0059.jpg"
+  },
+  {
+    "id": "p0060",
+    "name": "山根 視来",
+    "team": "浦和",
+    "birth": "1993-12-22",
+    "age": 33,
+    "photo": "images/p0060.jpg"
+  },
+  {
+    "id": "p0061",
+    "name": "工藤 孝太",
+    "team": "浦和",
+    "birth": "2003-08-13",
+    "age": 23,
+    "photo": "images/p0061.jpg"
+  },
+  {
+    "id": "p0062",
+    "name": "林 幸多郎",
+    "team": "浦和",
+    "birth": "2000-11-16",
+    "age": 26,
+    "photo": "images/p0062.jpg"
+  },
+  {
+    "id": "p0063",
+    "name": "田中 義峯",
+    "team": "浦和",
+    "birth": "2008-04-05",
+    "age": 18,
+    "photo": "images/p0063.jpg"
+  },
+  {
+    "id": "p0064",
+    "name": "片山 瑛一",
+    "team": "浦和",
+    "birth": "1991-11-30",
+    "age": 35,
+    "photo": "images/p0064.jpg"
+  },
+  {
+    "id": "p0065",
+    "name": "金子 拓郎",
+    "team": "浦和",
+    "birth": "1997-07-30",
+    "age": 29,
+    "photo": "images/p0065.jpg"
+  },
+  {
+    "id": "p0066",
+    "name": "水沼 宏太",
+    "team": "浦和",
+    "birth": "1990-02-22",
+    "age": 36,
+    "photo": "images/p0066.jpg"
+  },
+  {
+    "id": "p0067",
+    "name": "瀬古 樹",
+    "team": "浦和",
+    "birth": "1997-12-22",
+    "age": 29,
+    "photo": "images/p0067.jpg"
+  },
+  {
+    "id": "p0068",
+    "name": "渡邊 凌磨",
+    "team": "浦和",
+    "birth": "1996-10-02",
+    "age": 30,
+    "photo": "images/p0068.jpg"
+  },
+  {
+    "id": "p0069",
+    "name": "安居 海渡",
+    "team": "浦和",
+    "birth": "2000-02-09",
+    "age": 26,
+    "photo": "images/p0069.jpg"
+  },
+  {
+    "id": "p0070",
+    "name": "堀内 陽太",
+    "team": "浦和",
+    "birth": "2004-07-08",
+    "age": 22,
+    "photo": "images/p0070.jpg"
+  },
+  {
+    "id": "p0071",
+    "name": "笹 修大",
+    "team": "浦和",
+    "birth": "2006-08-31",
+    "age": 20,
+    "photo": "images/p0071.jpg"
+  },
+  {
+    "id": "p0072",
+    "name": "植木 颯",
+    "team": "浦和",
+    "birth": "2003-10-11",
+    "age": 23,
+    "photo": "images/p0072.jpg"
+  },
+  {
+    "id": "p0073",
+    "name": "早川 隼平",
+    "team": "浦和",
+    "birth": "2005-12-05",
+    "age": 21,
+    "photo": "images/p0073.jpg"
+  },
+  {
+    "id": "p0074",
+    "name": "和田 武士",
+    "team": "浦和",
+    "birth": "2009-06-05",
+    "age": 17,
+    "photo": "images/p0074.jpg"
+  },
+  {
+    "id": "p0075",
+    "name": "長沼 洋一",
+    "team": "浦和",
+    "birth": "1997-04-14",
+    "age": 29,
+    "photo": "images/p0075.jpg"
+  },
+  {
+    "id": "p0076",
+    "name": "小森 飛絢",
+    "team": "浦和",
+    "birth": "2000-08-06",
+    "age": 26,
+    "photo": "images/p0076.jpg"
+  },
+  {
+    "id": "p0077",
+    "name": "肥田野 蓮治",
+    "team": "浦和",
+    "birth": "2003-12-01",
+    "age": 23,
+    "photo": "images/p0077.jpg"
+  },
+  {
+    "id": "p0078",
+    "name": "南野 遥海",
+    "team": "浦和",
+    "birth": "2004-05-13",
+    "age": 22,
+    "photo": "images/p0078.jpg"
+  },
+  {
+    "id": "p0079",
+    "name": "オナイウ 阿道",
+    "team": "浦和",
+    "birth": "1995-11-08",
+    "age": 31,
+    "photo": "images/p0079.jpg"
+  },
+  {
+    "id": "p0080",
+    "name": "稲垣 篤志",
+    "team": "浦和",
+    "birth": "2005-03-03",
+    "age": 21,
+    "photo": "images/p0080.jpg"
+  },
+  {
+    "id": "p0081",
+    "name": "田中 玲音",
+    "team": "浦和",
+    "birth": "2007-02-01",
+    "age": 19,
+    "photo": "images/p0081.jpg"
+  },
+  {
+    "id": "p0082",
+    "name": "薄井 覇斗",
+    "team": "千葉",
+    "birth": "1999-07-11",
+    "age": 27,
+    "photo": "images/p0082.jpg"
+  },
+  {
+    "id": "p0083",
+    "name": "鈴木 椋大",
+    "team": "千葉",
+    "birth": "1994-02-10",
+    "age": 32,
+    "photo": "images/p0083.jpg"
+  },
+  {
+    "id": "p0084",
+    "name": "岡本 享也",
+    "team": "千葉",
+    "birth": "1995-05-15",
+    "age": 31,
+    "photo": "images/p0084.jpg"
+  },
+  {
+    "id": "p0085",
+    "name": "ンドカ ボニフェイス",
+    "team": "千葉",
+    "birth": "1996-02-15",
+    "age": 30,
+    "photo": "images/p0085.jpg"
+  },
+  {
+    "id": "p0086",
+    "name": "久保庭 良太",
+    "team": "千葉",
+    "birth": "2001-10-14",
+    "age": 25,
+    "photo": "images/p0086.jpg"
+  },
+  {
+    "id": "p0087",
+    "name": "鈴木 大輔",
+    "team": "千葉",
+    "birth": "1990-01-29",
+    "age": 36,
+    "photo": "images/p0087.jpg"
+  },
+  {
+    "id": "p0088",
+    "name": "前 貴之",
+    "team": "千葉",
+    "birth": "1993-09-16",
+    "age": 33,
+    "photo": "images/p0088.jpg"
+  },
+  {
+    "id": "p0089",
+    "name": "飯田 貴敬",
+    "team": "千葉",
+    "birth": "1994-08-31",
+    "age": 32,
+    "photo": "images/p0089.jpg"
+  },
+  {
+    "id": "p0090",
+    "name": "鳥海 晃司",
+    "team": "千葉",
+    "birth": "1995-05-09",
+    "age": 31,
+    "photo": "images/p0090.jpg"
+  },
+  {
+    "id": "p0091",
+    "name": "植田 悠太",
+    "team": "千葉",
+    "birth": "2004-07-06",
+    "age": 22,
+    "photo": "images/p0091.jpg"
+  },
+  {
+    "id": "p0092",
+    "name": "河野 貴志",
+    "team": "千葉",
+    "birth": "1996-06-17",
+    "age": 30,
+    "photo": "images/p0092.jpg"
+  },
+  {
+    "id": "p0093",
+    "name": "石尾 陸登",
+    "team": "千葉",
+    "birth": "2001-08-07",
+    "age": 25,
+    "photo": "images/p0093.jpg"
+  },
+  {
+    "id": "p0094",
+    "name": "田口 泰士",
+    "team": "千葉",
+    "birth": "1991-03-16",
+    "age": 35,
+    "photo": "images/p0094.jpg"
+  },
+  {
+    "id": "p0095",
+    "name": "小林 祐介",
+    "team": "千葉",
+    "birth": "1994-10-23",
+    "age": 32,
+    "photo": "images/p0095.jpg"
+  },
+  {
+    "id": "p0096",
+    "name": "津久井 匠海",
+    "team": "千葉",
+    "birth": "2002-04-30",
+    "age": 24,
+    "photo": "images/p0096.jpg"
+  },
+  {
+    "id": "p0097",
+    "name": "米倉 恒貴",
+    "team": "千葉",
+    "birth": "1988-05-17",
+    "age": 38,
+    "photo": "images/p0097.jpg"
+  },
+  {
+    "id": "p0098",
+    "name": "椿 直起",
+    "team": "千葉",
+    "birth": "2000-06-23",
+    "age": 26,
+    "photo": "images/p0098.jpg"
+  },
+  {
+    "id": "p0099",
+    "name": "杉山 直宏",
+    "team": "千葉",
+    "birth": "1998-09-07",
+    "age": 28,
+    "photo": "images/p0099.jpg"
+  },
+  {
+    "id": "p0100",
+    "name": "姫野 誠",
+    "team": "千葉",
+    "birth": "2008-08-12",
+    "age": 18,
+    "photo": "images/p0100.jpg"
+  },
+  {
+    "id": "p0101",
+    "name": "天笠 泰輝",
+    "team": "千葉",
+    "birth": "2000-05-11",
+    "age": 26,
+    "photo": "images/p0101.jpg"
+  },
+  {
+    "id": "p0102",
+    "name": "安井 拓也",
+    "team": "千葉",
+    "birth": "1998-11-21",
+    "age": 28,
+    "photo": "images/p0102.jpg"
+  },
+  {
+    "id": "p0103",
+    "name": "イサカ ゼイン",
+    "team": "千葉",
+    "birth": "1997-05-29",
+    "age": 29,
+    "photo": "images/p0103.jpg"
+  },
+  {
+    "id": "p0104",
+    "name": "品田 愛斗",
+    "team": "千葉",
+    "birth": "1999-09-19",
+    "age": 27,
+    "photo": "images/p0104.jpg"
+  },
+  {
+    "id": "p0105",
+    "name": "喜田 陽",
+    "team": "千葉",
+    "birth": "2000-07-04",
+    "age": 26,
+    "photo": "images/p0105.jpg"
+  },
+  {
+    "id": "p0106",
+    "name": "日高 大",
+    "team": "千葉",
+    "birth": "1995-03-14",
+    "age": 31,
+    "photo": "images/p0106.jpg"
+  },
+  {
+    "id": "p0107",
+    "name": "田中 和樹",
+    "team": "千葉",
+    "birth": "2000-01-13",
+    "age": 26,
+    "photo": "images/p0107.jpg"
+  },
+  {
+    "id": "p0108",
+    "name": "呉屋 大翔",
+    "team": "千葉",
+    "birth": "1994-01-02",
+    "age": 32,
+    "photo": "images/p0108.jpg"
+  },
+  {
+    "id": "p0109",
+    "name": "石川 大地",
+    "team": "千葉",
+    "birth": "1996-02-22",
+    "age": 30,
+    "photo": "images/p0109.jpg"
+  },
+  {
+    "id": "p0110",
+    "name": "矢村 健",
+    "team": "千葉",
+    "birth": "1997-06-09",
+    "age": 29,
+    "photo": "images/p0110.jpg"
+  },
+  {
+    "id": "p0111",
+    "name": "松村 拓実",
+    "team": "千葉",
+    "birth": "2004-01-03",
+    "age": 22,
+    "photo": "images/p0111.jpg"
+  },
+  {
+    "id": "p0112",
+    "name": "猿田 遥己",
+    "team": "柏",
+    "birth": "1999-04-23",
+    "age": 27,
+    "photo": "images/p0112.jpg"
+  },
+  {
+    "id": "p0113",
+    "name": "小島 亨介",
+    "team": "柏",
+    "birth": "1997-01-30",
+    "age": 29,
+    "photo": "images/p0113.jpg"
+  },
+  {
+    "id": "p0114",
+    "name": "永井 堅梧",
+    "team": "柏",
+    "birth": "1994-11-06",
+    "age": 32,
+    "photo": "images/p0114.jpg"
+  },
+  {
+    "id": "p0115",
+    "name": "松本 健太",
+    "team": "柏",
+    "birth": "1997-05-04",
+    "age": 29,
+    "photo": "images/p0115.jpg"
+  },
+  {
+    "id": "p0116",
+    "name": "若原 智哉",
+    "team": "柏",
+    "birth": "1999-12-28",
+    "age": 27,
+    "photo": "images/p0116.jpg"
+  },
+  {
+    "id": "p0117",
+    "name": "三丸 拡",
+    "team": "柏",
+    "birth": "1993-07-06",
+    "age": 33,
+    "photo": "images/p0117.jpg"
+  },
+  {
+    "id": "p0118",
+    "name": "麻田 将吾",
+    "team": "柏",
+    "birth": "1998-07-06",
+    "age": 28,
+    "photo": "images/p0118.jpg"
+  },
+  {
+    "id": "p0119",
+    "name": "古賀 太陽",
+    "team": "柏",
+    "birth": "1998-10-28",
+    "age": 28,
+    "photo": "images/p0119.jpg"
+  },
+  {
+    "id": "p0120",
+    "name": "犬飼 智也",
+    "team": "柏",
+    "birth": "1993-05-12",
+    "age": 33,
+    "photo": "images/p0120.jpg"
+  },
+  {
+    "id": "p0121",
+    "name": "杉岡 大暉",
+    "team": "柏",
+    "birth": "1998-09-08",
+    "age": 28,
+    "photo": "images/p0121.jpg"
+  },
+  {
+    "id": "p0122",
+    "name": "山之内 佑成",
+    "team": "柏",
+    "birth": "2003-09-01",
+    "age": 23,
+    "photo": "images/p0122.jpg"
+  },
+  {
+    "id": "p0123",
+    "name": "原田 亘",
+    "team": "柏",
+    "birth": "1996-07-22",
+    "age": 30,
+    "photo": "images/p0123.jpg"
+  },
+  {
+    "id": "p0124",
+    "name": "佐藤 桜久",
+    "team": "柏",
+    "birth": "2008-04-08",
+    "age": 18,
+    "photo": "images/p0124.jpg"
+  },
+  {
+    "id": "p0125",
+    "name": "常藤 奏",
+    "team": "柏",
+    "birth": "2004-07-13",
+    "age": 22,
+    "photo": "images/p0125.jpg"
+  },
+  {
+    "id": "p0126",
+    "name": "馬場 晴也",
+    "team": "柏",
+    "birth": "2001-10-24",
+    "age": 25,
+    "photo": "images/p0126.jpg"
+  },
+  {
+    "id": "p0127",
+    "name": "遠藤 渓太",
+    "team": "柏",
+    "birth": "1997-11-22",
+    "age": 29,
+    "photo": "images/p0127.jpg"
+  },
+  {
+    "id": "p0128",
+    "name": "山田 雄士",
+    "team": "柏",
+    "birth": "2000-05-17",
+    "age": 26,
+    "photo": "images/p0128.jpg"
+  },
+  {
+    "id": "p0129",
+    "name": "小泉 佳穂",
+    "team": "柏",
+    "birth": "1996-10-05",
+    "age": 30,
+    "photo": "images/p0129.jpg"
+  },
+  {
+    "id": "p0130",
+    "name": "渡井 理己",
+    "team": "柏",
+    "birth": "1999-07-18",
+    "age": 27,
+    "photo": "images/p0130.jpg"
+  },
+  {
+    "id": "p0131",
+    "name": "大久保 智明",
+    "team": "柏",
+    "birth": "1998-07-23",
+    "age": 28,
+    "photo": "images/p0131.jpg"
+  },
+  {
+    "id": "p0132",
+    "name": "汰木 康也",
+    "team": "柏",
+    "birth": "1995-07-03",
+    "age": 31,
+    "photo": "images/p0132.jpg"
+  },
+  {
+    "id": "p0133",
+    "name": "手塚 康平",
+    "team": "柏",
+    "birth": "1996-04-06",
+    "age": 30,
+    "photo": "images/p0133.jpg"
+  },
+  {
+    "id": "p0134",
+    "name": "仲間 隼斗",
+    "team": "柏",
+    "birth": "1992-05-16",
+    "age": 34,
+    "photo": "images/p0134.jpg"
+  },
+  {
+    "id": "p0135",
+    "name": "瀬川 祐輔",
+    "team": "柏",
+    "birth": "1994-02-07",
+    "age": 32,
+    "photo": "images/p0135.jpg"
+  },
+  {
+    "id": "p0136",
+    "name": "小西 雄大",
+    "team": "柏",
+    "birth": "1998-04-18",
+    "age": 28,
+    "photo": "images/p0136.jpg"
+  },
+  {
+    "id": "p0137",
+    "name": "長南 開史",
+    "team": "柏",
+    "birth": "2009-04-07",
+    "age": 17,
+    "photo": "images/p0137.jpg"
+  },
+  {
+    "id": "p0138",
+    "name": "久保 藤次郎",
+    "team": "柏",
+    "birth": "1999-04-05",
+    "age": 27,
+    "photo": "images/p0138.jpg"
+  },
+  {
+    "id": "p0139",
+    "name": "熊坂 光希",
+    "team": "柏",
+    "birth": "2001-04-15",
+    "age": 25,
+    "photo": "images/p0139.jpg"
+  },
+  {
+    "id": "p0140",
+    "name": "戸嶋 祥郎",
+    "team": "柏",
+    "birth": "1995-09-26",
+    "age": 31,
+    "photo": "images/p0140.jpg"
+  },
+  {
+    "id": "p0141",
+    "name": "古谷 柊介",
+    "team": "柏",
+    "birth": "2005-01-26",
+    "age": 21,
+    "photo": "images/p0141.jpg"
+  },
+  {
+    "id": "p0142",
+    "name": "岩永 創太",
+    "team": "柏",
+    "birth": "2005-10-07",
+    "age": 21,
+    "photo": "images/p0142.jpg"
+  },
+  {
+    "id": "p0143",
+    "name": "中川 敦瑛",
+    "team": "柏",
+    "birth": "2002-05-15",
+    "age": 24,
+    "photo": "images/p0143.jpg"
+  },
+  {
+    "id": "p0144",
+    "name": "原川 力",
+    "team": "柏",
+    "birth": "1993-08-18",
+    "age": 33,
+    "photo": "images/p0144.jpg"
+  },
+  {
+    "id": "p0145",
+    "name": "加茂 結斗",
+    "team": "柏",
+    "birth": "2008-10-18",
+    "age": 18,
+    "photo": "images/p0145.jpg"
+  },
+  {
+    "id": "p0146",
+    "name": "弓場 堅真",
+    "team": "柏",
+    "birth": "2000-10-12",
+    "age": 26,
+    "photo": "images/p0146.jpg"
+  },
+  {
+    "id": "p0147",
+    "name": "五十嵐 陵",
+    "team": "柏",
+    "birth": "2009-12-19",
+    "age": 17,
+    "photo": "images/p0147.jpg"
+  },
+  {
+    "id": "p0148",
+    "name": "山内 日向汰",
+    "team": "柏",
+    "birth": "2001-05-30",
+    "age": 25,
+    "photo": "images/p0148.jpg"
+  },
+  {
+    "id": "p0149",
+    "name": "細谷 真大",
+    "team": "柏",
+    "birth": "2001-09-07",
+    "age": 25,
+    "photo": "images/p0149.jpg"
+  },
+  {
+    "id": "p0150",
+    "name": "藤尾 翔太",
+    "team": "柏",
+    "birth": "2001-05-02",
+    "age": 25,
+    "photo": "images/p0150.jpg"
+  },
+  {
+    "id": "p0151",
+    "name": "垣田 裕暉",
+    "team": "柏",
+    "birth": "1997-07-14",
+    "age": 29,
+    "photo": "images/p0151.jpg"
+  },
+  {
+    "id": "p0152",
+    "name": "満田 誠",
+    "team": "柏",
+    "birth": "1999-07-20",
+    "age": 27,
+    "photo": "images/p0152.jpg"
+  },
+  {
+    "id": "p0153",
+    "name": "田中 颯",
+    "team": "FC東京",
+    "birth": "1999-06-10",
+    "age": 27,
+    "photo": "images/p0153.jpg"
+  },
+  {
+    "id": "p0154",
+    "name": "渡邊 麻舟",
+    "team": "FC東京",
+    "birth": "2008-04-24",
+    "age": 18,
+    "photo": "images/p0154.jpg"
+  },
+  {
+    "id": "p0155",
+    "name": "後藤 亘",
+    "team": "FC東京",
+    "birth": "2006-05-08",
+    "age": 20,
+    "photo": "images/p0155.jpg"
+  },
+  {
+    "id": "p0156",
+    "name": "室屋 成",
+    "team": "FC東京",
+    "birth": "1994-04-05",
+    "age": 32,
+    "photo": "images/p0156.jpg"
+  },
+  {
+    "id": "p0157",
+    "name": "森重 真人",
+    "team": "FC東京",
+    "birth": "1987-05-21",
+    "age": 39,
+    "photo": "images/p0157.jpg"
+  },
+  {
+    "id": "p0158",
+    "name": "稲村 隼翔",
+    "team": "FC東京",
+    "birth": "2002-05-06",
+    "age": 24,
+    "photo": "images/p0158.jpg"
+  },
+  {
+    "id": "p0159",
+    "name": "長友 佑都",
+    "team": "FC東京",
+    "birth": "1986-09-12",
+    "age": 40,
+    "photo": "images/p0159.jpg"
+  },
+  {
+    "id": "p0160",
+    "name": "バングーナガンデ 佳史扶",
+    "team": "FC東京",
+    "birth": "2001-09-24",
+    "age": 25,
+    "photo": "images/p0160.jpg"
+  },
+  {
+    "id": "p0161",
+    "name": "大森 理生",
+    "team": "FC東京",
+    "birth": "2002-07-21",
+    "age": 24,
+    "photo": "images/p0161.jpg"
+  },
+  {
+    "id": "p0162",
+    "name": "永野 修都",
+    "team": "FC東京",
+    "birth": "2006-04-15",
+    "age": 20,
+    "photo": "images/p0162.jpg"
+  },
+  {
+    "id": "p0163",
+    "name": "石原 広教",
+    "team": "FC東京",
+    "birth": "1999-02-26",
+    "age": 27,
+    "photo": "images/p0163.jpg"
+  },
+  {
+    "id": "p0164",
+    "name": "橋本 健人",
+    "team": "FC東京",
+    "birth": "1999-12-08",
+    "age": 27,
+    "photo": "images/p0164.jpg"
+  },
+  {
+    "id": "p0165",
+    "name": "鈴木 楓",
+    "team": "FC東京",
+    "birth": "2007-06-05",
+    "age": 19,
+    "photo": "images/p0165.jpg"
+  },
+  {
+    "id": "p0166",
+    "name": "安斎 颯馬",
+    "team": "FC東京",
+    "birth": "2002-09-29",
+    "age": 24,
+    "photo": "images/p0166.jpg"
+  },
+  {
+    "id": "p0167",
+    "name": "高 宇洋",
+    "team": "FC東京",
+    "birth": "1998-04-20",
+    "age": 28,
+    "photo": "images/p0167.jpg"
+  },
+  {
+    "id": "p0168",
+    "name": "橋本 拳人",
+    "team": "FC東京",
+    "birth": "1993-08-16",
+    "age": 33,
+    "photo": "images/p0168.jpg"
+  },
+  {
+    "id": "p0169",
+    "name": "本間 至恩",
+    "team": "FC東京",
+    "birth": "2000-08-06",
+    "age": 26,
+    "photo": "images/p0169.jpg"
+  },
+  {
+    "id": "p0170",
+    "name": "菅原 悠太",
+    "team": "FC東京",
+    "birth": "2007-09-07",
+    "age": 19,
+    "photo": "images/p0170.jpg"
+  },
+  {
+    "id": "p0171",
+    "name": "常盤 亨太",
+    "team": "FC東京",
+    "birth": "2002-04-09",
+    "age": 24,
+    "photo": "images/p0171.jpg"
+  },
+  {
+    "id": "p0172",
+    "name": "俵積田 晃太",
+    "team": "FC東京",
+    "birth": "2004-05-14",
+    "age": 22,
+    "photo": "images/p0172.jpg"
+  },
+  {
+    "id": "p0173",
+    "name": "田中 希和",
+    "team": "FC東京",
+    "birth": "2007-08-07",
+    "age": 19,
+    "photo": "images/p0173.jpg"
+  },
+  {
+    "id": "p0174",
+    "name": "山田 楓喜",
+    "team": "FC東京",
+    "birth": "2001-07-10",
+    "age": 25,
+    "photo": "images/p0174.jpg"
+  },
+  {
+    "id": "p0175",
+    "name": "佐藤 恵允",
+    "team": "FC東京",
+    "birth": "2001-07-11",
+    "age": 25,
+    "photo": "images/p0175.jpg"
+  },
+  {
+    "id": "p0176",
+    "name": "小湊 絆",
+    "team": "FC東京",
+    "birth": "2004-11-18",
+    "age": 22,
+    "photo": "images/p0176.jpg"
+  },
+  {
+    "id": "p0177",
+    "name": "長倉 幹樹",
+    "team": "FC東京",
+    "birth": "1999-10-07",
+    "age": 27,
+    "photo": "images/p0177.jpg"
+  },
+  {
+    "id": "p0178",
+    "name": "仲川 輝人",
+    "team": "FC東京",
+    "birth": "1992-07-27",
+    "age": 34,
+    "photo": "images/p0178.jpg"
+  },
+  {
+    "id": "p0179",
+    "name": "尾谷 ディヴァインチネドゥ",
+    "team": "FC東京",
+    "birth": "2007-05-04",
+    "age": 19,
+    "photo": "images/p0179.jpg"
+  },
+  {
+    "id": "p0180",
+    "name": "長沢 祐弥",
+    "team": "東京V",
+    "birth": "1996-07-01",
+    "age": 30,
+    "photo": "images/p0180.jpg"
+  },
+  {
+    "id": "p0181",
+    "name": "馬渡 洋樹",
+    "team": "東京V",
+    "birth": "1994-08-16",
+    "age": 32,
+    "photo": "images/p0181.jpg"
+  },
+  {
+    "id": "p0182",
+    "name": "中村 圭佑",
+    "team": "東京V",
+    "birth": "2005-04-27",
+    "age": 21,
+    "photo": "images/p0182.jpg"
+  },
+  {
+    "id": "p0183",
+    "name": "林 尚輝",
+    "team": "東京V",
+    "birth": "1998-06-09",
+    "age": 28,
+    "photo": "images/p0183.jpg"
+  },
+  {
+    "id": "p0184",
+    "name": "井上 竜太",
+    "team": "東京V",
+    "birth": "2000-07-25",
+    "age": 26,
+    "photo": "images/p0184.jpg"
+  },
+  {
+    "id": "p0185",
+    "name": "宮原 和也",
+    "team": "東京V",
+    "birth": "1996-03-22",
+    "age": 30,
+    "photo": "images/p0185.jpg"
+  },
+  {
+    "id": "p0186",
+    "name": "鈴木 海音",
+    "team": "東京V",
+    "birth": "2002-08-25",
+    "age": 24,
+    "photo": "images/p0186.jpg"
+  },
+  {
+    "id": "p0187",
+    "name": "溝口 修平",
+    "team": "東京V",
+    "birth": "2004-02-13",
+    "age": 22,
+    "photo": "images/p0187.jpg"
+  },
+  {
+    "id": "p0188",
+    "name": "内田 陽介",
+    "team": "東京V",
+    "birth": "2002-08-20",
+    "age": 24,
+    "photo": "images/p0188.jpg"
+  },
+  {
+    "id": "p0189",
+    "name": "佐古 真礼",
+    "team": "東京V",
+    "birth": "2002-12-02",
+    "age": 24,
+    "photo": "images/p0189.jpg"
+  },
+  {
+    "id": "p0190",
+    "name": "田邉 秀斗",
+    "team": "東京V",
+    "birth": "2002-05-05",
+    "age": 24,
+    "photo": "images/p0190.jpg"
+  },
+  {
+    "id": "p0191",
+    "name": "松田 陸",
+    "team": "東京V",
+    "birth": "1999-05-03",
+    "age": 27,
+    "photo": "images/p0191.jpg"
+  },
+  {
+    "id": "p0192",
+    "name": "吉田 泰授",
+    "team": "東京V",
+    "birth": "2000-04-21",
+    "age": 26,
+    "photo": "images/p0192.jpg"
+  },
+  {
+    "id": "p0193",
+    "name": "柴戸 海",
+    "team": "東京V",
+    "birth": "1995-11-24",
+    "age": 31,
+    "photo": "images/p0193.jpg"
+  },
+  {
+    "id": "p0194",
+    "name": "松橋 優安",
+    "team": "東京V",
+    "birth": "2001-10-27",
+    "age": 25,
+    "photo": "images/p0194.jpg"
+  },
+  {
+    "id": "p0195",
+    "name": "齋藤 功佑",
+    "team": "東京V",
+    "birth": "1997-06-16",
+    "age": 29,
+    "photo": "images/p0195.jpg"
+  },
+  {
+    "id": "p0196",
+    "name": "森田 晃樹",
+    "team": "東京V",
+    "birth": "2000-08-08",
+    "age": 26,
+    "photo": "images/p0196.jpg"
+  },
+  {
+    "id": "p0197",
+    "name": "福田 湧矢",
+    "team": "東京V",
+    "birth": "1999-04-04",
+    "age": 27,
+    "photo": "images/p0197.jpg"
+  },
+  {
+    "id": "p0198",
+    "name": "平川 怜",
+    "team": "東京V",
+    "birth": "2000-04-20",
+    "age": 26,
+    "photo": "images/p0198.jpg"
+  },
+  {
+    "id": "p0199",
+    "name": "食野 壮磨",
+    "team": "東京V",
+    "birth": "2001-05-20",
+    "age": 25,
+    "photo": "images/p0199.jpg"
+  },
+  {
+    "id": "p0200",
+    "name": "仲山 獅恩",
+    "team": "東京V",
+    "birth": "2007-10-16",
+    "age": 19,
+    "photo": "images/p0200.jpg"
+  },
+  {
+    "id": "p0201",
+    "name": "山本 丈偉",
+    "team": "東京V",
+    "birth": "2006-05-18",
+    "age": 20,
+    "photo": "images/p0201.jpg"
+  },
+  {
+    "id": "p0202",
+    "name": "川村 楽人",
+    "team": "東京V",
+    "birth": "2006-04-06",
+    "age": 20,
+    "photo": "images/p0202.jpg"
+  },
+  {
+    "id": "p0203",
+    "name": "新井 悠太",
+    "team": "東京V",
+    "birth": "2003-03-24",
+    "age": 23,
+    "photo": "images/p0203.jpg"
+  },
+  {
+    "id": "p0204",
+    "name": "今井 健人",
+    "team": "東京V",
+    "birth": "2007-10-31",
+    "age": 19,
+    "photo": "images/p0204.jpg"
+  },
+  {
+    "id": "p0205",
+    "name": "染野 唯月",
+    "team": "東京V",
+    "birth": "2001-09-12",
+    "age": 25,
+    "photo": "images/p0205.jpg"
+  },
+  {
+    "id": "p0206",
+    "name": "山見 大登",
+    "team": "東京V",
+    "birth": "1999-08-16",
+    "age": 27,
+    "photo": "images/p0206.jpg"
+  },
+  {
+    "id": "p0207",
+    "name": "山田 剛綺",
+    "team": "東京V",
+    "birth": "2000-09-19",
+    "age": 26,
+    "photo": "images/p0207.jpg"
+  },
+  {
+    "id": "p0208",
+    "name": "熊取谷 一星",
+    "team": "東京V",
+    "birth": "2003-02-14",
+    "age": 23,
+    "photo": "images/p0208.jpg"
+  },
+  {
+    "id": "p0209",
+    "name": "白井 亮丞",
+    "team": "東京V",
+    "birth": "2005-05-17",
+    "age": 21,
+    "photo": "images/p0209.jpg"
+  },
+  {
+    "id": "p0210",
+    "name": "一美 和成",
+    "team": "東京V",
+    "birth": "1997-11-10",
+    "age": 29,
+    "photo": "images/p0210.jpg"
+  },
+  {
+    "id": "p0211",
+    "name": "神田 奏真",
+    "team": "東京V",
+    "birth": "2005-12-29",
+    "age": 21,
+    "photo": "images/p0211.jpg"
+  },
+  {
+    "id": "p0212",
+    "name": "寺沼 星文",
+    "team": "東京V",
+    "birth": "2001-03-08",
+    "age": 25,
+    "photo": "images/p0212.jpg"
+  },
+  {
+    "id": "p0213",
+    "name": "大藤 颯太",
+    "team": "東京V",
+    "birth": "2007-08-07",
+    "age": 19,
+    "photo": "images/p0213.jpg"
+  },
+  {
+    "id": "p0214",
+    "name": "平尾 勇人",
+    "team": "東京V",
+    "birth": "2005-01-06",
+    "age": 21,
+    "photo": "images/p0214.jpg"
+  },
+  {
+    "id": "p0215",
+    "name": "谷 晃生",
+    "team": "町田",
+    "birth": "2000-11-22",
+    "age": 26,
+    "photo": "images/p0215.jpg"
+  },
+  {
+    "id": "p0216",
+    "name": "守田 達弥",
+    "team": "町田",
+    "birth": "1990-08-03",
+    "age": 36,
+    "photo": "images/p0216.jpg"
+  },
+  {
+    "id": "p0217",
+    "name": "昌子 源",
+    "team": "町田",
+    "birth": "1992-12-11",
+    "age": 34,
+    "photo": "images/p0217.jpg"
+  },
+  {
+    "id": "p0218",
+    "name": "菊池 ダビド 流帆",
+    "team": "町田",
+    "birth": "1996-12-09",
+    "age": 30,
+    "photo": "images/p0218.jpg"
+  },
+  {
+    "id": "p0219",
+    "name": "望月 ヘンリー海輝",
+    "team": "町田",
+    "birth": "2001-09-20",
+    "age": 25,
+    "photo": "images/p0219.jpg"
+  },
+  {
+    "id": "p0220",
+    "name": "岡村 大八",
+    "team": "町田",
+    "birth": "1997-02-15",
+    "age": 29,
+    "photo": "images/p0220.jpg"
+  },
+  {
+    "id": "p0221",
+    "name": "中村 帆高",
+    "team": "町田",
+    "birth": "1997-08-12",
+    "age": 29,
+    "photo": "images/p0221.jpg"
+  },
+  {
+    "id": "p0222",
+    "name": "仙頭 啓矢",
+    "team": "町田",
+    "birth": "1994-12-29",
+    "age": 32,
+    "photo": "images/p0222.jpg"
+  },
+  {
+    "id": "p0223",
+    "name": "松尾 佑介",
+    "team": "町田",
+    "birth": "1997-07-23",
+    "age": 29,
+    "photo": "images/p0223.jpg"
+  },
+  {
+    "id": "p0224",
+    "name": "前 寛之",
+    "team": "町田",
+    "birth": "1995-08-01",
+    "age": 31,
+    "photo": "images/p0224.jpg"
+  },
+  {
+    "id": "p0225",
+    "name": "下田 北斗",
+    "team": "町田",
+    "birth": "1991-11-07",
+    "age": 35,
+    "photo": "images/p0225.jpg"
+  },
+  {
+    "id": "p0226",
+    "name": "白崎 凌兵",
+    "team": "町田",
+    "birth": "1993-05-18",
+    "age": 33,
+    "photo": "images/p0226.jpg"
+  },
+  {
+    "id": "p0227",
+    "name": "明本 考浩",
+    "team": "町田",
+    "birth": "1998-01-31",
+    "age": 28,
+    "photo": "images/p0227.jpg"
+  },
+  {
+    "id": "p0228",
+    "name": "相馬 勇紀",
+    "team": "町田",
+    "birth": "1997-02-25",
+    "age": 29,
+    "photo": "images/p0228.jpg"
+  },
+  {
+    "id": "p0229",
+    "name": "小川 航基",
+    "team": "町田",
+    "birth": "1997-08-08",
+    "age": 29,
+    "photo": "images/p0229.jpg"
+  },
+  {
+    "id": "p0230",
+    "name": "西村 拓真",
+    "team": "町田",
+    "birth": "1996-10-22",
+    "age": 30,
+    "photo": "images/p0230.jpg"
+  },
+  {
+    "id": "p0231",
+    "name": "徳村 楓大",
+    "team": "町田",
+    "birth": "2007-11-26",
+    "age": 19,
+    "photo": "images/p0231.jpg"
+  },
+  {
+    "id": "p0232",
+    "name": "山口 瑠伊",
+    "team": "川崎",
+    "birth": "1998-05-28",
+    "age": 28,
+    "photo": "images/p0232.jpg"
+  },
+  {
+    "id": "p0233",
+    "name": "早坂 勇希",
+    "team": "川崎",
+    "birth": "1999-05-22",
+    "age": 27,
+    "photo": "images/p0233.jpg"
+  },
+  {
+    "id": "p0234",
+    "name": "松長根 悠仁",
+    "team": "川崎",
+    "birth": "2004-09-14",
+    "age": 22,
+    "photo": "images/p0234.jpg"
+  },
+  {
+    "id": "p0235",
+    "name": "谷口 栄斗",
+    "team": "川崎",
+    "birth": "1999-09-30",
+    "age": 27,
+    "photo": "images/p0235.jpg"
+  },
+  {
+    "id": "p0236",
+    "name": "佐々木 旭",
+    "team": "川崎",
+    "birth": "2000-01-26",
+    "age": 26,
+    "photo": "images/p0236.jpg"
+  },
+  {
+    "id": "p0237",
+    "name": "三浦 颯太",
+    "team": "川崎",
+    "birth": "2000-09-07",
+    "age": 26,
+    "photo": "images/p0237.jpg"
+  },
+  {
+    "id": "p0238",
+    "name": "丸山 祐市",
+    "team": "川崎",
+    "birth": "1989-06-16",
+    "age": 37,
+    "photo": "images/p0238.jpg"
+  },
+  {
+    "id": "p0239",
+    "name": "山原 怜音",
+    "team": "川崎",
+    "birth": "1999-06-08",
+    "age": 27,
+    "photo": "images/p0239.jpg"
+  },
+  {
+    "id": "p0240",
+    "name": "野田 裕人",
+    "team": "川崎",
+    "birth": "2006-04-05",
+    "age": 20,
+    "photo": "images/p0240.jpg"
+  },
+  {
+    "id": "p0241",
+    "name": "関 徳晴",
+    "team": "川崎",
+    "birth": "2007-04-11",
+    "age": 19,
+    "photo": "images/p0241.jpg"
+  },
+  {
+    "id": "p0242",
+    "name": "林 駿佑",
+    "team": "川崎",
+    "birth": "2007-05-29",
+    "age": 19,
+    "photo": "images/p0242.jpg"
+  },
+  {
+    "id": "p0243",
+    "name": "髙橋 哲也",
+    "team": "川崎",
+    "birth": "2005-01-15",
+    "age": 21,
+    "photo": "images/p0243.jpg"
+  },
+  {
+    "id": "p0244",
+    "name": "藤田 明日翔",
+    "team": "川崎",
+    "birth": "2008-11-20",
+    "age": 18,
+    "photo": "images/p0244.jpg"
+  },
+  {
+    "id": "p0245",
+    "name": "山本 悠樹",
+    "team": "川崎",
+    "birth": "1997-11-06",
+    "age": 29,
+    "photo": "images/p0245.jpg"
+  },
+  {
+    "id": "p0246",
+    "name": "橘田 健人",
+    "team": "川崎",
+    "birth": "1998-05-29",
+    "age": 28,
+    "photo": "images/p0246.jpg"
+  },
+  {
+    "id": "p0247",
+    "name": "大島 僚太",
+    "team": "川崎",
+    "birth": "1993-01-23",
+    "age": 33,
+    "photo": "images/p0247.jpg"
+  },
+  {
+    "id": "p0248",
+    "name": "脇坂 泰斗",
+    "team": "川崎",
+    "birth": "1995-06-11",
+    "age": 31,
+    "photo": "images/p0248.jpg"
+  },
+  {
+    "id": "p0249",
+    "name": "大関 友翔",
+    "team": "川崎",
+    "birth": "2005-02-06",
+    "age": 21,
+    "photo": "images/p0249.jpg"
+  },
+  {
+    "id": "p0250",
+    "name": "紺野 和也",
+    "team": "川崎",
+    "birth": "1997-07-11",
+    "age": 29,
+    "photo": "images/p0250.jpg"
+  },
+  {
+    "id": "p0251",
+    "name": "河原 創",
+    "team": "川崎",
+    "birth": "1998-03-13",
+    "age": 28,
+    "photo": "images/p0251.jpg"
+  },
+  {
+    "id": "p0252",
+    "name": "山市 秀翔",
+    "team": "川崎",
+    "birth": "2004-01-20",
+    "age": 22,
+    "photo": "images/p0252.jpg"
+  },
+  {
+    "id": "p0253",
+    "name": "由井 航太",
+    "team": "川崎",
+    "birth": "2005-06-10",
+    "age": 21,
+    "photo": "images/p0253.jpg"
+  },
+  {
+    "id": "p0254",
+    "name": "長 璃喜",
+    "team": "川崎",
+    "birth": "2007-10-13",
+    "age": 19,
+    "photo": "images/p0254.jpg"
+  },
+  {
+    "id": "p0255",
+    "name": "小川 尋斗",
+    "team": "川崎",
+    "birth": "2008-12-09",
+    "age": 18,
+    "photo": "images/p0255.jpg"
+  },
+  {
+    "id": "p0256",
+    "name": "家長 昭博",
+    "team": "川崎",
+    "birth": "1986-06-13",
+    "age": 40,
+    "photo": "images/p0256.jpg"
+  },
+  {
+    "id": "p0257",
+    "name": "小林 悠",
+    "team": "川崎",
+    "birth": "1987-09-23",
+    "age": 39,
+    "photo": "images/p0257.jpg"
+  },
+  {
+    "id": "p0258",
+    "name": "伊藤 達哉",
+    "team": "川崎",
+    "birth": "1997-06-26",
+    "age": 29,
+    "photo": "images/p0258.jpg"
+  },
+  {
+    "id": "p0259",
+    "name": "持山 匡佑",
+    "team": "川崎",
+    "birth": "2003-08-18",
+    "age": 23,
+    "photo": "images/p0259.jpg"
+  },
+  {
+    "id": "p0260",
+    "name": "宮城 天",
+    "team": "川崎",
+    "birth": "2001-06-02",
+    "age": 25,
+    "photo": "images/p0260.jpg"
+  },
+  {
+    "id": "p0261",
+    "name": "本間 凜",
+    "team": "川崎",
+    "birth": "2004-08-03",
+    "age": 22,
+    "photo": "images/p0261.jpg"
+  },
+  {
+    "id": "p0262",
+    "name": "朴 一圭",
+    "team": "横浜FM",
+    "birth": "1989-12-22",
+    "age": 37,
+    "photo": "images/p0262.jpg"
+  },
+  {
+    "id": "p0263",
+    "name": "坪井 湧也",
+    "team": "横浜FM",
+    "birth": "1999-08-23",
+    "age": 27,
+    "photo": "images/p0263.jpg"
+  },
+  {
+    "id": "p0264",
+    "name": "飯倉 大樹",
+    "team": "横浜FM",
+    "birth": "1986-06-01",
+    "age": 40,
+    "photo": "images/p0264.jpg"
+  },
+  {
+    "id": "p0265",
+    "name": "井上 太聖",
+    "team": "横浜FM",
+    "birth": "2002-10-01",
+    "age": 24,
+    "photo": "images/p0265.jpg"
+  },
+  {
+    "id": "p0266",
+    "name": "渡邊 泰基",
+    "team": "横浜FM",
+    "birth": "1999-04-22",
+    "age": 27,
+    "photo": "images/p0266.jpg"
+  },
+  {
+    "id": "p0267",
+    "name": "角田 涼太朗",
+    "team": "横浜FM",
+    "birth": "1999-06-27",
+    "age": 27,
+    "photo": "images/p0267.jpg"
+  },
+  {
+    "id": "p0268",
+    "name": "松原 健",
+    "team": "横浜FM",
+    "birth": "1993-02-16",
+    "age": 33,
+    "photo": "images/p0268.jpg"
+  },
+  {
+    "id": "p0269",
+    "name": "諏訪間 幸成",
+    "team": "横浜FM",
+    "birth": "2003-06-06",
+    "age": 23,
+    "photo": "images/p0269.jpg"
+  },
+  {
+    "id": "p0270",
+    "name": "関富 貫太",
+    "team": "横浜FM",
+    "birth": "2005-10-23",
+    "age": 21,
+    "photo": "images/p0270.jpg"
+  },
+  {
+    "id": "p0271",
+    "name": "喜田 拓也",
+    "team": "横浜FM",
+    "birth": "1994-08-23",
+    "age": 32,
+    "photo": "images/p0271.jpg"
+  },
+  {
+    "id": "p0272",
+    "name": "知念 慶",
+    "team": "横浜FM",
+    "birth": "1995-03-17",
+    "age": 31,
+    "photo": "images/p0272.jpg"
+  },
+  {
+    "id": "p0273",
+    "name": "鈴木 冬一",
+    "team": "横浜FM",
+    "birth": "2000-05-30",
+    "age": 26,
+    "photo": "images/p0273.jpg"
+  },
+  {
+    "id": "p0274",
+    "name": "山根 陸",
+    "team": "横浜FM",
+    "birth": "2003-08-17",
+    "age": 23,
+    "photo": "images/p0274.jpg"
+  },
+  {
+    "id": "p0275",
+    "name": "田中 雄大",
+    "team": "横浜FM",
+    "birth": "2002-10-11",
+    "age": 24,
+    "photo": "images/p0275.jpg"
+  },
+  {
+    "id": "p0276",
+    "name": "木村 卓斗",
+    "team": "横浜FM",
+    "birth": "2000-05-16",
+    "age": 26,
+    "photo": "images/p0276.jpg"
+  },
+  {
+    "id": "p0277",
+    "name": "天野 純",
+    "team": "横浜FM",
+    "birth": "1991-07-19",
+    "age": 35,
+    "photo": "images/p0277.jpg"
+  },
+  {
+    "id": "p0278",
+    "name": "三井寺 眞",
+    "team": "横浜FM",
+    "birth": "2010-04-02",
+    "age": 16,
+    "photo": "images/p0278.jpg"
+  },
+  {
+    "id": "p0279",
+    "name": "遠野 大弥",
+    "team": "横浜FM",
+    "birth": "1999-03-14",
+    "age": 27,
+    "photo": "images/p0279.jpg"
+  },
+  {
+    "id": "p0280",
+    "name": "谷村 海那",
+    "team": "横浜FM",
+    "birth": "1998-03-05",
+    "age": 28,
+    "photo": "images/p0280.jpg"
+  },
+  {
+    "id": "p0281",
+    "name": "オナイウ 情滋",
+    "team": "横浜FM",
+    "birth": "2000-11-11",
+    "age": 26,
+    "photo": "images/p0281.jpg"
+  },
+  {
+    "id": "p0282",
+    "name": "宮市 亮",
+    "team": "横浜FM",
+    "birth": "1992-12-14",
+    "age": 34,
+    "photo": "images/p0282.jpg"
+  },
+  {
+    "id": "p0283",
+    "name": "近藤 友喜",
+    "team": "横浜FM",
+    "birth": "2001-03-21",
+    "age": 25,
+    "photo": "images/p0283.jpg"
+  },
+  {
+    "id": "p0284",
+    "name": "二田 理央",
+    "team": "横浜FM",
+    "birth": "2003-04-10",
+    "age": 23,
+    "photo": "images/p0284.jpg"
+  },
+  {
+    "id": "p0285",
+    "name": "高橋 輝",
+    "team": "横浜FM",
+    "birth": "2004-06-26",
+    "age": 22,
+    "photo": "images/p0285.jpg"
+  },
+  {
+    "id": "p0286",
+    "name": "松村 晃助",
+    "team": "横浜FM",
+    "birth": "2004-05-02",
+    "age": 22,
+    "photo": "images/p0286.jpg"
+  },
+  {
+    "id": "p0287",
+    "name": "藤井 翔大",
+    "team": "横浜FM",
+    "birth": "2008-08-11",
+    "age": 18,
+    "photo": "images/p0287.jpg"
+  },
+  {
+    "id": "p0288",
+    "name": "平野 遼",
+    "team": "横浜FM",
+    "birth": "2008-09-23",
+    "age": 18,
+    "photo": "images/p0288.jpg"
+  },
+  {
+    "id": "p0289",
+    "name": "沖 悠哉",
+    "team": "清水",
+    "birth": "1999-08-22",
+    "age": 27,
+    "photo": "images/p0289.jpg"
+  },
+  {
+    "id": "p0290",
+    "name": "梅田 透吾",
+    "team": "清水",
+    "birth": "2000-07-23",
+    "age": 26,
+    "photo": "images/p0290.jpg"
+  },
+  {
+    "id": "p0291",
+    "name": "石川 慧",
+    "team": "清水",
+    "birth": "1992-09-30",
+    "age": 34,
+    "photo": "images/p0291.jpg"
+  },
+  {
+    "id": "p0292",
+    "name": "佐々木 智太郎",
+    "team": "清水",
+    "birth": "2007-03-23",
+    "age": 19,
+    "photo": "images/p0292.jpg"
+  },
+  {
+    "id": "p0293",
+    "name": "猪越 優惟",
+    "team": "清水",
+    "birth": "2001-05-26",
+    "age": 25,
+    "photo": "images/p0293.jpg"
+  },
+  {
+    "id": "p0294",
+    "name": "高橋 祐治",
+    "team": "清水",
+    "birth": "1993-04-11",
+    "age": 33,
+    "photo": "images/p0294.jpg"
+  },
+  {
+    "id": "p0295",
+    "name": "蓮川 壮大",
+    "team": "清水",
+    "birth": "1998-06-27",
+    "age": 28,
+    "photo": "images/p0295.jpg"
+  },
+  {
+    "id": "p0296",
+    "name": "本多 勇喜",
+    "team": "清水",
+    "birth": "1991-01-02",
+    "age": 35,
+    "photo": "images/p0296.jpg"
+  },
+  {
+    "id": "p0297",
+    "name": "須貝 英大",
+    "team": "清水",
+    "birth": "1998-10-27",
+    "age": 28,
+    "photo": "images/p0297.jpg"
+  },
+  {
+    "id": "p0298",
+    "name": "吉田 豊",
+    "team": "清水",
+    "birth": "1990-02-17",
+    "age": 36,
+    "photo": "images/p0298.jpg"
+  },
+  {
+    "id": "p0299",
+    "name": "日髙 華杜",
+    "team": "清水",
+    "birth": "2003-12-11",
+    "age": 23,
+    "photo": "images/p0299.jpg"
+  },
+  {
+    "id": "p0300",
+    "name": "住吉 ジェラニレショーン",
+    "team": "清水",
+    "birth": "1997-10-05",
+    "age": 29,
+    "photo": "images/p0300.jpg"
+  },
+  {
+    "id": "p0301",
+    "name": "高木 践",
+    "team": "清水",
+    "birth": "2002-03-14",
+    "age": 24,
+    "photo": "images/p0301.jpg"
+  },
+  {
+    "id": "p0302",
+    "name": "井上 健太",
+    "team": "清水",
+    "birth": "1998-07-23",
+    "age": 28,
+    "photo": "images/p0302.jpg"
+  },
+  {
+    "id": "p0303",
+    "name": "弓場 将輝",
+    "team": "清水",
+    "birth": "2002-05-13",
+    "age": 24,
+    "photo": "images/p0303.jpg"
+  },
+  {
+    "id": "p0304",
+    "name": "平戸 太貴",
+    "team": "清水",
+    "birth": "1997-04-18",
+    "age": 29,
+    "photo": "images/p0304.jpg"
+  },
+  {
+    "id": "p0305",
+    "name": "松崎 快",
+    "team": "清水",
+    "birth": "1997-11-22",
+    "age": 29,
+    "photo": "images/p0305.jpg"
+  },
+  {
+    "id": "p0306",
+    "name": "針生 涼太",
+    "team": "清水",
+    "birth": "2008-03-07",
+    "age": 18,
+    "photo": "images/p0306.jpg"
+  },
+  {
+    "id": "p0307",
+    "name": "土居 佑至",
+    "team": "清水",
+    "birth": "2007-05-12",
+    "age": 19,
+    "photo": "images/p0307.jpg"
+  },
+  {
+    "id": "p0308",
+    "name": "小泉 慶",
+    "team": "清水",
+    "birth": "1995-04-19",
+    "age": 31,
+    "photo": "images/p0308.jpg"
+  },
+  {
+    "id": "p0309",
+    "name": "辻 友翔",
+    "team": "清水",
+    "birth": "2005-12-29",
+    "age": 21,
+    "photo": "images/p0309.jpg"
+  },
+  {
+    "id": "p0310",
+    "name": "鈴木 奎吾",
+    "team": "清水",
+    "birth": "2003-07-13",
+    "age": 23,
+    "photo": "images/p0310.jpg"
+  },
+  {
+    "id": "p0311",
+    "name": "嶋本 悠大",
+    "team": "清水",
+    "birth": "2006-10-26",
+    "age": 20,
+    "photo": "images/p0311.jpg"
+  },
+  {
+    "id": "p0312",
+    "name": "藤井 智也",
+    "team": "清水",
+    "birth": "1998-12-04",
+    "age": 28,
+    "photo": "images/p0312.jpg"
+  },
+  {
+    "id": "p0313",
+    "name": "小塚 和季",
+    "team": "清水",
+    "birth": "1994-08-02",
+    "age": 32,
+    "photo": "images/p0313.jpg"
+  },
+  {
+    "id": "p0314",
+    "name": "大畑 凜生",
+    "team": "清水",
+    "birth": "2003-11-23",
+    "age": 23,
+    "photo": "images/p0314.jpg"
+  },
+  {
+    "id": "p0315",
+    "name": "ジャーメイン 良",
+    "team": "清水",
+    "birth": "1995-04-19",
+    "age": 31,
+    "photo": "images/p0315.jpg"
+  },
+  {
+    "id": "p0316",
+    "name": "木下 康介",
+    "team": "清水",
+    "birth": "1994-10-03",
+    "age": 32,
+    "photo": "images/p0316.jpg"
+  },
+  {
+    "id": "p0317",
+    "name": "北川 航也",
+    "team": "清水",
+    "birth": "1996-07-26",
+    "age": 30,
+    "photo": "images/p0317.jpg"
+  },
+  {
+    "id": "p0318",
+    "name": "武田 洋平",
+    "team": "名古屋",
+    "birth": "1987-06-30",
+    "age": 39,
+    "photo": "images/p0318.jpg"
+  },
+  {
+    "id": "p0319",
+    "name": "ピサノ アレックス幸冬堀尾",
+    "team": "名古屋",
+    "birth": "2006-01-10",
+    "age": 20,
+    "photo": "images/p0319.jpg"
+  },
+  {
+    "id": "p0320",
+    "name": "萩 裕陽",
+    "team": "名古屋",
+    "birth": "2007-06-12",
+    "age": 19,
+    "photo": "images/p0320.jpg"
+  },
+  {
+    "id": "p0321",
+    "name": "野上 結貴",
+    "team": "名古屋",
+    "birth": "1991-04-20",
+    "age": 35,
+    "photo": "images/p0321.jpg"
+  },
+  {
+    "id": "p0322",
+    "name": "佐藤 瑶大",
+    "team": "名古屋",
+    "birth": "1998-09-10",
+    "age": 28,
+    "photo": "images/p0322.jpg"
+  },
+  {
+    "id": "p0323",
+    "name": "藤井 陽也",
+    "team": "名古屋",
+    "birth": "2000-12-26",
+    "age": 26,
+    "photo": "images/p0323.jpg"
+  },
+  {
+    "id": "p0324",
+    "name": "久保 遥夢",
+    "team": "名古屋",
+    "birth": "2007-06-18",
+    "age": 19,
+    "photo": "images/p0324.jpg"
+  },
+  {
+    "id": "p0325",
+    "name": "徳元 悠平",
+    "team": "名古屋",
+    "birth": "1995-09-12",
+    "age": 31,
+    "photo": "images/p0325.jpg"
+  },
+  {
+    "id": "p0326",
+    "name": "原 輝綺",
+    "team": "名古屋",
+    "birth": "1998-07-30",
+    "age": 28,
+    "photo": "images/p0326.jpg"
+  },
+  {
+    "id": "p0327",
+    "name": "和泉 竜司",
+    "team": "名古屋",
+    "birth": "1993-11-06",
+    "age": 33,
+    "photo": "images/p0327.jpg"
+  },
+  {
+    "id": "p0328",
+    "name": "浅野 雄也",
+    "team": "名古屋",
+    "birth": "1997-02-17",
+    "age": 29,
+    "photo": "images/p0328.jpg"
+  },
+  {
+    "id": "p0329",
+    "name": "森島 司",
+    "team": "名古屋",
+    "birth": "1997-04-25",
+    "age": 29,
+    "photo": "images/p0329.jpg"
+  },
+  {
+    "id": "p0330",
+    "name": "稲垣 祥",
+    "team": "名古屋",
+    "birth": "1991-12-25",
+    "age": 35,
+    "photo": "images/p0330.jpg"
+  },
+  {
+    "id": "p0331",
+    "name": "内田 宅哉",
+    "team": "名古屋",
+    "birth": "1998-06-02",
+    "age": 28,
+    "photo": "images/p0331.jpg"
+  },
+  {
+    "id": "p0332",
+    "name": "甲田 英將",
+    "team": "名古屋",
+    "birth": "2003-10-02",
+    "age": 23,
+    "photo": "images/p0332.jpg"
+  },
+  {
+    "id": "p0333",
+    "name": "中山 克広",
+    "team": "名古屋",
+    "birth": "1996-07-17",
+    "age": 30,
+    "photo": "images/p0333.jpg"
+  },
+  {
+    "id": "p0334",
+    "name": "高嶺 朋樹",
+    "team": "名古屋",
+    "birth": "1997-12-29",
+    "age": 29,
+    "photo": "images/p0334.jpg"
+  },
+  {
+    "id": "p0335",
+    "name": "菊地 泰智",
+    "team": "名古屋",
+    "birth": "1999-05-07",
+    "age": 27,
+    "photo": "images/p0335.jpg"
+  },
+  {
+    "id": "p0336",
+    "name": "小野 雅史",
+    "team": "名古屋",
+    "birth": "1996-08-09",
+    "age": 30,
+    "photo": "images/p0336.jpg"
+  },
+  {
+    "id": "p0337",
+    "name": "小屋松 知哉",
+    "team": "名古屋",
+    "birth": "1995-04-24",
+    "age": 31,
+    "photo": "images/p0337.jpg"
+  },
+  {
+    "id": "p0338",
+    "name": "山岸 祐也",
+    "team": "名古屋",
+    "birth": "1993-08-29",
+    "age": 33,
+    "photo": "images/p0338.jpg"
+  },
+  {
+    "id": "p0339",
+    "name": "永井 謙佑",
+    "team": "名古屋",
+    "birth": "1989-03-05",
+    "age": 37,
+    "photo": "images/p0339.jpg"
+  },
+  {
+    "id": "p0340",
+    "name": "木村 勇大",
+    "team": "名古屋",
+    "birth": "2001-02-28",
+    "age": 25,
+    "photo": "images/p0340.jpg"
+  },
+  {
+    "id": "p0341",
+    "name": "杉浦 駿吾",
+    "team": "名古屋",
+    "birth": "2006-05-14",
+    "age": 20,
+    "photo": "images/p0341.jpg"
+  },
+  {
+    "id": "p0342",
+    "name": "太田 岳志",
+    "team": "京都",
+    "birth": "1990-12-26",
+    "age": 36,
+    "photo": "images/p0342.jpg"
+  },
+  {
+    "id": "p0343",
+    "name": "圍 謙太朗",
+    "team": "京都",
+    "birth": "1991-04-23",
+    "age": 35,
+    "photo": "images/p0343.jpg"
+  },
+  {
+    "id": "p0344",
+    "name": "ファンティーニ 燦",
+    "team": "京都",
+    "birth": "1998-05-24",
+    "age": 28,
+    "photo": "images/p0344.jpg"
+  },
+  {
+    "id": "p0345",
+    "name": "村上 昌謙",
+    "team": "京都",
+    "birth": "1992-08-07",
+    "age": 34,
+    "photo": "images/p0345.jpg"
+  },
+  {
+    "id": "p0346",
+    "name": "アピアタウィア 久",
+    "team": "京都",
+    "birth": "1998-10-18",
+    "age": 28,
+    "photo": "images/p0346.jpg"
+  },
+  {
+    "id": "p0347",
+    "name": "永田 倖大",
+    "team": "京都",
+    "birth": "2002-09-08",
+    "age": 24,
+    "photo": "images/p0347.jpg"
+  },
+  {
+    "id": "p0348",
+    "name": "加藤 蓮",
+    "team": "京都",
+    "birth": "1999-12-28",
+    "age": 27,
+    "photo": "images/p0348.jpg"
+  },
+  {
+    "id": "p0349",
+    "name": "山本 楓大",
+    "team": "京都",
+    "birth": "2004-08-23",
+    "age": 22,
+    "photo": "images/p0349.jpg"
+  },
+  {
+    "id": "p0350",
+    "name": "石田 侑資",
+    "team": "京都",
+    "birth": "2002-11-11",
+    "age": 24,
+    "photo": "images/p0350.jpg"
+  },
+  {
+    "id": "p0351",
+    "name": "鈴木 義宜",
+    "team": "京都",
+    "birth": "1992-09-11",
+    "age": 34,
+    "photo": "images/p0351.jpg"
+  },
+  {
+    "id": "p0352",
+    "name": "山中 亮輔",
+    "team": "京都",
+    "birth": "1993-04-20",
+    "age": 33,
+    "photo": "images/p0352.jpg"
+  },
+  {
+    "id": "p0353",
+    "name": "志知 孝明",
+    "team": "京都",
+    "birth": "1993-12-27",
+    "age": 33,
+    "photo": "images/p0353.jpg"
+  },
+  {
+    "id": "p0354",
+    "name": "奥川 雅也",
+    "team": "京都",
+    "birth": "1996-04-14",
+    "age": 30,
+    "photo": "images/p0354.jpg"
+  },
+  {
+    "id": "p0355",
+    "name": "米本 拓司",
+    "team": "京都",
+    "birth": "1990-12-03",
+    "age": 36,
+    "photo": "images/p0355.jpg"
+  },
+  {
+    "id": "p0356",
+    "name": "福岡 慎平",
+    "team": "京都",
+    "birth": "2000-06-27",
+    "age": 26,
+    "photo": "images/p0356.jpg"
+  },
+  {
+    "id": "p0357",
+    "name": "平岡 太陽",
+    "team": "京都",
+    "birth": "2002-09-14",
+    "age": 24,
+    "photo": "images/p0357.jpg"
+  },
+  {
+    "id": "p0358",
+    "name": "松田 天馬",
+    "team": "京都",
+    "birth": "1995-06-11",
+    "age": 31,
+    "photo": "images/p0358.jpg"
+  },
+  {
+    "id": "p0359",
+    "name": "諸岡 裕人",
+    "team": "京都",
+    "birth": "1997-01-04",
+    "age": 29,
+    "photo": "images/p0359.jpg"
+  },
+  {
+    "id": "p0360",
+    "name": "尹 星俊",
+    "team": "京都",
+    "birth": "2007-05-04",
+    "age": 19,
+    "photo": "images/p0360.jpg"
+  },
+  {
+    "id": "p0361",
+    "name": "齊藤 未月",
+    "team": "京都",
+    "birth": "1999-01-10",
+    "age": 27,
+    "photo": "images/p0361.jpg"
+  },
+  {
+    "id": "p0362",
+    "name": "立川 遼翔",
+    "team": "京都",
+    "birth": "2007-02-20",
+    "age": 19,
+    "photo": "images/p0362.jpg"
+  },
+  {
+    "id": "p0363",
+    "name": "佐藤 響",
+    "team": "京都",
+    "birth": "2000-03-21",
+    "age": 26,
+    "photo": "images/p0363.jpg"
+  },
+  {
+    "id": "p0364",
+    "name": "中野 瑠馬",
+    "team": "京都",
+    "birth": "2002-10-06",
+    "age": 24,
+    "photo": "images/p0364.jpg"
+  },
+  {
+    "id": "p0365",
+    "name": "新井 晴樹",
+    "team": "京都",
+    "birth": "1998-04-12",
+    "age": 28,
+    "photo": "images/p0365.jpg"
+  },
+  {
+    "id": "p0366",
+    "name": "本田 風智",
+    "team": "京都",
+    "birth": "2001-05-10",
+    "age": 25,
+    "photo": "images/p0366.jpg"
+  },
+  {
+    "id": "p0367",
+    "name": "加藤 拓己",
+    "team": "京都",
+    "birth": "1999-07-16",
+    "age": 27,
+    "photo": "images/p0367.jpg"
+  },
+  {
+    "id": "p0368",
+    "name": "酒井 滉生",
+    "team": "京都",
+    "birth": "2007-10-07",
+    "age": 19,
+    "photo": "images/p0368.jpg"
+  },
+  {
+    "id": "p0369",
+    "name": "平賀 大空",
+    "team": "京都",
+    "birth": "2005-03-02",
+    "age": 21,
+    "photo": "images/p0369.jpg"
+  },
+  {
+    "id": "p0370",
+    "name": "長沢 駿",
+    "team": "京都",
+    "birth": "1988-08-25",
+    "age": 38,
+    "photo": "images/p0370.jpg"
+  },
+  {
+    "id": "p0371",
+    "name": "東口 順昭",
+    "team": "G大阪",
+    "birth": "1986-05-12",
+    "age": 40,
+    "photo": "images/p0371.jpg"
+  },
+  {
+    "id": "p0372",
+    "name": "荒木 琉偉",
+    "team": "G大阪",
+    "birth": "2007-10-14",
+    "age": 19,
+    "photo": "images/p0372.jpg"
+  },
+  {
+    "id": "p0373",
+    "name": "一森 純",
+    "team": "G大阪",
+    "birth": "1991-07-02",
+    "age": 35,
+    "photo": "images/p0373.jpg"
+  },
+  {
+    "id": "p0374",
+    "name": "張 奥林",
+    "team": "G大阪",
+    "birth": "2005-04-25",
+    "age": 21,
+    "photo": "images/p0374.jpg"
+  },
+  {
+    "id": "p0375",
+    "name": "福岡 将太",
+    "team": "G大阪",
+    "birth": "1995-10-24",
+    "age": 31,
+    "photo": "images/p0375.jpg"
+  },
+  {
+    "id": "p0376",
+    "name": "半田 陸",
+    "team": "G大阪",
+    "birth": "2002-01-01",
+    "age": 24,
+    "photo": "images/p0376.jpg"
+  },
+  {
+    "id": "p0377",
+    "name": "中谷 進之介",
+    "team": "G大阪",
+    "birth": "1996-03-24",
+    "age": 30,
+    "photo": "images/p0377.jpg"
+  },
+  {
+    "id": "p0378",
+    "name": "三浦 弦太",
+    "team": "G大阪",
+    "birth": "1995-03-01",
+    "age": 31,
+    "photo": "images/p0378.jpg"
+  },
+  {
+    "id": "p0379",
+    "name": "岸本 武流",
+    "team": "G大阪",
+    "birth": "1997-07-16",
+    "age": 29,
+    "photo": "images/p0379.jpg"
+  },
+  {
+    "id": "p0380",
+    "name": "池谷 銀姿郎",
+    "team": "G大阪",
+    "birth": "2004-06-19",
+    "age": 22,
+    "photo": "images/p0380.jpg"
+  },
+  {
+    "id": "p0381",
+    "name": "初瀬 亮",
+    "team": "G大阪",
+    "birth": "1997-07-10",
+    "age": 29,
+    "photo": "images/p0381.jpg"
+  },
+  {
+    "id": "p0382",
+    "name": "藤原 奏哉",
+    "team": "G大阪",
+    "birth": "1995-09-09",
+    "age": 31,
+    "photo": "images/p0382.jpg"
+  },
+  {
+    "id": "p0383",
+    "name": "横井 佑弥",
+    "team": "G大阪",
+    "birth": "2008-04-15",
+    "age": 18,
+    "photo": "images/p0383.jpg"
+  },
+  {
+    "id": "p0384",
+    "name": "中野 伸哉",
+    "team": "G大阪",
+    "birth": "2003-08-17",
+    "age": 23,
+    "photo": "images/p0384.jpg"
+  },
+  {
+    "id": "p0385",
+    "name": "佐々木 翔悟",
+    "team": "G大阪",
+    "birth": "2000-07-25",
+    "age": 26,
+    "photo": "images/p0385.jpg"
+  },
+  {
+    "id": "p0386",
+    "name": "倉田 秋",
+    "team": "G大阪",
+    "birth": "1988-11-26",
+    "age": 38,
+    "photo": "images/p0386.jpg"
+  },
+  {
+    "id": "p0387",
+    "name": "安部 柊斗",
+    "team": "G大阪",
+    "birth": "1997-12-05",
+    "age": 29,
+    "photo": "images/p0387.jpg"
+  },
+  {
+    "id": "p0388",
+    "name": "鈴木 徳真",
+    "team": "G大阪",
+    "birth": "1997-03-12",
+    "age": 29,
+    "photo": "images/p0388.jpg"
+  },
+  {
+    "id": "p0389",
+    "name": "美藤 倫",
+    "team": "G大阪",
+    "birth": "2002-02-12",
+    "age": 24,
+    "photo": "images/p0389.jpg"
+  },
+  {
+    "id": "p0390",
+    "name": "吉原 優輝",
+    "team": "G大阪",
+    "birth": "2004-07-19",
+    "age": 22,
+    "photo": "images/p0390.jpg"
+  },
+  {
+    "id": "p0391",
+    "name": "當野 泰生",
+    "team": "G大阪",
+    "birth": "2007-06-02",
+    "age": 19,
+    "photo": "images/p0391.jpg"
+  },
+  {
+    "id": "p0392",
+    "name": "角 昂志郎",
+    "team": "G大阪",
+    "birth": "2002-08-13",
+    "age": 24,
+    "photo": "images/p0392.jpg"
+  },
+  {
+    "id": "p0393",
+    "name": "奥抜 侃士",
+    "team": "G大阪",
+    "birth": "1999-08-11",
+    "age": 27,
+    "photo": "images/p0393.jpg"
+  },
+  {
+    "id": "p0394",
+    "name": "岡本 新大",
+    "team": "G大阪",
+    "birth": "2009-12-16",
+    "age": 17,
+    "photo": "images/p0394.jpg"
+  },
+  {
+    "id": "p0395",
+    "name": "宇佐美 貴史",
+    "team": "G大阪",
+    "birth": "1992-05-06",
+    "age": 34,
+    "photo": "images/p0395.jpg"
+  },
+  {
+    "id": "p0396",
+    "name": "食野 亮太郎",
+    "team": "G大阪",
+    "birth": "1998-06-18",
+    "age": 28,
+    "photo": "images/p0396.jpg"
+  },
+  {
+    "id": "p0397",
+    "name": "林 大地",
+    "team": "G大阪",
+    "birth": "1997-05-23",
+    "age": 29,
+    "photo": "images/p0397.jpg"
+  },
+  {
+    "id": "p0398",
+    "name": "植中 朝日",
+    "team": "G大阪",
+    "birth": "2001-11-01",
+    "age": 25,
+    "photo": "images/p0398.jpg"
+  },
+  {
+    "id": "p0399",
+    "name": "山下 諒也",
+    "team": "G大阪",
+    "birth": "1997-10-19",
+    "age": 29,
+    "photo": "images/p0399.jpg"
+  },
+  {
+    "id": "p0400",
+    "name": "小柏 剛",
+    "team": "G大阪",
+    "birth": "1998-07-09",
+    "age": 28,
+    "photo": "images/p0400.jpg"
+  },
+  {
+    "id": "p0401",
+    "name": "中積 爲",
+    "team": "G大阪",
+    "birth": "2007-12-19",
+    "age": 19,
+    "photo": "images/p0401.jpg"
+  },
+  {
+    "id": "p0402",
+    "name": "土信田 悠生",
+    "team": "G大阪",
+    "birth": "1999-07-23",
+    "age": 27,
+    "photo": "images/p0402.jpg"
+  },
+  {
+    "id": "p0403",
+    "name": "上林 豪",
+    "team": "C大阪",
+    "birth": "2002-08-18",
+    "age": 24,
+    "photo": "images/p0403.jpg"
+  },
+  {
+    "id": "p0404",
+    "name": "中村 航輔",
+    "team": "C大阪",
+    "birth": "1995-02-27",
+    "age": 31,
+    "photo": "images/p0404.jpg"
+  },
+  {
+    "id": "p0405",
+    "name": "阿部 航斗",
+    "team": "C大阪",
+    "birth": "1997-08-01",
+    "age": 29,
+    "photo": "images/p0405.jpg"
+  },
+  {
+    "id": "p0406",
+    "name": "イシボウ 拳",
+    "team": "C大阪",
+    "birth": "2007-08-29",
+    "age": 19,
+    "photo": "images/p0406.jpg"
+  },
+  {
+    "id": "p0407",
+    "name": "中村 拓海",
+    "team": "C大阪",
+    "birth": "2001-03-16",
+    "age": 25,
+    "photo": "images/p0407.jpg"
+  },
+  {
+    "id": "p0408",
+    "name": "井上 黎生人",
+    "team": "C大阪",
+    "birth": "1997-03-09",
+    "age": 29,
+    "photo": "images/p0408.jpg"
+  },
+  {
+    "id": "p0409",
+    "name": "登里 享平",
+    "team": "C大阪",
+    "birth": "1990-11-13",
+    "age": 36,
+    "photo": "images/p0409.jpg"
+  },
+  {
+    "id": "p0410",
+    "name": "奥田 勇斗",
+    "team": "C大阪",
+    "birth": "2001-04-21",
+    "age": 25,
+    "photo": "images/p0410.jpg"
+  },
+  {
+    "id": "p0411",
+    "name": "エゼモクェ チメヅェ海",
+    "team": "C大阪",
+    "birth": "2009-04-02",
+    "age": 17,
+    "photo": "images/p0411.jpg"
+  },
+  {
+    "id": "p0412",
+    "name": "畠中 槙之輔",
+    "team": "C大阪",
+    "birth": "1995-08-25",
+    "age": 31,
+    "photo": "images/p0412.jpg"
+  },
+  {
+    "id": "p0413",
+    "name": "大畑 歩夢",
+    "team": "C大阪",
+    "birth": "2001-04-27",
+    "age": 25,
+    "photo": "images/p0413.jpg"
+  },
+  {
+    "id": "p0414",
+    "name": "鷹啄 トラビス",
+    "team": "C大阪",
+    "birth": "2001-09-17",
+    "age": 25,
+    "photo": "images/p0414.jpg"
+  },
+  {
+    "id": "p0415",
+    "name": "上門 知樹",
+    "team": "C大阪",
+    "birth": "1997-04-27",
+    "age": 29,
+    "photo": "images/p0415.jpg"
+  },
+  {
+    "id": "p0416",
+    "name": "香川 真司",
+    "team": "C大阪",
+    "birth": "1989-03-17",
+    "age": 37,
+    "photo": "images/p0416.jpg"
+  },
+  {
+    "id": "p0417",
+    "name": "田中 駿汰",
+    "team": "C大阪",
+    "birth": "1997-05-26",
+    "age": 29,
+    "photo": "images/p0417.jpg"
+  },
+  {
+    "id": "p0418",
+    "name": "横山 夢樹",
+    "team": "C大阪",
+    "birth": "2005-09-23",
+    "age": 21,
+    "photo": "images/p0418.jpg"
+  },
+  {
+    "id": "p0419",
+    "name": "阪田 澪哉",
+    "team": "C大阪",
+    "birth": "2004-05-11",
+    "age": 22,
+    "photo": "images/p0419.jpg"
+  },
+  {
+    "id": "p0420",
+    "name": "岡澤 昂星",
+    "team": "C大阪",
+    "birth": "2003-10-22",
+    "age": 23,
+    "photo": "images/p0420.jpg"
+  },
+  {
+    "id": "p0421",
+    "name": "塩尻 哲平",
+    "team": "C大阪",
+    "birth": "2008-04-14",
+    "age": 18,
+    "photo": "images/p0421.jpg"
+  },
+  {
+    "id": "p0422",
+    "name": "柴山 昌也",
+    "team": "C大阪",
+    "birth": "2002-07-02",
+    "age": 24,
+    "photo": "images/p0422.jpg"
+  },
+  {
+    "id": "p0423",
+    "name": "櫻川 ソロモン",
+    "team": "C大阪",
+    "birth": "2001-08-04",
+    "age": 25,
+    "photo": "images/p0423.jpg"
+  },
+  {
+    "id": "p0424",
+    "name": "小見 洋太",
+    "team": "C大阪",
+    "birth": "2002-08-11",
+    "age": 24,
+    "photo": "images/p0424.jpg"
+  },
+  {
+    "id": "p0425",
+    "name": "永添 功樹",
+    "team": "C大阪",
+    "birth": "2009-04-02",
+    "age": 17,
+    "photo": "images/p0425.jpg"
+  },
+  {
+    "id": "p0426",
+    "name": "前川 黛也",
+    "team": "神戸",
+    "birth": "1994-09-08",
+    "age": 32,
+    "photo": "images/p0426.jpg"
+  },
+  {
+    "id": "p0427",
+    "name": "新井  章太",
+    "team": "神戸",
+    "birth": "1988-11-01",
+    "age": 38,
+    "photo": "images/p0427.jpg"
+  },
+  {
+    "id": "p0428",
+    "name": "髙山 汐生",
+    "team": "神戸",
+    "birth": "2001-06-13",
+    "age": 25,
+    "photo": "images/p0428.jpg"
+  },
+  {
+    "id": "p0429",
+    "name": "権田 修一",
+    "team": "神戸",
+    "birth": "1989-03-03",
+    "age": 37,
+    "photo": "images/p0429.jpg"
+  },
+  {
+    "id": "p0430",
+    "name": "山川 哲史",
+    "team": "神戸",
+    "birth": "1997-10-01",
+    "age": 29,
+    "photo": "images/p0430.jpg"
+  },
+  {
+    "id": "p0431",
+    "name": "酒井 高徳",
+    "team": "神戸",
+    "birth": "1991-03-14",
+    "age": 35,
+    "photo": "images/p0431.jpg"
+  },
+  {
+    "id": "p0432",
+    "name": "岩波 拓也",
+    "team": "神戸",
+    "birth": "1994-06-18",
+    "age": 32,
+    "photo": "images/p0432.jpg"
+  },
+  {
+    "id": "p0433",
+    "name": "永戸 勝也",
+    "team": "神戸",
+    "birth": "1995-01-15",
+    "age": 31,
+    "photo": "images/p0433.jpg"
+  },
+  {
+    "id": "p0434",
+    "name": "本間 ジャスティン",
+    "team": "神戸",
+    "birth": "2005-08-26",
+    "age": 21,
+    "photo": "images/p0434.jpg"
+  },
+  {
+    "id": "p0435",
+    "name": "山田 海斗",
+    "team": "神戸",
+    "birth": "2006-08-31",
+    "age": 20,
+    "photo": "images/p0435.jpg"
+  },
+  {
+    "id": "p0436",
+    "name": "飯野 七聖",
+    "team": "神戸",
+    "birth": "1996-10-02",
+    "age": 30,
+    "photo": "images/p0436.jpg"
+  },
+  {
+    "id": "p0437",
+    "name": "郷家 友太",
+    "team": "神戸",
+    "birth": "1999-06-10",
+    "age": 27,
+    "photo": "images/p0437.jpg"
+  },
+  {
+    "id": "p0438",
+    "name": "扇原 貴宏",
+    "team": "神戸",
+    "birth": "1991-10-05",
+    "age": 35,
+    "photo": "images/p0438.jpg"
+  },
+  {
+    "id": "p0439",
+    "name": "井手口 陽介",
+    "team": "神戸",
+    "birth": "1996-08-23",
+    "age": 30,
+    "photo": "images/p0439.jpg"
+  },
+  {
+    "id": "p0440",
+    "name": "髙橋 壱晟",
+    "team": "神戸",
+    "birth": "1998-04-20",
+    "age": 28,
+    "photo": "images/p0440.jpg"
+  },
+  {
+    "id": "p0441",
+    "name": "井出 遥也",
+    "team": "神戸",
+    "birth": "1994-03-25",
+    "age": 32,
+    "photo": "images/p0441.jpg"
+  },
+  {
+    "id": "p0442",
+    "name": "渡辺 皓太",
+    "team": "神戸",
+    "birth": "1998-10-18",
+    "age": 28,
+    "photo": "images/p0442.jpg"
+  },
+  {
+    "id": "p0443",
+    "name": "岩本 悠庵",
+    "team": "神戸",
+    "birth": "2006-04-15",
+    "age": 20,
+    "photo": "images/p0443.jpg"
+  },
+  {
+    "id": "p0444",
+    "name": "鍬先 祐弥",
+    "team": "神戸",
+    "birth": "1998-05-15",
+    "age": 28,
+    "photo": "images/p0444.jpg"
+  },
+  {
+    "id": "p0445",
+    "name": "濱﨑 健斗",
+    "team": "神戸",
+    "birth": "2007-06-16",
+    "age": 19,
+    "photo": "images/p0445.jpg"
+  },
+  {
+    "id": "p0446",
+    "name": "橋本 陸斗",
+    "team": "神戸",
+    "birth": "2005-04-02",
+    "age": 21,
+    "photo": "images/p0446.jpg"
+  },
+  {
+    "id": "p0447",
+    "name": "浦 十藏",
+    "team": "神戸",
+    "birth": "2004-05-21",
+    "age": 22,
+    "photo": "images/p0447.jpg"
+  },
+  {
+    "id": "p0448",
+    "name": "日髙 光揮",
+    "team": "神戸",
+    "birth": "2003-05-11",
+    "age": 23,
+    "photo": "images/p0448.jpg"
+  },
+  {
+    "id": "p0449",
+    "name": "大西 湊太",
+    "team": "神戸",
+    "birth": "2007-04-12",
+    "age": 19,
+    "photo": "images/p0449.jpg"
+  },
+  {
+    "id": "p0450",
+    "name": "大迫 勇也",
+    "team": "神戸",
+    "birth": "1990-05-18",
+    "age": 36,
+    "photo": "images/p0450.jpg"
+  },
+  {
+    "id": "p0451",
+    "name": "武藤 嘉紀",
+    "team": "神戸",
+    "birth": "1992-07-15",
+    "age": 34,
+    "photo": "images/p0451.jpg"
+  },
+  {
+    "id": "p0452",
+    "name": "佐々木 大樹",
+    "team": "神戸",
+    "birth": "1999-09-17",
+    "age": 27,
+    "photo": "images/p0452.jpg"
+  },
+  {
+    "id": "p0453",
+    "name": "小松 蓮",
+    "team": "神戸",
+    "birth": "1998-09-10",
+    "age": 28,
+    "photo": "images/p0453.jpg"
+  },
+  {
+    "id": "p0454",
+    "name": "冨永 虹七",
+    "team": "神戸",
+    "birth": "2004-07-18",
+    "age": 22,
+    "photo": "images/p0454.jpg"
+  },
+  {
+    "id": "p0455",
+    "name": "伊藤 湊太",
+    "team": "神戸",
+    "birth": "2007-09-24",
+    "age": 19,
+    "photo": "images/p0455.jpg"
+  },
+  {
+    "id": "p0456",
+    "name": "渡辺 隼斗",
+    "team": "神戸",
+    "birth": "2007-04-06",
+    "age": 19,
+    "photo": "images/p0456.jpg"
+  },
+  {
+    "id": "p0457",
+    "name": "宮原 勇太",
+    "team": "神戸",
+    "birth": "2005-04-07",
+    "age": 21,
+    "photo": "images/p0457.jpg"
+  },
+  {
+    "id": "p0458",
+    "name": "松田 駿",
+    "team": "岡山",
+    "birth": "2007-05-22",
+    "age": 19,
+    "photo": "images/p0458.jpg"
+  },
+  {
+    "id": "p0459",
+    "name": "濱田 太郎",
+    "team": "岡山",
+    "birth": "2000-02-21",
+    "age": 26,
+    "photo": "images/p0459.jpg"
+  },
+  {
+    "id": "p0460",
+    "name": "川浪 吾郎",
+    "team": "岡山",
+    "birth": "1991-04-30",
+    "age": 35,
+    "photo": "images/p0460.jpg"
+  },
+  {
+    "id": "p0461",
+    "name": "小川 遼也",
+    "team": "岡山",
+    "birth": "2004-05-21",
+    "age": 22,
+    "photo": "images/p0461.jpg"
+  },
+  {
+    "id": "p0462",
+    "name": "池戸 柊宇",
+    "team": "岡山",
+    "birth": "2005-12-26",
+    "age": 21,
+    "photo": "images/p0462.jpg"
+  },
+  {
+    "id": "p0463",
+    "name": "大森 博",
+    "team": "岡山",
+    "birth": "2002-09-10",
+    "age": 24,
+    "photo": "images/p0463.jpg"
+  },
+  {
+    "id": "p0464",
+    "name": "田上 大地",
+    "team": "岡山",
+    "birth": "1993-06-16",
+    "age": 33,
+    "photo": "images/p0464.jpg"
+  },
+  {
+    "id": "p0465",
+    "name": "千田 遼",
+    "team": "岡山",
+    "birth": "2007-09-20",
+    "age": 19,
+    "photo": "images/p0465.jpg"
+  },
+  {
+    "id": "p0466",
+    "name": "鈴木 喜丈",
+    "team": "岡山",
+    "birth": "1998-07-06",
+    "age": 28,
+    "photo": "images/p0466.jpg"
+  },
+  {
+    "id": "p0467",
+    "name": "森 壮一朗",
+    "team": "岡山",
+    "birth": "2007-06-29",
+    "age": 19,
+    "photo": "images/p0467.jpg"
+  },
+  {
+    "id": "p0468",
+    "name": "立田 悠悟",
+    "team": "岡山",
+    "birth": "1998-06-21",
+    "age": 28,
+    "photo": "images/p0468.jpg"
+  },
+  {
+    "id": "p0469",
+    "name": "白井 康介",
+    "team": "岡山",
+    "birth": "1994-05-01",
+    "age": 32,
+    "photo": "images/p0469.jpg"
+  },
+  {
+    "id": "p0470",
+    "name": "藤井 葉大",
+    "team": "岡山",
+    "birth": "2006-01-16",
+    "age": 20,
+    "photo": "images/p0470.jpg"
+  },
+  {
+    "id": "p0471",
+    "name": "竹内 涼",
+    "team": "岡山",
+    "birth": "1991-03-08",
+    "age": 35,
+    "photo": "images/p0471.jpg"
+  },
+  {
+    "id": "p0472",
+    "name": "江坂 任",
+    "team": "岡山",
+    "birth": "1992-05-31",
+    "age": 34,
+    "photo": "images/p0472.jpg"
+  },
+  {
+    "id": "p0473",
+    "name": "田部井 涼",
+    "team": "岡山",
+    "birth": "1999-06-25",
+    "age": 27,
+    "photo": "images/p0473.jpg"
+  },
+  {
+    "id": "p0474",
+    "name": "末吉 塁",
+    "team": "岡山",
+    "birth": "1996-07-24",
+    "age": 30,
+    "photo": "images/p0474.jpg"
+  },
+  {
+    "id": "p0475",
+    "name": "藤田 息吹",
+    "team": "岡山",
+    "birth": "1991-01-30",
+    "age": 35,
+    "photo": "images/p0475.jpg"
+  },
+  {
+    "id": "p0476",
+    "name": "木村 太哉",
+    "team": "岡山",
+    "birth": "1998-07-08",
+    "age": 28,
+    "photo": "images/p0476.jpg"
+  },
+  {
+    "id": "p0477",
+    "name": "松本 昌也",
+    "team": "岡山",
+    "birth": "1995-01-25",
+    "age": 31,
+    "photo": "images/p0477.jpg"
+  },
+  {
+    "id": "p0478",
+    "name": "神谷 優太",
+    "team": "岡山",
+    "birth": "1997-04-24",
+    "age": 29,
+    "photo": "images/p0478.jpg"
+  },
+  {
+    "id": "p0479",
+    "name": "小倉 幸成",
+    "team": "岡山",
+    "birth": "2005-04-09",
+    "age": 21,
+    "photo": "images/p0479.jpg"
+  },
+  {
+    "id": "p0480",
+    "name": "宮本 英治",
+    "team": "岡山",
+    "birth": "1998-08-03",
+    "age": 28,
+    "photo": "images/p0480.jpg"
+  },
+  {
+    "id": "p0481",
+    "name": "西川 潤",
+    "team": "岡山",
+    "birth": "2002-02-21",
+    "age": 24,
+    "photo": "images/p0481.jpg"
+  },
+  {
+    "id": "p0482",
+    "name": "ブラウン ノア 賢信",
+    "team": "岡山",
+    "birth": "2001-05-27",
+    "age": 25,
+    "photo": "images/p0482.jpg"
+  },
+  {
+    "id": "p0483",
+    "name": "山根 永遠",
+    "team": "岡山",
+    "birth": "1999-02-05",
+    "age": 27,
+    "photo": "images/p0483.jpg"
+  },
+  {
+    "id": "p0484",
+    "name": "佐藤 凌我",
+    "team": "岡山",
+    "birth": "1999-02-20",
+    "age": 27,
+    "photo": "images/p0484.jpg"
+  },
+  {
+    "id": "p0485",
+    "name": "河野 孝汰",
+    "team": "岡山",
+    "birth": "2003-08-12",
+    "age": 23,
+    "photo": "images/p0485.jpg"
+  },
+  {
+    "id": "p0486",
+    "name": "末宗 寛士郎",
+    "team": "岡山",
+    "birth": "2007-06-10",
+    "age": 19,
+    "photo": "images/p0486.jpg"
+  },
+  {
+    "id": "p0487",
+    "name": "大迫 敬介",
+    "team": "広島",
+    "birth": "1999-07-28",
+    "age": 27,
+    "photo": "images/p0487.jpg"
+  },
+  {
+    "id": "p0488",
+    "name": "田中 雄大",
+    "team": "広島",
+    "birth": "1995-11-17",
+    "age": 31,
+    "photo": "images/p0488.jpg"
+  },
+  {
+    "id": "p0489",
+    "name": "小川 煌",
+    "team": "広島",
+    "birth": "2007-06-24",
+    "age": 19,
+    "photo": "images/p0489.jpg"
+  },
+  {
+    "id": "p0490",
+    "name": "大内 一生",
+    "team": "広島",
+    "birth": "2000-09-08",
+    "age": 26,
+    "photo": "images/p0490.jpg"
+  },
+  {
+    "id": "p0491",
+    "name": "山﨑 大地",
+    "team": "広島",
+    "birth": "2001-01-08",
+    "age": 25,
+    "photo": "images/p0491.jpg"
+  },
+  {
+    "id": "p0492",
+    "name": "荒木 隼人",
+    "team": "広島",
+    "birth": "1996-08-07",
+    "age": 30,
+    "photo": "images/p0492.jpg"
+  },
+  {
+    "id": "p0493",
+    "name": "新井 直人",
+    "team": "広島",
+    "birth": "1996-10-07",
+    "age": 30,
+    "photo": "images/p0493.jpg"
+  },
+  {
+    "id": "p0494",
+    "name": "中野 就斗",
+    "team": "広島",
+    "birth": "2000-06-27",
+    "age": 26,
+    "photo": "images/p0494.jpg"
+  },
+  {
+    "id": "p0495",
+    "name": "佐々木 翔",
+    "team": "広島",
+    "birth": "1989-10-02",
+    "age": 37,
+    "photo": "images/p0495.jpg"
+  },
+  {
+    "id": "p0496",
+    "name": "塩谷 司",
+    "team": "広島",
+    "birth": "1988-12-05",
+    "age": 38,
+    "photo": "images/p0496.jpg"
+  },
+  {
+    "id": "p0497",
+    "name": "川辺 駿",
+    "team": "広島",
+    "birth": "1995-09-08",
+    "age": 31,
+    "photo": "images/p0497.jpg"
+  },
+  {
+    "id": "p0498",
+    "name": "東 俊希",
+    "team": "広島",
+    "birth": "2000-07-28",
+    "age": 26,
+    "photo": "images/p0498.jpg"
+  },
+  {
+    "id": "p0499",
+    "name": "川村 拓夢",
+    "team": "広島",
+    "birth": "1999-08-28",
+    "age": 27,
+    "photo": "images/p0499.jpg"
+  },
+  {
+    "id": "p0500",
+    "name": "松本 泰志",
+    "team": "広島",
+    "birth": "1998-08-22",
+    "age": 28,
+    "photo": "images/p0500.jpg"
+  },
+  {
+    "id": "p0501",
+    "name": "菅 大輝",
+    "team": "広島",
+    "birth": "1998-09-10",
+    "age": 28,
+    "photo": "images/p0501.jpg"
+  },
+  {
+    "id": "p0502",
+    "name": "越道 草太",
+    "team": "広島",
+    "birth": "2004-04-03",
+    "age": 22,
+    "photo": "images/p0502.jpg"
+  },
+  {
+    "id": "p0503",
+    "name": "中島 洋太朗",
+    "team": "広島",
+    "birth": "2006-04-22",
+    "age": 20,
+    "photo": "images/p0503.jpg"
+  },
+  {
+    "id": "p0504",
+    "name": "小林 志紋",
+    "team": "広島",
+    "birth": "2008-01-23",
+    "age": 18,
+    "photo": "images/p0504.jpg"
+  },
+  {
+    "id": "p0505",
+    "name": "野口 蓮斗",
+    "team": "広島",
+    "birth": "2008-04-20",
+    "age": 18,
+    "photo": "images/p0505.jpg"
+  },
+  {
+    "id": "p0506",
+    "name": "鈴木 章斗",
+    "team": "広島",
+    "birth": "2003-07-30",
+    "age": 23,
+    "photo": "images/p0506.jpg"
+  },
+  {
+    "id": "p0507",
+    "name": "加藤 陸次樹",
+    "team": "広島",
+    "birth": "1997-08-06",
+    "age": 29,
+    "photo": "images/p0507.jpg"
+  },
+  {
+    "id": "p0508",
+    "name": "鮎川 峻",
+    "team": "広島",
+    "birth": "2001-09-15",
+    "age": 25,
+    "photo": "images/p0508.jpg"
+  },
+  {
+    "id": "p0509",
+    "name": "浅野 拓磨",
+    "team": "広島",
+    "birth": "1994-11-10",
+    "age": 32,
+    "photo": "images/p0509.jpg"
+  },
+  {
+    "id": "p0510",
+    "name": "前田 直輝",
+    "team": "広島",
+    "birth": "1994-11-17",
+    "age": 32,
+    "photo": "images/p0510.jpg"
+  },
+  {
+    "id": "p0511",
+    "name": "永石 拓海",
+    "team": "福岡",
+    "birth": "1996-02-16",
+    "age": 30,
+    "photo": "images/p0511.jpg"
+  },
+  {
+    "id": "p0512",
+    "name": "小畑 裕馬",
+    "team": "福岡",
+    "birth": "2001-11-07",
+    "age": 25,
+    "photo": "images/p0512.jpg"
+  },
+  {
+    "id": "p0513",
+    "name": "藤田 和輝",
+    "team": "福岡",
+    "birth": "2001-02-19",
+    "age": 25,
+    "photo": "images/p0513.jpg"
+  },
+  {
+    "id": "p0514",
+    "name": "オビ パウエル オビンナ",
+    "team": "福岡",
+    "birth": "1997-12-18",
+    "age": 29,
+    "photo": "images/p0514.jpg"
+  },
+  {
+    "id": "p0515",
+    "name": "湯澤 聖人",
+    "team": "福岡",
+    "birth": "1993-10-10",
+    "age": 33,
+    "photo": "images/p0515.jpg"
+  },
+  {
+    "id": "p0516",
+    "name": "上島 拓巳",
+    "team": "福岡",
+    "birth": "1997-02-05",
+    "age": 29,
+    "photo": "images/p0516.jpg"
+  },
+  {
+    "id": "p0517",
+    "name": "辻岡 佑真",
+    "team": "福岡",
+    "birth": "2001-12-09",
+    "age": 25,
+    "photo": "images/p0517.jpg"
+  },
+  {
+    "id": "p0518",
+    "name": "岡 哲平",
+    "team": "福岡",
+    "birth": "2001-09-06",
+    "age": 25,
+    "photo": "images/p0518.jpg"
+  },
+  {
+    "id": "p0519",
+    "name": "三國 ケネディエブス",
+    "team": "福岡",
+    "birth": "2000-06-23",
+    "age": 26,
+    "photo": "images/p0519.jpg"
+  },
+  {
+    "id": "p0520",
+    "name": "深澤 大輝",
+    "team": "福岡",
+    "birth": "1998-08-21",
+    "age": 28,
+    "photo": "images/p0520.jpg"
+  },
+  {
+    "id": "p0521",
+    "name": "前嶋 洋太",
+    "team": "福岡",
+    "birth": "1997-08-12",
+    "age": 29,
+    "photo": "images/p0521.jpg"
+  },
+  {
+    "id": "p0522",
+    "name": "山脇 樺織",
+    "team": "福岡",
+    "birth": "2000-12-17",
+    "age": 26,
+    "photo": "images/p0522.jpg"
+  },
+  {
+    "id": "p0523",
+    "name": "田代 雅也",
+    "team": "福岡",
+    "birth": "1993-05-01",
+    "age": 33,
+    "photo": "images/p0523.jpg"
+  },
+  {
+    "id": "p0524",
+    "name": "宮 大樹",
+    "team": "福岡",
+    "birth": "1996-04-01",
+    "age": 30,
+    "photo": "images/p0524.jpg"
+  },
+  {
+    "id": "p0525",
+    "name": "橋本 悠",
+    "team": "福岡",
+    "birth": "2002-06-07",
+    "age": 24,
+    "photo": "images/p0525.jpg"
+  },
+  {
+    "id": "p0526",
+    "name": "藤川 虎三",
+    "team": "福岡",
+    "birth": "2008-07-29",
+    "age": 18,
+    "photo": "images/p0526.jpg"
+  },
+  {
+    "id": "p0527",
+    "name": "重見 柾斗",
+    "team": "福岡",
+    "birth": "2001-09-20",
+    "age": 25,
+    "photo": "images/p0527.jpg"
+  },
+  {
+    "id": "p0528",
+    "name": "奥野 耕平",
+    "team": "福岡",
+    "birth": "2000-04-03",
+    "age": 26,
+    "photo": "images/p0528.jpg"
+  },
+  {
+    "id": "p0529",
+    "name": "見木 友哉",
+    "team": "福岡",
+    "birth": "1998-03-28",
+    "age": 28,
+    "photo": "images/p0529.jpg"
+  },
+  {
+    "id": "p0530",
+    "name": "名古 新太郎",
+    "team": "福岡",
+    "birth": "1996-04-17",
+    "age": 30,
+    "photo": "images/p0530.jpg"
+  },
+  {
+    "id": "p0531",
+    "name": "秋野 央樹",
+    "team": "福岡",
+    "birth": "1994-10-08",
+    "age": 32,
+    "photo": "images/p0531.jpg"
+  },
+  {
+    "id": "p0532",
+    "name": "北島 祐二",
+    "team": "福岡",
+    "birth": "2000-08-04",
+    "age": 26,
+    "photo": "images/p0532.jpg"
+  },
+  {
+    "id": "p0533",
+    "name": "椎橋 慧也",
+    "team": "福岡",
+    "birth": "1997-06-20",
+    "age": 29,
+    "photo": "images/p0533.jpg"
+  },
+  {
+    "id": "p0534",
+    "name": "福島 和毅",
+    "team": "福岡",
+    "birth": "2007-04-27",
+    "age": 19,
+    "photo": "images/p0534.jpg"
+  },
+  {
+    "id": "p0535",
+    "name": "武本 匠平",
+    "team": "福岡",
+    "birth": "2008-05-26",
+    "age": 18,
+    "photo": "images/p0535.jpg"
+  },
+  {
+    "id": "p0536",
+    "name": "碓井 聖生",
+    "team": "福岡",
+    "birth": "2001-07-20",
+    "age": 25,
+    "photo": "images/p0536.jpg"
+  },
+  {
+    "id": "p0537",
+    "name": "城後 寿",
+    "team": "福岡",
+    "birth": "1986-04-16",
+    "age": 40,
+    "photo": "images/p0537.jpg"
+  },
+  {
+    "id": "p0538",
+    "name": "師岡 柊生",
+    "team": "福岡",
+    "birth": "2000-12-09",
+    "age": 26,
+    "photo": "images/p0538.jpg"
+  },
+  {
+    "id": "p0539",
+    "name": "佐藤 颯之介",
+    "team": "福岡",
+    "birth": "2003-07-06",
+    "age": 23,
+    "photo": "images/p0539.jpg"
+  },
+  {
+    "id": "p0540",
+    "name": "藤本 一輝",
+    "team": "福岡",
+    "birth": "1998-07-29",
+    "age": 28,
+    "photo": "images/p0540.jpg"
+  },
+  {
+    "id": "p0541",
+    "name": "鶴野 怜樹",
+    "team": "福岡",
+    "birth": "2001-01-26",
+    "age": 25,
+    "photo": "images/p0541.jpg"
+  },
+  {
+    "id": "p0542",
+    "name": "サニブラウン ハナン",
+    "team": "福岡",
+    "birth": "2006-07-03",
+    "age": 20,
+    "photo": "images/p0542.jpg"
+  },
+  {
+    "id": "p0543",
+    "name": "前田 一翔",
+    "team": "福岡",
+    "birth": "2006-06-16",
+    "age": 20,
+    "photo": "images/p0543.jpg"
+  },
+  {
+    "id": "p0544",
+    "name": "前田 陽輝",
+    "team": "福岡",
+    "birth": "2008-10-25",
+    "age": 18,
+    "photo": "images/p0544.jpg"
+  },
+  {
+    "id": "p0545",
+    "name": "前田 快",
+    "team": "福岡",
+    "birth": "2004-07-01",
+    "age": 22,
+    "photo": "images/p0545.jpg"
+  },
+  {
+    "id": "p0546",
+    "name": "坂井 悠飛",
+    "team": "福岡",
+    "birth": "2004-10-05",
+    "age": 22,
+    "photo": "images/p0546.jpg"
+  },
+  {
+    "id": "p0547",
+    "name": "北浜 琉星",
+    "team": "福岡",
+    "birth": "2004-07-15",
+    "age": 22,
+    "photo": "images/p0547.jpg"
+  },
+  {
+    "id": "p0548",
+    "name": "後藤 雅明",
+    "team": "長崎",
+    "birth": "1994-05-24",
+    "age": 32,
+    "photo": "images/p0548.jpg"
+  },
+  {
+    "id": "p0549",
+    "name": "波多野 豪",
+    "team": "長崎",
+    "birth": "1998-05-25",
+    "age": 28,
+    "photo": "images/p0549.jpg"
+  },
+  {
+    "id": "p0550",
+    "name": "井岡 海都",
+    "team": "長崎",
+    "birth": "1998-04-27",
+    "age": 28,
+    "photo": "images/p0550.jpg"
+  },
+  {
+    "id": "p0551",
+    "name": "江川 湧清",
+    "team": "長崎",
+    "birth": "2000-10-24",
+    "age": 26,
+    "photo": "images/p0551.jpg"
+  },
+  {
+    "id": "p0552",
+    "name": "高畑 奎汰",
+    "team": "長崎",
+    "birth": "2000-09-16",
+    "age": 26,
+    "photo": "images/p0552.jpg"
+  },
+  {
+    "id": "p0553",
+    "name": "米田 隼也",
+    "team": "長崎",
+    "birth": "1995-11-05",
+    "age": 31,
+    "photo": "images/p0553.jpg"
+  },
+  {
+    "id": "p0554",
+    "name": "大南 拓磨",
+    "team": "長崎",
+    "birth": "1997-12-13",
+    "age": 29,
+    "photo": "images/p0554.jpg"
+  },
+  {
+    "id": "p0555",
+    "name": "新井 一耀",
+    "team": "長崎",
+    "birth": "1993-11-08",
+    "age": 33,
+    "photo": "images/p0555.jpg"
+  },
+  {
+    "id": "p0556",
+    "name": "土肥 幹太",
+    "team": "長崎",
+    "birth": "2004-11-10",
+    "age": 22,
+    "photo": "images/p0556.jpg"
+  },
+  {
+    "id": "p0557",
+    "name": "進藤 亮佑",
+    "team": "長崎",
+    "birth": "1996-06-07",
+    "age": 30,
+    "photo": "images/p0557.jpg"
+  },
+  {
+    "id": "p0558",
+    "name": "山口 蛍",
+    "team": "長崎",
+    "birth": "1990-10-06",
+    "age": 36,
+    "photo": "images/p0558.jpg"
+  },
+  {
+    "id": "p0559",
+    "name": "保田 堅心",
+    "team": "長崎",
+    "birth": "2005-03-05",
+    "age": 21,
+    "photo": "images/p0559.jpg"
+  },
+  {
+    "id": "p0560",
+    "name": "岩崎 悠人",
+    "team": "長崎",
+    "birth": "1998-06-11",
+    "age": 28,
+    "photo": "images/p0560.jpg"
+  },
+  {
+    "id": "p0561",
+    "name": "名倉 巧",
+    "team": "長崎",
+    "birth": "1998-06-03",
+    "age": 28,
+    "photo": "images/p0561.jpg"
+  },
+  {
+    "id": "p0562",
+    "name": "澤田 崇",
+    "team": "長崎",
+    "birth": "1991-05-26",
+    "age": 35,
+    "photo": "images/p0562.jpg"
+  },
+  {
+    "id": "p0563",
+    "name": "中村 慶太",
+    "team": "長崎",
+    "birth": "1993-06-30",
+    "age": 33,
+    "photo": "images/p0563.jpg"
+  },
+  {
+    "id": "p0564",
+    "name": "翁長 聖",
+    "team": "長崎",
+    "birth": "1995-02-23",
+    "age": 31,
+    "photo": "images/p0564.jpg"
+  },
+  {
+    "id": "p0565",
+    "name": "山田 陸",
+    "team": "長崎",
+    "birth": "1998-04-15",
+    "age": 28,
+    "photo": "images/p0565.jpg"
+  },
+  {
+    "id": "p0566",
+    "name": "松本 天夢",
+    "team": "長崎",
+    "birth": "2002-09-28",
+    "age": 24,
+    "photo": "images/p0566.jpg"
+  },
+  {
+    "id": "p0567",
+    "name": "長谷川 元希",
+    "team": "長崎",
+    "birth": "1998-12-10",
+    "age": 28,
+    "photo": "images/p0567.jpg"
+  },
+  {
+    "id": "p0568",
+    "name": "鍋島 暖歩",
+    "team": "長崎",
+    "birth": "2004-02-21",
+    "age": 22,
+    "photo": "images/p0568.jpg"
+  },
+  {
+    "id": "p0569",
+    "name": "増山 朝陽",
+    "team": "長崎",
+    "birth": "1997-01-29",
+    "age": 29,
+    "photo": "images/p0569.jpg"
+  },
+  {
+    "id": "p0570",
+    "name": "山﨑 凌吾",
+    "team": "長崎",
+    "birth": "1992-09-20",
+    "age": 34,
+    "photo": "images/p0570.jpg"
+  },
+  {
+    "id": "p0571",
+    "name": "洪 怜鎭",
+    "team": "長崎",
+    "birth": "2003-08-26",
+    "age": 23,
+    "photo": "images/p0571.jpg"
+  }
 ];
 
+/* ============================================================
+   ゲーム設定
+============================================================ */
+const CONFIG = {
+  choiceCount: 4,
+  // 各年代から最終3人を選出
+  finalCount: 3,
+  // 予選は「1人あたり2回」を基本にする。全員を最低限見たうえで、勝負のブレも残す。
+  qualificationAppearances: 2,
+  // 予選通過者。多すぎると終盤が長くなるので12人に絞る。
+  shortlistCount: 12,
+  // 最終戦は12人を何度も4択に登場させる
+  finalAppearances: 5,
+  // Elo風レーティングの更新幅
+  ratingK: 32
+};
 
-/* =====================================================
-   ゲーム状態
-===================================================== */
+const ageGroups = [
+  {key:"teens",label:"10代",min:10,max:19},
+  {key:"twenties",label:"20代",min:20,max:29},
+  {key:"30plus",label:"30代以上",min:30,max:99}
+];
 
-let currentRound = 1;
-let scores = {};
-let currentCandidates = [];
-let previousCandidates = [];
-let choosing = false;
+let state = null;
 
-
-/* =====================================================
-   DOM
-===================================================== */
-
-const gameArea =
-  document.getElementById("gameArea");
-
-const resultArea =
-  document.getElementById("resultArea");
-
-const playerGrid =
-  document.getElementById("playerGrid");
-
-const currentRoundElement =
-  document.getElementById("currentRound");
-
-const totalRoundsElement =
-  document.getElementById("totalRounds");
-
-const progressInner =
-  document.getElementById("progressInner");
-
-const resultGrid =
-  document.getElementById("resultGrid");
-
-const rankingList =
-  document.getElementById("rankingList");
-
-const downloadButton =
-  document.getElementById("downloadButton");
-
-const restartButton =
-  document.getElementById("restartButton");
-
-
-/* =====================================================
-   ゲーム開始
-===================================================== */
-
-function initGame() {
-
-  currentRound = 1;
-
-  previousCandidates = [];
-
-  choosing = false;
-
-  scores = {};
-
-  players.forEach(player => {
-    scores[player.id] = 0;
-  });
-
-  totalRoundsElement.textContent =
-    TOTAL_ROUNDS;
-
-  gameArea.style.display = "block";
-
-  resultArea.style.display = "none";
-
-  showCandidates();
+function calcAge(birth, fallbackAge=null){
+  if(Number.isFinite(Number(fallbackAge))) return Number(fallbackAge);
+  if(!birth) return null;
+  const b = new Date(birth + "T00:00:00");
+  let age = new Date().getFullYear() - b.getFullYear();
+  const beforeBirthday =
+    new Date().getMonth() < b.getMonth() ||
+    (new Date().getMonth() === b.getMonth() && new Date().getDate() < b.getDate());
+  if(beforeBirthday) age--;
+  return age;
 }
 
+function getGroup(player){
+  const age = calcAge(player.birth, player.age);
+  return age < 20 ? "teens" : age < 30 ? "twenties" : "30plus";
+}
 
-/* =====================================================
-   4人を選ぶ
-===================================================== */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
 
-function getCandidates() {
+function initials(name){ return name.replace(/\s/g,"").slice(0,2); }
 
-  let pool =
-    shuffleArray(players);
+function photoHTML(p, cls="photo"){
+  if(p.photo){
+    return `<div class="${cls}"><img src="${escapeAttr(p.photo)}" alt="${escapeAttr(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="avatar" style="display:none">${escapeHTML(initials(p.name))}</div></div>`;
+  }
+  return `<div class="${cls}"><div class="avatar">${escapeHTML(initials(p.name))}</div></div>`;
+}
 
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escapeAttr(s){return escapeHTML(s);}
 
-  /*
-   * 前回出た選手を少し避ける
-   */
+// 4択専用のElo風レーティング。勝者だけが上がるのではなく、
+// 「強そうな相手に勝つ」ほど大きく上がるので、単純な勝利数より逆転が起きやすい。
+function updateRating(choices, winnerId){
+  const weights=choices.map(p=>Math.pow(10,(state.rating[p.id]||1500)/400));
+  const total=weights.reduce((a,b)=>a+b,0);
+  choices.forEach((p,i)=>{
+    const expected=weights[i]/total;
+    const actual=p.id===winnerId ? 1 : 0;
+    state.rating[p.id]=(state.rating[p.id]||1500)+CONFIG.ratingK*(actual-expected);
+  });
+}
 
-  if (previousCandidates.length > 0) {
+// 登場回数が少ない選手を優先しつつ、毎回同じ4人にならないようランダム性を入れる。
+function makeChoices(pool, appearanceKey="appear"){
+  const candidates=pool.filter(p=>p && p.id);
+  const choices=[];
+  const used=new Set();
 
-    const preferred =
-      pool.filter(player =>
-        !previousCandidates.includes(player.id)
-      );
-
-    const avoided =
-      pool.filter(player =>
-        previousCandidates.includes(player.id)
-      );
-
-
-    /*
-     * まず前回出ていない選手から選ぶ
-     */
-
-    const candidatePool =
-      Math.random() < REPEAT_AVOIDANCE
-        ? preferred
-        : pool;
-
-
-    /*
-     * 4人に足りない場合は
-     * 前回出た選手から補充
-     */
-
-    let selected =
-      candidatePool.slice(
-        0,
-        CANDIDATE_COUNT
-      );
-
-
-    if (selected.length < CANDIDATE_COUNT) {
-
-      selected = [
-        ...selected,
-        ...avoided.slice(
-          0,
-          CANDIDATE_COUNT - selected.length
-        )
-      ];
-
+  while(choices.length<CONFIG.choiceCount && choices.length<candidates.length){
+    const available=candidates.filter(p=>!used.has(p.id));
+    if(!available.length) break;
+    const counts=available.map(p=>state[appearanceKey][p.id]||0);
+    const min=Math.min(...counts);
+    const low=available.filter(p=>(state[appearanceKey][p.id]||0)<=min);
+    // 8割は登場回数最少グループ、2割は少し上のグループから。
+    let source=low;
+    if(Math.random()<0.2){
+      const near=available.filter(p=>(state[appearanceKey][p.id]||0)<=min+1);
+      source=near.length?near:low;
     }
-
-    return selected;
+    const pick=source[Math.floor(Math.random()*source.length)];
+    choices.push(pick);
+    used.add(pick.id);
   }
-
-
-  return pool.slice(
-    0,
-    CANDIDATE_COUNT
-  );
+  return shuffle(choices);
 }
 
-
-/* =====================================================
-   選択肢表示
-===================================================== */
-
-function showCandidates() {
-
-  choosing = false;
-
-  playerGrid.innerHTML = "";
-
-  currentCandidates =
-    getCandidates();
-
-
-  previousCandidates =
-    currentCandidates.map(
-      player => player.id
-    );
-
-
-  currentCandidates.forEach(player => {
-
-    const card =
-      document.createElement("button");
-
-    card.type = "button";
-
-    card.className =
-      "player-card";
-
-
-    card.innerHTML = `
-
-      <img
-        src="${player.image}"
-        alt="${escapeHtml(player.name)}"
-        onerror="this.src='https://placehold.co/800x800?text=${encodeURIComponent(player.name)}'"
-      >
-
-      <div class="choice-mark">
-        ✓
-      </div>
-
-      <div class="player-info">
-
-        <span class="player-name">
-          ${escapeHtml(player.name)}
-        </span>
-
-        <span class="player-club">
-          ${escapeHtml(player.club)}
-        </span>
-
-      </div>
-    `;
-
-
-    card.addEventListener(
-      "click",
-      () => choosePlayer(player, card)
-    );
-
-
-    playerGrid.appendChild(card);
-
+function startGame(){
+  const grouped={teens:[],twenties:[],"30plus":[]};
+  players.forEach(p=>{
+    if(!p.birth || !p.name) return;
+    const g=getGroup(p);
+    if(grouped[g]) grouped[g].push({...p});
   });
 
-
-  currentRoundElement.textContent =
-    currentRound;
-
-
-  const percentage =
-    ((currentRound - 1) / TOTAL_ROUNDS) * 100;
-
-
-  progressInner.style.width =
-    percentage + "%";
-}
-
-
-/* =====================================================
-   選手を選択
-===================================================== */
-
-function choosePlayer(player, card) {
-
-  if (choosing) {
-    return;
-  }
-
-  choosing = true;
-
-
-  /*
-   * 得票 +1
-   */
-
-  scores[player.id]++;
-
-
-  card.classList.add("selected");
-
-
-  setTimeout(() => {
-
-    if (currentRound >= TOTAL_ROUNDS) {
-
-      showResult();
-
+  for(const g of ageGroups){
+    if(grouped[g.key].length<CONFIG.choiceCount){
+      alert(`${g.label}の登録選手が4人未満です。players配列を確認してください。`);
       return;
     }
+  }
 
+  state={
+    groups:grouped,
+    currentGroupIndex:0,
+    round:0,
+    maxRounds:0,
+    choices:[],
+    appear:{},
+    rating:{},
+    stage:"qualify",
+    shortlists:{},
+    finalists:{},
+    finalAppear:{},
+    finalRating:{}
+  };
+  players.forEach(p=>{
+    state.appear[p.id]=0;
+    state.rating[p.id]=1500;
+    state.finalAppear[p.id]=0;
+    state.finalRating[p.id]=1500;
+  });
 
-    currentRound++;
-
-    showCandidates();
-
-  }, 280);
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+  prepareQualification();
 }
 
+function prepareQualification(){
+  const g=ageGroups[state.currentGroupIndex];
+  const pool=state.groups[g.key];
+  // 1人2回 × 人数 ÷ 4。2回とも偶然が偏らないよう、毎ラウンド登場回数の少ない人を優先。
+  state.maxRounds=Math.max(
+    Math.ceil(pool.length*CONFIG.qualificationAppearances/CONFIG.choiceCount),
+    1
+  );
+  state.round=0;
+  state.stage="qualify";
+  renderRound();
+}
 
-/* =====================================================
-   結果
-===================================================== */
+function renderRound(){
+  const g=ageGroups[state.currentGroupIndex];
+  const pool=state.groups[g.key];
+  state.choices=makeChoices(pool,"appear");
+  state.choices.forEach(p=>state.appear[p.id]=(state.appear[p.id]||0)+1);
 
-function showResult() {
+  document.getElementById("stageTitle").textContent=`${g.label} 予選`;
+  document.getElementById("stageNote").textContent=`4人の中から「一番好きな顔」を1人選んでください。直感でOK！`;
+  document.getElementById("progressLabel").textContent=`${g.label}・予選`;
+  document.getElementById("progressCount").textContent=`${state.round+1} / ${state.maxRounds}`;
+  document.getElementById("progressBar").style.width=`${(state.round/state.maxRounds)*100}%`;
 
-  gameArea.style.display = "none";
-
-  resultArea.style.display = "block";
-
-
-  /*
-   * 得票数の高い順
-   *
-   * 同点の場合はランダム
-   */
-
-  const ranking =
-    [...players].sort((a,b) => {
-
-      const difference =
-        scores[b.id] - scores[a.id];
-
-      if (difference !== 0) {
-        return difference;
-      }
-
-      return Math.random() - .5;
-    });
-
-
-  /*
-   * TOP9
-   */
-
-  const top9 =
-    ranking.slice(
-      0,
-      RESULT_COUNT
-    );
-
-
-  /*
-   * 3×3生成
-   */
-
-  resultGrid.innerHTML = "";
-
-
-  top9.forEach((player,index) => {
-
-    const cell =
-      document.createElement("div");
-
-    cell.className =
-      "result-cell";
-
-
-    cell.innerHTML = `
-
-      <img
-        src="${player.image}"
-        alt="${escapeHtml(player.name)}"
-        onerror="this.src='https://placehold.co/800x800?text=${encodeURIComponent(player.name)}'"
-      >
-
-      <div class="result-cell-name">
-
-        ${index + 1}位
-        ${escapeHtml(player.name)}
-        ・${scores[player.id]}票
-
+  const el=document.getElementById("choices");
+  el.innerHTML=state.choices.map(p=>`
+    <button class="choice" data-id="${escapeAttr(p.id)}" aria-label="${escapeAttr(p.name)}">
+      ${photoHTML(p)}
+      <div class="choice-body">
+        <div class="choice-name">${escapeHTML(p.name)}</div>
+        <div class="choice-team">${escapeHTML(p.team)}</div>
+        <div class="choice-age">${calcAge(p.birth,p.age)}歳</div>
       </div>
-
-    `;
-
-
-    resultGrid.appendChild(cell);
-
-  });
-
-
-  /*
-   * 全ランキング
-   */
-
-  rankingList.innerHTML = "";
-
-
-  ranking.forEach((player,index) => {
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "ranking-row";
-
-
-    row.innerHTML = `
-
-      <div class="rank">
-        ${index + 1}
-      </div>
-
-      <div class="rank-photo">
-
-        <img
-          src="${player.image}"
-          alt="${escapeHtml(player.name)}"
-          onerror="this.src='https://placehold.co/100x100?text=${encodeURIComponent(player.name)}'"
-        >
-
-      </div>
-
-      <div class="rank-name">
-        ${escapeHtml(player.name)}
-      </div>
-
-      <div class="rank-score">
-        ${scores[player.id]}票
-      </div>
-
-    `;
-
-
-    rankingList.appendChild(row);
-
-  });
-
-
-  progressInner.style.width = "100%";
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    </button>
+  `).join("");
+  el.querySelectorAll(".choice").forEach(btn=>{
+    btn.addEventListener("click",()=>choose(btn.dataset.id));
   });
 }
 
+function choose(id){
+  const p=state.choices.find(x=>x.id===id);
+  if(!p) return;
+  // 二重クリック防止
+  document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  updateRating(state.choices,id);
+  state.round++;
 
-/* =====================================================
-   PNG保存
-===================================================== */
-
-downloadButton.addEventListener(
-  "click",
-  async () => {
-
-    downloadButton.disabled = true;
-
-    downloadButton.textContent =
-      "画像を作成中...";
-
-
-    try {
-
-      const canvas =
-        await html2canvas(
-          resultGrid,
-          {
-            backgroundColor: "#111",
-            scale: 2,
-            useCORS: true
-          }
-        );
-
-
-      const link =
-        document.createElement("a");
-
-
-      link.download =
-        "jleague-sukigao9.png";
-
-
-      link.href =
-        canvas.toDataURL("image/png");
-
-
-      link.click();
-
-
-    } catch(error) {
-
-      console.error(error);
-
-      alert(
-        "画像の保存に失敗しました。"
-      );
-
-    }
-
-
-    downloadButton.disabled = false;
-
-    downloadButton.textContent =
-      "🖼️ 画像を保存";
+  if(state.round>=state.maxRounds){
+    finishQualification();
+  }else{
+    renderRound();
   }
-);
-
-
-/* =====================================================
-   リスタート
-===================================================== */
-
-restartButton.addEventListener(
-  "click",
-  () => {
-
-    initGame();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }
-);
-
-
-/* =====================================================
-   シャッフル
-===================================================== */
-
-function shuffleArray(array) {
-
-  const result =
-    [...array];
-
-
-  for (
-    let i = result.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
-
-
-    [
-      result[i],
-      result[j]
-    ] = [
-      result[j],
-      result[i]
-    ];
-  }
-
-
-  return result;
 }
 
+function finishQualification(){
+  const g=ageGroups[state.currentGroupIndex];
+  const pool=state.groups[g.key];
+  // レーティングを基本にしつつ、登場回数が少ない選手の不利を補正。
+  // 同点付近は少しランダムにして「最後まで誰が残るかわからない」感じを残す。
+  const ranked=[...pool].sort((a,b)=>{
+    const ra=state.rating[a.id]||1500;
+    const rb=state.rating[b.id]||1500;
+    const appearanceBonusA=Math.min(state.appear[a.id]||0,2)*2;
+    const appearanceBonusB=Math.min(state.appear[b.id]||0,2)*2;
+    const scoreA=ra+appearanceBonusA;
+    const scoreB=rb+appearanceBonusB;
+    if(Math.abs(scoreB-scoreA)>8) return scoreB-scoreA;
+    return Math.random()-.5;
+  });
+  const count=Math.min(CONFIG.shortlistCount,ranked.length);
+  state.shortlists[g.key]=ranked.slice(0,count);
 
-/* =====================================================
-   HTMLエスケープ
-===================================================== */
-
-function escapeHtml(text) {
-
-  return String(text)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  state.currentGroupIndex++;
+  if(state.currentGroupIndex<ageGroups.length){
+    prepareQualification();
+  }else{
+    prepareFinals();
+  }
 }
 
+function prepareFinals(){
+  state.currentGroupIndex=0;
+  state.stage="final";
+  state.round=0;
+  prepareOneFinal();
+}
 
-/* =====================================================
-   START
-===================================================== */
+function prepareOneFinal(){
+  const g=ageGroups[state.currentGroupIndex];
+  const pool=state.shortlists[g.key];
+  if(!pool || pool.length<3){
+    alert(`${g.label}の候補が3人未満です。`);
+    return;
+  }
+  state.finalPool=pool;
+  state.finalAppear={};
+  state.finalRating={};
+  pool.forEach(p=>{
+    state.finalAppear[p.id]=0;
+    // 予選結果を少しだけ引き継ぐ。完全リセットより「予選での勢い」が感じられる。
+    const q=state.rating[p.id]||1500;
+    state.finalRating[p.id]=1500+(q-1500)*0.35;
+  });
+  // 12人 × 5回登場 ÷ 4 = 15ラウンド。年代ごとに15回程度なので遊びやすい。
+  state.finalMaxRounds=Math.max(
+    Math.ceil(pool.length*CONFIG.finalAppearances/CONFIG.choiceCount),
+    15
+  );
+  state.round=0;
+  renderFinalRound();
+}
 
-initGame();
+function updateFinalRating(choices,winnerId){
+  const weights=choices.map(p=>Math.pow(10,(state.finalRating[p.id]||1500)/400));
+  const total=weights.reduce((a,b)=>a+b,0);
+  choices.forEach((p,i)=>{
+    const expected=weights[i]/total;
+    const actual=p.id===winnerId?1:0;
+    state.finalRating[p.id]=(state.finalRating[p.id]||1500)+CONFIG.ratingK*(actual-expected);
+  });
+}
 
+function renderFinalRound(){
+  const g=ageGroups[state.currentGroupIndex];
+  const pool=state.finalPool;
+  const choices=makeChoices(pool,"finalAppear");
+  state.choices=choices;
+  choices.forEach(p=>state.finalAppear[p.id]=(state.finalAppear[p.id]||0)+1);
+
+  document.getElementById("stageTitle").textContent=`${g.label} 最終決戦`;
+  document.getElementById("stageNote").textContent=`予選通過12人から、最後の一票。あなたのTOP3を決めます。`;
+  document.getElementById("progressLabel").textContent=`${g.label}・最終決戦`;
+  document.getElementById("progressCount").textContent=`${state.round+1} / ${state.finalMaxRounds}`;
+  document.getElementById("progressBar").style.width=`${(state.round/state.finalMaxRounds)*100}%`;
+
+  const el=document.getElementById("choices");
+  el.innerHTML=choices.map(p=>`
+    <button class="choice" data-id="${escapeAttr(p.id)}">
+      ${photoHTML(p)}
+      <div class="choice-body">
+        <div class="choice-name">${escapeHTML(p.name)}</div>
+        <div class="choice-team">${escapeHTML(p.team)}</div>
+        <div class="choice-age">${calcAge(p.birth,p.age)}歳</div>
+      </div>
+    </button>
+  `).join("");
+  el.querySelectorAll(".choice").forEach(btn=>{
+    btn.addEventListener("click",()=>chooseFinal(btn.dataset.id));
+  });
+}
+
+function chooseFinal(id){
+  if(!state.choices.some(p=>p.id===id)) return;
+  document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  updateFinalRating(state.choices,id);
+  state.round++;
+  if(state.round>=state.finalMaxRounds){
+    finishOneFinal();
+  }else renderFinalRound();
+}
+
+function finishOneFinal(){
+  const g=ageGroups[state.currentGroupIndex];
+  const ranked=[...state.finalPool].sort((a,b)=>{
+    const d=(state.finalRating[b.id]||1500)-(state.finalRating[a.id]||1500);
+    if(Math.abs(d)>4) return d;
+    return Math.random()-.5;
+  });
+  state.finalists[g.key]=ranked.slice(0,CONFIG.finalCount);
+
+  state.currentGroupIndex++;
+  if(state.currentGroupIndex<ageGroups.length){
+    state.round=0;
+    prepareOneFinal();
+  }else{
+    showResults();
+  }
+}
+
+function showResults(){
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+
+  const podium=document.getElementById("podium");
+  podium.innerHTML=ageGroups.map(g=>{
+    const list=state.finalists[g.key]||[];
+    return `<div class="podium-group">
+      <h2>${g.label}</h2>
+      ${list.map((p,i)=>`
+        <div class="pod-card">
+          ${photoHTML(p,"pod-photo")}
+          <div class="pod-info">
+            <div class="rank">${i+1}位</div>
+            <div class="pname">${escapeHTML(p.name)}</div>
+            <div class="pteam">${escapeHTML(p.team)} ・ ${escapeHTML(String(p.age))}歳</div>
+          </div>
+        </div>`).join("")}
+    </div>`;
+  }).join("");
+
+  const all=[];
+  ageGroups.forEach(g=>(state.finalists[g.key]||[]).forEach((p,i)=>all.push({...p,group:g.label,rank:i+1})));
+  document.getElementById("nine").innerHTML=all.map((p,i)=>`
+    <div class="nine-card">
+      ${photoHTML(p,"nine-photo")}
+      <div class="nine-info">
+        <div class="nine-rank">${i+1} / ${p.group} ${p.rank}位</div>
+        <div class="nine-name">${escapeHTML(p.name)}</div>
+        <div class="nine-team">${escapeHTML(p.team)} ・ ${escapeHTML(String(p.age))}歳</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function resultText(){
+  let lines=["⚽ Jリーグ 好き顔9選",""];
+  ageGroups.forEach(g=>{
+    lines.push(`【${g.label}】`);
+    (state.finalists[g.key]||[]).forEach((p,i)=>lines.push(`${i+1}位 ${p.name}（${p.team}）`));
+    lines.push("");
+  });
+  return lines.join("\n");
+}
+
+document.getElementById("startBtn").addEventListener("click",startGame);
+document.getElementById("retryBtn").addEventListener("click",()=>{
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
+});
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  try{
+    await navigator.clipboard.writeText(resultText());
+    const b=document.getElementById("copyBtn");
+    const old=b.textContent;b.textContent="コピーしました！";
+    setTimeout(()=>b.textContent=old,1200);
+  }catch(e){
+    prompt("以下をコピーしてください",resultText());
+  }
+});
 </script>
-
 </body>
 </html>
-```
